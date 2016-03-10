@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>553</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Need a fancy program name and icon</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>390</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 57 8pt &quot;DINPro-Medium&quot;;
+font: 57 14pt &quot;Roboto Medium&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Miley Cyrus</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="horizontalSlider">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>470</y>
+      <width>471</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>420</y>
+      <width>181</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 57 8pt &quot;DINPro-Medium&quot;;
+font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Party in the U.S.A</string>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>471</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;</string>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Playlist</string>
+     </attribute>
+     <widget class="QListWidget" name="playList">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>471</width>
+        <height>331</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Equalizer</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="playButton">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>390</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>75</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pauseButton">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>390</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>75</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stopButton">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>390</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>75</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>550</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuConnections">
+    <property name="title">
+     <string>&amp;Connections</string>
+    </property>
+    <addaction name="action_Request_Playlist"/>
+    <addaction name="action_Join_Multicast"/>
+    <addaction name="separator"/>
+    <addaction name="action_Visible"/>
+    <addaction name="action_Host_Multicast"/>
+   </widget>
+   <widget class="QMenu" name="menuAdd_Music">
+    <property name="title">
+     <string>Add Music</string>
+    </property>
+   </widget>
+   <addaction name="menuConnections"/>
+   <addaction name="menuAdd_Music"/>
+  </widget>
+  <action name="action_Request_Playlist">
+   <property name="text">
+    <string>&amp;Request Playlist</string>
+   </property>
+  </action>
+  <action name="action_Join_Multicast">
+   <property name="text">
+    <string>&amp;Join Multicast</string>
+   </property>
+  </action>
+  <action name="action_Visible">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Visible</string>
+   </property>
+  </action>
+  <action name="action_Host_Multicast">
+   <property name="text">
+    <string>&amp;Host Multicast</string>
+   </property>
+  </action>
+  <action name="actionAqua">
+   <property name="text">
+    <string>Aqua</string>
+   </property>
+  </action>
+  <action name="actionRed">
+   <property name="text">
+    <string>Red</string>
+   </property>
+  </action>
+  <action name="actionBlack">
+   <property name="text">
+    <string>Black</string>
+   </property>
+  </action>
+  <action name="actionCrimson">
+   <property name="text">
+    <string>Crimson</string>
+   </property>
+  </action>
+  <action name="actionChocolate">
+   <property name="text">
+    <string>Chocolate</string>
+   </property>
+  </action>
+  <action name="actionDarkMagenta">
+   <property name="text">
+    <string>DarkMagenta </string>
+   </property>
+  </action>
+  <action name="actionV">
+   <property name="text">
+    <string>DeepPink </string>
+   </property>
+  </action>
+  <action name="actionForestGreen">
+   <property name="text">
+    <string>ForestGreen </string>
+   </property>
+  </action>
+  <action name="actionAqua_2">
+   <property name="text">
+    <string>Aqua</string>
+   </property>
+  </action>
+  <action name="actionRed_2">
+   <property name="text">
+    <string>Red</string>
+   </property>
+  </action>
+  <action name="actionBlack_2">
+   <property name="text">
+    <string>Black</string>
+   </property>
+  </action>
+  <action name="actionCrimson_2">
+   <property name="text">
+    <string>Crimson</string>
+   </property>
+  </action>
+  <action name="actionChocolate_2">
+   <property name="text">
+    <string>Chocolate</string>
+   </property>
+  </action>
+  <action name="actionDarkMegenta">
+   <property name="text">
+    <string>DarkMagenta</string>
+   </property>
+  </action>
+  <action name="actionDeepPink">
+   <property name="text">
+    <string>DeepPink</string>
+   </property>
+  </action>
+  <action name="actionForestGreen_2">
+   <property name="text">
+    <string>ForestGreen</string>
+   </property>
+  </action>
+  <action name="actionWhite">
+   <property name="text">
+    <string>White</string>
+   </property>
+  </action>
+  <action name="actionWhite_2">
+   <property name="text">
+    <string>White</string>
+   </property>
+  </action>
+  <action name="action_Modify">
+   <property name="text">
+    <string>Custom</string>
+   </property>
+  </action>
+  <action name="action_Advanced">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Advanced</string>
+   </property>
+  </action>
+  <action name="action_Folder">
+   <property name="text">
+    <string>Folder</string>
+   </property>
+  </action>
+  <action name="action_Song">
+   <property name="text">
+    <string>Song</string>
+   </property>
+  </action>
+  <action name="action_Default">
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="action_Tiger">
+   <property name="text">
+    <string>Tiger</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
