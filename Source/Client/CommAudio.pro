@@ -14,9 +14,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    playback.cpp \
+    wavfile.cpp \
+    recording.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    playback.h \
+    wavfile.h \
+    recording.h
 
 FORMS    += mainwindow.ui
 

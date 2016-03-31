@@ -198,7 +198,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
      <x>0</x>
      <y>0</y>
      <width>550</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuConnections">
@@ -216,8 +216,19 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
      <string>Add Music</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuAudio_Test">
+    <property name="title">
+     <string>Audio Test</string>
+    </property>
+    <addaction name="actionTest_1"/>
+    <addaction name="actionPause"/>
+    <addaction name="actionResume"/>
+    <addaction name="actionTest_2"/>
+    <addaction name="actionPause2"/>
+   </widget>
    <addaction name="menuConnections"/>
    <addaction name="menuAdd_Music"/>
+   <addaction name="menuAudio_Test"/>
   </widget>
   <action name="action_Request_Playlist">
    <property name="text">
@@ -379,6 +390,31 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
   <action name="actionDisconnect">
    <property name="text">
     <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionTest_1">
+   <property name="text">
+    <string>Test 1</string>
+   </property>
+  </action>
+  <action name="actionPause">
+   <property name="text">
+    <string>Pause</string>
+   </property>
+  </action>
+  <action name="actionResume">
+   <property name="text">
+    <string>Resume</string>
+   </property>
+  </action>
+  <action name="actionTest_2">
+   <property name="text">
+    <string>Test 2</string>
+   </property>
+  </action>
+  <action name="actionPause2">
+   <property name="text">
+    <string>Pause2</string>
    </property>
   </action>
  </widget>
