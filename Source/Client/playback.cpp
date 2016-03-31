@@ -8,7 +8,7 @@ Playback::Playback()
     wf = new WavFile();
     qByteArray = QByteArray();
 
-    initialize("Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
+    initialize("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
     play();
 }
 
