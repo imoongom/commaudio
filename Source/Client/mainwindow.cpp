@@ -69,3 +69,12 @@ void MainWindow::on_actionPause2_triggered()
 {
     test2->pause();
 }
+
+void MainWindow::on_actionPlaylist_triggered()
+{
+    list = new Playlist("../Demo");
+    list->update_list();
+    qDebug() << "updated";
+    ui->playList->addItems(list->get_playlist());
+    qDebug() << "got list";
+}

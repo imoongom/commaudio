@@ -225,6 +225,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
     <addaction name="actionResume"/>
     <addaction name="actionTest_2"/>
     <addaction name="actionPause2"/>
+    <addaction name="actionPlaylist"/>
    </widget>
    <addaction name="menuConnections"/>
    <addaction name="menuAdd_Music"/>
@@ -415,6 +416,11 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
   <action name="actionPause2">
    <property name="text">
     <string>Pause2</string>
+   </property>
+  </action>
+  <action name="actionPlaylist">
+   <property name="text">
+    <string>Playlist</string>
    </property>
   </action>
  </widget>
