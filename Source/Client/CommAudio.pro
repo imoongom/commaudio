@@ -17,12 +17,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     playback.cpp \
     wavfile.cpp \
-    recording.cpp
+    recording.cpp \
+    playlist.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
     wavfile.h \
-    recording.h
+    recording.h \
+    playlist.h
 
 FORMS    += mainwindow.ui
 

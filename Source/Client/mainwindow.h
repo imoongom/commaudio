@@ -11,6 +11,7 @@
 
 #include "playback.h"
 #include "recording.h"
+#include "playlist.h"
 
 namespace Ui {
 class MainWindow;
@@ -38,11 +39,14 @@ private slots:
 
     void on_actionPause2_triggered();
 
+    void on_actionPlaylist_triggered();
+
 private:
     Ui::MainWindow *ui;
     int icon;
     Playback *test;
     Recording *test2;
+    Playlist *list;
 };
 
 #endif // MAINWINDOW_H
