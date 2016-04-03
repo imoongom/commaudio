@@ -7,7 +7,7 @@ Recording::Recording()
     qBuf.open(QIODevice::ReadWrite);
     m_format = QAudioFormat();
 
-    m_format.setSampleRate(8000);
+    m_format.setSampleRate(8000); // 48000
     m_format.setChannelCount(2);
     m_format.setSampleSize(8);
     m_format.setCodec("audio/pcm");
