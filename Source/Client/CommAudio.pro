@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     playback.cpp \
     wavfile.cpp \
     recording.cpp \
-    playlist.cpp
+    playlist.cpp \
+    circularbuffer.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
     wavfile.h \
     recording.h \
-    playlist.h
+    playlist.h \
+    circularbuffer.h
 
 FORMS    += mainwindow.ui
 
