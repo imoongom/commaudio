@@ -15,6 +15,7 @@ public:
     ~Playlist();
     void update_list();
     QStringList get_playlist();
+    QString get_song(QString song);
 
 private:
     QString p_dir;
