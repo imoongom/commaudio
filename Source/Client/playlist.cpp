@@ -32,3 +32,10 @@ QStringList Playlist::get_playlist()
 
     return list;
 }
+
+QString Playlist::get_song(QString song)
+{
+    if(p_files.contains(song))
+        return p_files.value(song);
+    return "";
+}
