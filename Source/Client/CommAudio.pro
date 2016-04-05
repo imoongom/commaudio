@@ -26,7 +26,8 @@ HEADERS  += mainwindow.h \
     wavfile.h \
     recording.h \
     playlist.h \
-    circularbuffer.h
+    circularbuffer.h \
+    global.h
 
 FORMS    += mainwindow.ui
 
