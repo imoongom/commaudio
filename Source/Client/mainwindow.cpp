@@ -44,3 +44,37 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_actionTest_1_triggered()
+{
+    test = new Playback();
+}
+
+void MainWindow::on_actionPause_triggered()
+{
+    test->pause();
+}
+
+void MainWindow::on_actionResume_triggered()
+{
+    test->resume();
+}
+
+void MainWindow::on_actionTest_2_triggered()
+{
+    test2 = new Recording();
+}
+
+void MainWindow::on_actionPause2_triggered()
+{
+    test2->pause();
+}
+
+void MainWindow::on_actionPlaylist_triggered()
+{
+    list = new Playlist("../Demo");
+    list->update_list();
+    qDebug() << "updated";
+    ui->playList->addItems(list->get_playlist());
+    qDebug() << "got list";
+}

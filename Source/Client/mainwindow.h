@@ -9,6 +9,10 @@
 #include <QPushButton>
 #include <QMediaPlaylist>
 
+#include "playback.h"
+#include "recording.h"
+#include "playlist.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -24,9 +28,25 @@ public:
 public slots:
     void toggleIcon();
 
+private slots:
+    void on_actionTest_1_triggered();
+
+    void on_actionPause_triggered();
+
+    void on_actionResume_triggered();
+
+    void on_actionTest_2_triggered();
+
+    void on_actionPause2_triggered();
+
+    void on_actionPlaylist_triggered();
+
 private:
     Ui::MainWindow *ui;
     int icon;
+    Playback *test;
+    Recording *test2;
+    Playlist *list;
 };
 
 #endif // MAINWINDOW_H
