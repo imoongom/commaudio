@@ -758,11 +758,11 @@ QLabel
 }
 
 QTabWidget{
-    border: 1px transparent black;
+    border: 0px;
 }
 
 QTabWidget::pane {
-    border: 1px solid #444;
+    border: 0px;
     border-radius: 3px;
     padding: 3px;
 }
@@ -797,9 +797,9 @@ QTabBar::close-button:pressed {
 /* TOP TABS */
 QTabBar::tab:top {
     color: #b1b1b1;
-    border: 1px solid #4A4949;
+    border: 0px;
     border-bottom: 1px transparent black;
-    background-color: #302F2F;
+    background-color: rgb(85, 85, 255);
     padding: 5px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
