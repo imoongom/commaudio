@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     wavfile.cpp \
     recording.cpp \
     playlist.cpp \
-    circularbuffer.cpp
+    circularbuffer.cpp \
+    ringbuffer.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     recording.h \
     playlist.h \
     circularbuffer.h \
-    global.h
+    global.h \
+    ringbuffer.h
 
 FORMS    += mainwindow.ui
 
