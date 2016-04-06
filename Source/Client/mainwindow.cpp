@@ -21,8 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stopButton->setStyleSheet("QPushButton{border: none;outline: none;}");
     ui->stopButton->setIcon(QIcon(fname3));
 
-//    ui->playList->addItems(items);
+//  ui->playList->addItems(items);
 
+    ui->userList->addItem("Oscar");
     connect(ui->playButton, SIGNAL(clicked()), this, SLOT(toggleIcon()));
 
 }
