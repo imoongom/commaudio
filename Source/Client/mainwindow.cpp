@@ -7,13 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QStringList items;
-    items << "Love Yourself - Justin Bieber" << "See You Again - Wiz Khalifa, Charlie Puth" << "Love Story - Taylor Swift"
-          << "USA West" << "Monaco" << "Belgian" << "Spanish"
-          << "Swedish" << "French" << "British" << "German"
-          << "Austrian" << "Dutch" << "Italian" << "USA East"
-          << "Canadian";
-
     QString fname = QString(":/qss_icons/rc/play-circle1.png");
     QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
     QString fname3 = QString(":/qss_icons/rc/stopButton.png");
@@ -28,8 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stopButton->setStyleSheet("QPushButton{border: none;outline: none;}");
     ui->stopButton->setIcon(QIcon(fname3));
 
-    ui->playList->addItems(items);
+//  ui->playList->addItems(items);
 
+    ui->userList->addItem("Oscar");
     connect(ui->playButton, SIGNAL(clicked()), this, SLOT(toggleIcon()));
 
 }

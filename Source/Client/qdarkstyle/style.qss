@@ -45,7 +45,7 @@ QWidget
 {
     color: silver;
     background-color: #302F2F;
-    selection-background-color:#3d8ec9;
+    /*selection-background-color:#3d8ec9;*/
     selection-color: black;
     background-clip: border;
     border-image: none;
@@ -60,7 +60,8 @@ QWidget:item:hover
 
 QWidget:item:selected
 {
-    background-color: #3d8ec9;
+    background-color: #524fa1;
+    color: white;
 }
 
 QCheckBox
@@ -255,7 +256,7 @@ QMenu::icon
 
 QMenu::item
 {
-    padding: 5px 30px 5px 30px;
+    padding: 10px 30px 10px 30px;
     margin-left: 5px;
     border: 1px solid transparent; /* reserve space for selection border */
 }
@@ -758,11 +759,12 @@ QLabel
 }
 
 QTabWidget{
-    border: 1px transparent black;
+    border: 0px;
+    background: transparent;
 }
 
 QTabWidget::pane {
-    border: 1px solid #444;
+    border: 0px;
     border-radius: 3px;
     padding: 3px;
 }
@@ -797,10 +799,10 @@ QTabBar::close-button:pressed {
 /* TOP TABS */
 QTabBar::tab:top {
     color: #b1b1b1;
-    border: 1px solid #4A4949;
+    border: 0px;
     border-bottom: 1px transparent black;
-    background-color: #302F2F;
-    padding: 5px;
+    background-color: #524FA1;
+    padding: 10px;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
 }
@@ -933,7 +935,7 @@ QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
     background: rgba(255, 255, 255, 10);
 }
 
-QTreeView, QListView
+QTreeView, Q
 {
     border: 1px solid #444;
     background-color: #201F1F;
@@ -976,14 +978,14 @@ QTreeView::branch:open:has-children:has-siblings:hover  {
     image: url(:/qss_icons/rc/branch_open-on.png);
     }
 
-QListView::item:!selected:hover, QListView::item:!selected:hover, QTreeView::item:!selected:hover  {
+QListView::item:!selected:hover, Q::item:!selected:hover, QTreeView::item:!selected:hover  {
     background: rgba(0, 0, 0, 0);
     outline: 0;
     color: #FFFFFF
 }
 
 QListView::item:selected:hover, QListView::item:selected:hover, QTreeView::item:selected:hover  {
-    background: #3d8ec9;
+    background: #524fa1;
     color: #FFFFFF;
 }
 
@@ -1103,8 +1105,8 @@ QTableView::item:pressed, QListView::item:pressed, QTreeView::item:pressed  {
     color: #FFFFFF;
 }
 
-QTableView::item:selected:active, QTreeView::item:selected:active, QListView::item:selected:active  {
-    background: #3d8ec9;
+QTableView::item:selected:active, QTreeView::item:selected:active, Q::item:selected:active  {
+    background: #524fa1;
     color: #FFFFFF;
 }
 

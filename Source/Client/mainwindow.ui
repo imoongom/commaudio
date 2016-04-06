@@ -6,12 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>553</height>
+    <width>892</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Need a fancy program name and icon</string>
+  </property>
+  <property name="toolTipDuration">
+   <number>8</number>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border: 0;</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLabel" name="label_3">
@@ -19,13 +25,14 @@
      <rect>
       <x>40</x>
       <y>390</y>
-      <width>121</width>
-      <height>20</height>
+      <width>161</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">font: 57 8pt &quot;DINPro-Medium&quot;;
-font: 57 14pt &quot;Roboto Medium&quot;;</string>
+font: 57 14pt &quot;Roboto Medium&quot;;
+color: white;</string>
     </property>
     <property name="text">
      <string>Miley Cyrus</string>
@@ -35,8 +42,8 @@ font: 57 14pt &quot;Roboto Medium&quot;;</string>
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>470</y>
-      <width>471</width>
+      <y>480</y>
+      <width>571</width>
       <height>19</height>
      </rect>
     </property>
@@ -48,9 +55,9 @@ font: 57 14pt &quot;Roboto Medium&quot;;</string>
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>420</y>
+      <y>430</y>
       <width>181</width>
-      <height>20</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -66,12 +73,13 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
      <rect>
       <x>40</x>
       <y>10</y>
-      <width>471</width>
+      <width>571</width>
       <height>361</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;</string>
+     <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;
+border: 0;</string>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -85,9 +93,12 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>471</width>
+        <width>571</width>
         <height>331</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 0;</string>
       </property>
      </widget>
     </widget>
@@ -100,7 +111,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
    <widget class="QPushButton" name="playButton">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>470</x>
       <y>390</y>
       <width>41</width>
       <height>41</height>
@@ -133,7 +144,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
    <widget class="QPushButton" name="pauseButton">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>520</x>
       <y>390</y>
       <width>41</width>
       <height>41</height>
@@ -163,7 +174,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
    <widget class="QPushButton" name="stopButton">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>570</x>
       <y>390</y>
       <width>41</width>
       <height>41</height>
@@ -190,6 +201,72 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
      </size>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>41</x>
+      <y>501</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 8pt &quot;Roboto Light&quot;;
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>0:28</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>500</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 25 8pt &quot;Roboto Light&quot;;
+color: rgb(161, 161, 161);</string>
+    </property>
+    <property name="text">
+     <string>/ 3:25</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="userList">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>60</y>
+      <width>191</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;
+</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>10</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 57 8pt &quot;DINPro-Medium&quot;;
+font: 57 14pt &quot;Roboto Medium&quot;;
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>Users</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
@@ -197,24 +274,19 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>550</width>
-     <height>30</height>
+     <width>892</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #524FA1;</string>
    </property>
    <widget class="QMenu" name="menuConnections">
     <property name="title">
      <string>&amp;Connections</string>
     </property>
-    <addaction name="action_Request_Playlist"/>
-    <addaction name="action_Join_Multicast"/>
     <addaction name="separator"/>
-    <addaction name="action_Visible"/>
-    <addaction name="action_Host_Multicast"/>
-   </widget>
-   <widget class="QMenu" name="menuAdd_Music">
-    <property name="title">
-     <string>Add Music</string>
-    </property>
+    <addaction name="actionJoin_MultiCast"/>
    </widget>
    <widget class="QMenu" name="menuAudio_Test">
     <property name="title">
@@ -228,7 +300,6 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
     <addaction name="actionPlaylist"/>
    </widget>
    <addaction name="menuConnections"/>
-   <addaction name="menuAdd_Music"/>
    <addaction name="menuAudio_Test"/>
   </widget>
   <action name="action_Request_Playlist">
@@ -421,6 +492,11 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
   <action name="actionPlaylist">
    <property name="text">
     <string>Playlist</string>
+   </property>
+  </action>
+  <action name="actionJoin_MultiCast">
+   <property name="text">
+    <string>Join MultiCast</string>
    </property>
   </action>
  </widget>
