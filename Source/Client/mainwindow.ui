@@ -275,7 +275,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>892</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -286,7 +286,7 @@ color: white;</string>
      <string>&amp;Connections</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="actionJoin_MultiCast"/>
+    <addaction name="actionJoin_Multicast"/>
    </widget>
    <widget class="QMenu" name="menuAudio_Test">
     <property name="title">
@@ -305,11 +305,6 @@ color: white;</string>
   <action name="action_Request_Playlist">
    <property name="text">
     <string>&amp;Request Playlist</string>
-   </property>
-  </action>
-  <action name="action_Join_Multicast">
-   <property name="text">
-    <string>&amp;Join Multicast</string>
    </property>
   </action>
   <action name="action_Visible">
@@ -494,9 +489,9 @@ color: white;</string>
     <string>Playlist</string>
    </property>
   </action>
-  <action name="actionJoin_MultiCast">
+  <action name="actionJoin_Multicast">
    <property name="text">
-    <string>Join MultiCast</string>
+    <string>Join Multicast</string>
    </property>
   </action>
  </widget>

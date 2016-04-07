@@ -2,7 +2,7 @@
 #define GLOBAL_H
 #include <winsock2.h>
 #include <iostream>
-#include "circularbuffer.h"
+#include "socket/circularbuffer.h"
 
 
 #define BUFMAX  128
@@ -22,7 +22,9 @@ typedef struct _SOCKET_INFORMATION {
    DWORD BytesRECV;
 } SOCKET_INFORMATION, * LPSOCKET_INFORMATION;
 
-static SOCKET hSocket;
-extern struct CircularBuffer CBuf;
-
+extern SOCKET hSock;
+extern int sockPort;
+//static SOCKET hSocket;
+extern struct CBuffer CBuf;
+extern SOCKADDR_IN stLclAddr,  InternetAddr;
 #endif // GLOBAL_H
