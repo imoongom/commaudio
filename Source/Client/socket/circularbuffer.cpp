@@ -8,8 +8,6 @@ CircularBuffer::CircularBuffer(){
 
 void initBuffer(CBufs * Buf){
     Buf->_count = 0;
-    Buf->_readBuf = 0;
-    Buf->_writeBuf = 0;
     Buf->_writePtr = &Buf->buffer;
     Buf->_readPtr = &Buf->buffer;
     Buf->_endPtr = &Buf->buffer[CIRBUFSIZE*CIRBUFMAX];
@@ -63,8 +61,6 @@ void read_buffer(CBufs * Buf, void * data){
 
 void clean_buffer(CBufs * Buf){
     std::memset(Buf->buffer, '\0', sizeof(Buf->buffer));
-    Buf->_readBuf = 0;
-    Buf->_writeBuf = 0;
     Buf->_writePtr = Buf->buffer;
     Buf->_readPtr = Buf->buffer;
 }

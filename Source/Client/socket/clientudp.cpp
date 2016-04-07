@@ -90,10 +90,9 @@ void ClientUDP::writeFile(){
      char buffer[CIRBUFSIZE];
 
 
-      //  Sleep(500);
         if(CBuf._count==0)
             return;
-        qDebug("WOWOWWOWWTIME");
+        //qDebug("WOWOWWOWWTIME");
         read_buffer(&CBuf, &buffer);
         qDebug()<<"BUFFER READ : " << buffer;
         fwrite(buffer, sizeof(char), CIRBUFSIZE, fstream);
