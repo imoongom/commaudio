@@ -48,6 +48,9 @@ private slots:
 
     void on_playPauseButton_clicked();
 
+    void on_actionRingBuf_triggered();
+
+
 private:
     Ui::MainWindow *ui;
     int icon;
