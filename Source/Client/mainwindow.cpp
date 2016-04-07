@@ -7,16 +7,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QString fname = QString(":/qss_icons/rc/play-circle1.png");
-    QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
-    QString fname3 = QString(":/qss_icons/rc/stopButton.png");
+    // QString fname = QString(":/qss_icons/rc/play-circle1.png");
+    //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
+    // QString fname3 = QString(":/qss_icons/rc/stopButton.png");
 
-    ui->playButton->setIconSize(QSize(32, 32));
-    ui->playButton->setStyleSheet("QPushButton{border: none;outline: none;}");
-    ui->playButton->setIcon(QIcon(fname));
+    ui->playPauseButton->setIconSize(QSize(32, 32));
+    ui->playPauseButton->setStyleSheet("QPushButton{border: none;outline: none;}");
+    ui->playPauseButton->setIcon(QIcon(fname));
 
-    ui->pauseButton->setStyleSheet("QPushButton{border: none;outline: none;}");
-    ui->pauseButton->setIcon(QIcon(fname2));
+  //  ui->pauseButton->setStyleSheet("QPushButton{border: none;outline: none;}");
+   // ui->pauseButton->setIcon(QIcon(fname2));
 
     ui->stopButton->setStyleSheet("QPushButton{border: none;outline: none;}");
     ui->stopButton->setIcon(QIcon(fname3));
@@ -24,19 +24,18 @@ MainWindow::MainWindow(QWidget *parent) :
 //  ui->playList->addItems(items);
 
     ui->userList->addItem("Oscar");
-    connect(ui->playButton, SIGNAL(clicked()), this, SLOT(toggleIcon()));
-
-}
-
-
-void MainWindow::toggleIcon()
-{
+  //  connect(ui->playPauseButton, SIGNAL(clicked()), this, SLOT(toggleIcon()));
 
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::toggleIcon()
+{
+
 }
 
 void MainWindow::on_actionTest_1_triggered()
@@ -98,7 +97,14 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
     UDPRecvThread *multiThread = new UDPRecvThread(this);
 
-
     multiThread->start();
     connect(multiThread, SIGNAL(recvData()), cl, SLOT(writeFile()));
+}
+
+void MainWindow::on_playPauseButton_clicked()
+{
+    playPauseFlag = true;
+
+    ui->playPauseButton->setIcon(QIcon(fname2));
+
 }
