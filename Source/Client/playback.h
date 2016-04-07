@@ -12,11 +12,18 @@
 #include <QBuffer>
 
 #include "wavfile.h"
+#include "circularbuffer.h"
+#include "ringbuffer.h"
+#include "global.h"
+
+#include<string>
+#include<iostream>
 
 class Playback
 {
 public:
     explicit Playback();
+    Playback(RingBuffer *buf);
     ~Playback();
 
     bool initialize(const QString &fileName);

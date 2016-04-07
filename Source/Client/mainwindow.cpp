@@ -69,8 +69,22 @@ void MainWindow::on_actionPlaylist_triggered()
     list = new Playlist("../Demo");
     list->update_list();
     qDebug() << "updated";
+    ui->playList->clear();
     ui->playList->addItems(list->get_playlist());
     qDebug() << "got list";
+
+}
+
+void MainWindow::on_actionRingBuf_triggered()
+{
+    /*
+    CircularBuffer *cb;
+    initBuffer(cb);
+    Playback *cbtest = new Playback(cb);
+    */
+
+    Playback *pb = new Playback(new RingBuffer());
+
 }
 
 
