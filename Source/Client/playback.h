@@ -12,7 +12,7 @@
 #include <QBuffer>
 
 #include "wavfile.h"
-#include "circularbuffer.h"
+//#include "circularbuffer.h"
 #include "ringbuffer.h"
 #include "global.h"
 
