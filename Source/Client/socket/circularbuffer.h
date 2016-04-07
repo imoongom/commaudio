@@ -17,14 +17,12 @@ typedef struct CBuffer{
     void * _writePtr;
     void * _readPtr;
     void * _endPtr;
-    int _readBuf;
-    int _writeBuf;
     int _count;
 }CBufs;
 
 void initBuffer(CBufs * Buf);
 void write_buffer(CBufs * Buf, const void * data);
-
+o
 void read_buffer(CBufs * Buf, void * data);
 
 void clean_buffer(CBufs * Buf);
