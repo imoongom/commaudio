@@ -8,10 +8,13 @@
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QMediaPlaylist>
+#include <QDebug>
 
 #include "playback.h"
 #include "recording.h"
 #include "playlist.h"
+#include "socket/clientudp.h"
+#include "socket/udprecvthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,6 +43,10 @@ private slots:
     void on_actionPause2_triggered();
 
     void on_actionPlaylist_triggered();
+
+    void on_action_Join_Multicast_triggered();
+
+    void on_actionJoin_Multicast_triggered();
 
 private:
     Ui::MainWindow *ui;

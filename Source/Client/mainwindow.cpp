@@ -72,3 +72,19 @@ void MainWindow::on_actionPlaylist_triggered()
     ui->playList->addItems(list->get_playlist());
     qDebug() << "got list";
 }
+
+
+void MainWindow::on_actionJoin_Multicast_triggered()
+{
+    qDebug() << "JOIN multicast";
+    ClientUDP *cl = new ClientUDP();
+    cl->Start();
+    cl->initData();
+    cl->multiSetup();
+
+    UDPRecvThread *multiThread = new UDPRecvThread(this);
+
+
+    multiThread->start();
+    connect(multiThread, SIGNAL(recvData()), cl, SLOT(writeFile()));
+}

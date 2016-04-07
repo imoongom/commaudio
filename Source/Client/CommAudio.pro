@@ -12,6 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = CommAudio
 TEMPLATE = app
 
+LIBS += -lws2_32
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -19,17 +20,21 @@ SOURCES += main.cpp\
     wavfile.cpp \
     recording.cpp \
     playlist.cpp \
-    circularbuffer.cpp \
-    ringbuffer.cpp
+    ringbuffer.cpp \
+    socket/circularbuffer.cpp \
+    socket/clientudp.cpp \
+    socket/udprecvthread.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
     wavfile.h \
     recording.h \
     playlist.h \
-    circularbuffer.h \
     global.h \
-    ringbuffer.h
+    ringbuffer.h \
+    socket/circularbuffer.h \
+    socket/clientudp.h \
+    socket/udprecvthread.h
 
 FORMS    += mainwindow.ui
 
