@@ -20,7 +20,7 @@ RingBuffer::~RingBuffer()
 
 }
 
-int RingBuffer::push(char * data)
+bool RingBuffer::push(char * data)
 {
     // Get the next QBuffer
     int next = head + 1;
@@ -31,21 +31,21 @@ int RingBuffer::push(char * data)
 
     // Check if RingBuf is full
     if (next == tail)
-        return -1;
+        return false;
 
     // Push data
     std::memcpy(buffer[head], data, BUFSIZE);
 
     head = next;
 
-    return 0;
+    return true;
 }
 
-int RingBuffer::pop(char * data)
+bool RingBuffer::pop(char * data)
 {
     // Check for if there's unread data
     if (head == tail)
-        return -1;
+        return false;
 
     // Pop data and place it in data
     std::memcpy(data, buffer[tail], BUFSIZE);
@@ -60,7 +60,7 @@ int RingBuffer::pop(char * data)
 
     tail = next;
 
-    return 0;
+    return true;
 }
 
 // Check if there is data to read. If no data, returns true.
