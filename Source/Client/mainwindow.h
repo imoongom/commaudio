@@ -44,8 +44,6 @@ private slots:
 
     void on_actionPlaylist_triggered();
 
-    void on_action_Join_Multicast_triggered();
-
     void on_actionJoin_Multicast_triggered();
 
 private:

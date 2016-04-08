@@ -22,7 +22,7 @@ typedef struct CBuffer{
 
 void initBuffer(CBufs * Buf);
 void write_buffer(CBufs * Buf, const void * data);
-o
+
 void read_buffer(CBufs * Buf, void * data);
 
 void clean_buffer(CBufs * Buf);
