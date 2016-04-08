@@ -13,8 +13,8 @@ class RingBuffer
 public:
     RingBuffer();
     ~RingBuffer();
-    int push(char * data);
-    int pop(char * data);
+    bool push(char * data);
+    bool pop(char * data);
     bool isEmpty();
 private:
     char * buffer[BUFMAX];

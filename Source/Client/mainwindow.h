@@ -46,12 +46,22 @@ private slots:
 
     void on_actionJoin_Multicast_triggered();
 
+    void on_playPauseButton_clicked();
+
+    void on_actionRingBuf_triggered();
+
+
 private:
     Ui::MainWindow *ui;
     int icon;
     Playback *test;
     Recording *test2;
     Playlist *list;
+    bool playPauseFlag = false;
+    QString fname = QString(":/qss_icons/rc/play-circle1.png");
+    QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
+    QString fname3 = QString(":/qss_icons/rc/stopButton.png");
+
 };
 
 #endif // MAINWINDOW_H
