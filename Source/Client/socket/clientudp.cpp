@@ -77,8 +77,9 @@ void ClientUDP::multiSetup(){
 }
 void ClientUDP::initData(){
     initBuffer(&CBuf);
-    if((fstream = fopen("NeYo-SoSick.wav", "wb"))== NULL){
-            qDebug() << "file open fail\n";
+ //   if((fstream = fopen("NeYo-SoSick.wav", "wb"))== NULL){
+    if((fstream = fopen("nananafile.txt", "wb"))== NULL){
+        qDebug() << "file open fail\n";
             return;
           }
 }
@@ -88,11 +89,8 @@ void ClientUDP::initData(){
 void ClientUDP::writeFile(){
      qDebug("WriteFile: ");
      char buffer[CIRBUFSIZE];
-
-
         if(CBuf._count==0)
             return;
-        //qDebug("WOWOWWOWWTIME");
         read_buffer(&CBuf, &buffer);
         qDebug()<<"BUFFER READ : " << buffer;
         fwrite(buffer, sizeof(char), CIRBUFSIZE, fstream);
@@ -116,9 +114,12 @@ int ClientUDP::close() {
 
     /* Close the socket */
     closesocket(hSock);
+    fclose(fstream);
 
     /* Tell WinSock we're leaving */
     WSACleanup();
 
     return (0);
 }
+
+
