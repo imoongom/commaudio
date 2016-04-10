@@ -84,6 +84,81 @@ border: 0;</string>
     <property name="currentIndex">
      <number>0</number>
     </property>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Connect</string>
+     </attribute>
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>251</width>
+        <height>41</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>40</y>
+        <width>111</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>IP Address</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>180</y>
+        <width>131</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #524FA1;
+color: white;
+ box-shadow: 3px 3px 5px 6px #ccc;</string>
+      </property>
+      <property name="text">
+       <string>Connect</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>40</y>
+        <width>101</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Socket</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>80</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
       <string>Playlist</string>
