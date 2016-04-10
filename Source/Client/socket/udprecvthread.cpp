@@ -21,6 +21,9 @@ void UDPRecvThread::run(){
     int destlen;
     char buffer[DATA_BUFSIZE];
 
+    //start TCP Server
+    emit startTCP();
+
     // initialize address information
     memset(&InternetAddr, 0, sizeof(InternetAddr));
     InternetAddr.sin_family = AF_INET;

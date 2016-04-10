@@ -89,16 +89,19 @@ void MainWindow::on_actionRingBuf_triggered()
 
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
+    ThreadHandler *TCPthread = new ThreadHandler();
+    UDPRecvThread *multiThread = new UDPRecvThread(this);
     qDebug() << "JOIN multicast";
     ClientUDP *cl = new ClientUDP();
     cl->Start();
     cl->initData();
     cl->multiSetup();
 
-    UDPRecvThread *multiThread = new UDPRecvThread(this);
+
 
     multiThread->start();
     connect(multiThread, SIGNAL(recvData()), cl, SLOT(writeFile()));
+    connect(multiThread, SIGNAL(startTCP()), TCPthread, SLOT(createThread()));
 }
 
 void MainWindow::on_playPauseButton_clicked()

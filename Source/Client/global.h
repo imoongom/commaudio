@@ -22,7 +22,17 @@ typedef struct _SOCKET_INFORMATION {
    DWORD BytesRECV;
 } SOCKET_INFORMATION, * LPSOCKET_INFORMATION;
 
+typedef struct TCP_MESSSAGE{
+    int type;
+    char name[BUFSIZE];
+    char data[DATA_BUFSIZE];
+    boolean *end;
+
+}TCP_MESG;
+
+
 extern SOCKET hSock;
+extern SOCKET tcpSock;
 extern int sockPort;
 //static SOCKET hSocket;
 extern struct CBuffer CBuf;

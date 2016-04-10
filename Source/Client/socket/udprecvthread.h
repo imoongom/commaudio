@@ -14,6 +14,7 @@ private:
     void run();
 signals:
     void recvData();
+    void startTCP();
     void closeSock();
 };
 

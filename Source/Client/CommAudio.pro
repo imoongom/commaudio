@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     ringbuffer.cpp \
     socket/circularbuffer.cpp \
     socket/clientudp.cpp \
-    socket/udprecvthread.cpp
+    socket/udprecvthread.cpp \
+    socket/clienttcp.cpp \
+    socket/threadhandler.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
@@ -34,7 +36,9 @@ HEADERS  += mainwindow.h \
     ringbuffer.h \
     socket/circularbuffer.h \
     socket/clientudp.h \
-    socket/udprecvthread.h
+    socket/udprecvthread.h \
+    socket/clienttcp.h \
+    socket/threadhandler.h
 
 FORMS    += mainwindow.ui
 
