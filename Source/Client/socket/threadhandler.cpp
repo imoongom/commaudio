@@ -48,7 +48,10 @@ void ThreadHandler::createThread() {
 //1st thread function
 void ThreadHandler::TCPThread() {
     ClientTCP tcpcl;
-    tcpcl.TCPConnect();
+    if(tcpcl.TCPConnect()){
+        return ;
+    }
+
     tcpcl.createThread();
 }
 

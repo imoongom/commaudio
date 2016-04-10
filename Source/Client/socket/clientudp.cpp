@@ -5,11 +5,10 @@
 
 struct CBuffer CBuf;
 
-int ClientUDP::Start() {
+boolean ClientUDP::Start() {
     int nRet;
     BOOL  fFlag;
     SOCKADDR_IN locAddr;
-
 
 
     WSADATA stWSAData;
@@ -20,7 +19,7 @@ int ClientUDP::Start() {
     nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
     if (nRet != 0) {
         qDebug("WSAStartup failed: %d\r\n", nRet);
-        exit(1);
+        return false;
     }
 
 
@@ -29,7 +28,7 @@ int ClientUDP::Start() {
     if (hSocket == INVALID_SOCKET) {
         qDebug("socket() failed, Err: %d\n", WSAGetLastError());
         WSACleanup();
-        exit(1);
+        return false;
     }
     hSock = hSocket;
     qDebug("[OPENSOCKET]hSocket : %d\thSock: %d\n",hSocket, hSock);
@@ -40,6 +39,7 @@ int ClientUDP::Start() {
     if (nRet == SOCKET_ERROR) {
         qDebug("setsockopt() SO_REUSEADDR failed, Err: %d\n",
             WSAGetLastError());
+        return false;
     }
 
     /* Name the socket (assign the local port number to receive on) */
@@ -50,13 +50,15 @@ int ClientUDP::Start() {
     if (nRet == SOCKET_ERROR) {
         qDebug("bind() port: %d failed, Err: %d\n", nPort,
             WSAGetLastError());
+        return false;
     }
 
     qDebug("[BIND]hSocket : %d\thSock: %d\n",hSocket, hSock);
+    return true;
 }
 
 
-void ClientUDP::multiSetup(){
+boolean ClientUDP::multiSetup(){
     int nRet;
     qDebug("[multiSetup]hSocket : %d\thSock: %d\n",hSocket, hSock);
 
@@ -70,18 +72,20 @@ void ClientUDP::multiSetup(){
         qDebug(
             "setsockopt() IP_ADD_MEMBERSHIP address %s failed, Err: %d\n",
             hostAddr, WSAGetLastError());
+        return false;
     }
     qDebug("  multicast group address: %s, port number: %d\n", hostAddr, nPort);
-
+    return true;
 
 }
-void ClientUDP::initData(){
+boolean ClientUDP::initData(){
     initBuffer(&CBuf);
  //   if((fstream = fopen("NeYo-SoSick.wav", "wb"))== NULL){
     if((fstream = fopen("nananafile.txt", "wb"))== NULL){
         qDebug() << "file open fail\n";
-            return;
-          }
+        return false;
+    }
+    return true;
 }
 
 

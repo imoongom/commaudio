@@ -17,11 +17,14 @@ public:
 
     //method
     static DWORD WINAPI TCPThreadConnect(void * Param);
-    void TCPConnect();
+    boolean TCPConnect();
     void createThread();
     void TCPRecv();
     void TCPSend(char * message);
     void TCPSend2(char * message);
+    void Send(int type, char* name, char* message);
+    void CloseTCP();
+
     //varible
     char tcp_host_addr[BUFSIZE];
     int tcp_port;

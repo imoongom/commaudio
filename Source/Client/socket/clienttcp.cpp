@@ -16,7 +16,7 @@ DWORD WINAPI ClientTCP::TCPThreadConnect(void * Param) {
 }
 
 
-void ClientTCP::TCPConnect() {
+boolean ClientTCP::TCPConnect() {
 
     SOCKADDR_IN InetAddr;
 
@@ -28,26 +28,27 @@ void ClientTCP::TCPConnect() {
     nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
     if (nRet != 0) {
         qDebug("WSAStartup failed: %d\r\n", nRet);
-        exit(1);
+        return false;
     }
 
     // Create the socket
     if ((tcpSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED)) == INVALID_SOCKET)
     {
         qDebug("Cannot create socket");
-        return;
+        return false;
     }
     fFlag = TRUE;
     if (setsockopt(tcpSock, SOL_SOCKET, SO_REUSEADDR, (char *)&fFlag,
         sizeof(fFlag)) == SOCKET_ERROR) {
         qDebug("setsockopt() SO_REUSEADDR failed, Err: %d\n",
             WSAGetLastError());
+        return false;
     }
 
     if ((host = gethostbyname(tcp_host_addr)) == NULL)
     {
         qDebug("Unable to resolve host name");
-        return;
+        return false;
     }
 
     memset(&InetAddr, 0, sizeof(SOCKADDR_IN));
@@ -60,10 +61,9 @@ void ClientTCP::TCPConnect() {
     {
         qDebug("WSAConnect() port: %d failed, Err: %d\n", tcp_port,
             WSAGetLastError());
-
-        return;
+        return false;
     }
-
+    return true;
 }
 
 void ClientTCP::createThread() {
@@ -78,7 +78,7 @@ void ClientTCP::createThread() {
     qDebug("### TCP CLIENT thread CREATED!!!!!!!!\n");
 }
 
-
+// TCP Receive routine(Thread function)
 void ClientTCP::TCPRecv() {
     LPSOCKET_INFORMATION SI;
     char temp[BUFSIZE] = "";
@@ -127,6 +127,7 @@ void ClientTCP::TCPRecv() {
     }
 }
 
+//TCP SEND FUNCTION using completion routine
 void ClientTCP::TCPSend(char * message) {
     LPSOCKET_INFORMATION SI;
     DWORD  SendBytes;
@@ -163,19 +164,31 @@ void ClientTCP::TCPSend(char * message) {
 
         SI->BytesSEND += SendBytes;
 
-
-
-
 }
-
+//TCP SEND FUNCTION without using completion routine
 void ClientTCP::TCPSend2(char * message) {
-    LPSOCKET_INFORMATION SI;
-    DWORD  SendBytes;
-    int i = 0;
-
 
     if (send(tcpSock, message, BUFSIZE, 0) == -1)
     {
         qDebug()<<"SEND FAIL";
+        return;
     }
+}
+
+
+void ClientTCP::Send(int type, char* name, char* message){
+    TCP_MESG sendForm;
+
+    sendForm.type = type;
+    sendForm._end = false;
+
+    strcpy(sendForm.name, name);
+    strcpy(sendForm.data, message);
+    //change to structure
+    TCPSend(message);
+}
+
+void ClientTCP::CloseTCP(){
+    closesocket(tcpSock);
+    return;
 }

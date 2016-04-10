@@ -13,6 +13,15 @@
 #define TIMECAST_ADDR "234.5.6.7"
 #define TIMECAST_PORT 8910
 
+//client side type flag
+#define MUSIC_DOWNLOAD 10001
+#define MUSIC_REQUEST  10002
+
+//server side type flag
+#define MUSIC_LIST  20001
+#define CLIENT_LIST 20002
+
+
 typedef struct _SOCKET_INFORMATION {
    OVERLAPPED Overlapped;
    SOCKET Socket;
@@ -26,7 +35,7 @@ typedef struct TCP_MESSSAGE{
     int type;
     char name[BUFSIZE];
     char data[DATA_BUFSIZE];
-    boolean *end;
+    boolean _end;
 
 }TCP_MESG;
 

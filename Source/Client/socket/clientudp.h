@@ -17,9 +17,9 @@ class ClientUDP :public QObject{
     Q_OBJECT
 public:
 
-    int Start();
-    void multiSetup();
-    void initData();
+    boolean Start();
+    boolean multiSetup();
+    boolean initData();
     int close();
 
 
