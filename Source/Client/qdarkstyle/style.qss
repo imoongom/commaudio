@@ -608,7 +608,7 @@ QToolBar::separator:vertical {
 QPushButton
 {
    /* color: silver; */
-  /*  background-color: #302F2F; */
+   /* background-color: #524FA1; */
     border-width: 1px;
     border-color: #4A4949;
     border-style: solid;
