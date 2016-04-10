@@ -15,6 +15,7 @@
 #include "playlist.h"
 #include "socket/clientudp.h"
 #include "socket/udprecvthread.h"
+#include "socket/threadhandler.h"
 
 namespace Ui {
 class MainWindow;

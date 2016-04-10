@@ -21,6 +21,9 @@ void UDPRecvThread::run(){
     int destlen;
     char buffer[DATA_BUFSIZE];
 
+    //start TCP Server
+    emit startTCP();
+
     // initialize address information
     memset(&InternetAddr, 0, sizeof(InternetAddr));
     InternetAddr.sin_family = AF_INET;
@@ -58,9 +61,9 @@ void UDPRecvThread::run(){
             }
 
         }
-
         qDebug("RECV: %s\n", SI.DataBuf.buf);
 
+        //add on Circular buffer
         write_buffer(&CBuf, SI.DataBuf.buf);
         qDebug()<<"RECEV SUCCESS";
         emit recvData();
