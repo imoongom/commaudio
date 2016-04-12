@@ -1,56 +1,9 @@
 #include "playback.h"
 
-const int DataSampleRateHz = 44100;
 
 Playback::Playback()
 {
-    qDebug() << "Heyo";
-    wf = new WavFile();
-    qByteArray = QByteArray(); // QByteArray(1024, NULL);
-
-    initialize("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
-    play();
-}
-
-Playback::Playback(RingBuffer *buf)
-{
-    char *cbuf = (char*)malloc(BUFSIZE);
-    char *tmp = (char*)malloc(BUFSIZE);
-    char *tmp2 = (char*)malloc(BUFSIZE*5);
-
-    wf = new WavFile();
-
-    if(wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav"))
-    {
-        /* This part seems to be broken.
-        while(wf->read(tmp, BUFSIZE))
-        {
-            qDebug() << "in read";
-            if (!buf->push(tmp))
-                qDebug() << "oh dang";
-            memset(tmp, '\0', BUFSIZE);
-        }
-        */
-        wf->read(tmp, BUFSIZE);
-    }
-    qDebug() << "done read";
-
-    qByteArray = QByteArray(tmp, BUFSIZE);
-    qBuf.setBuffer(&qByteArray);
-    qBuf.open(QIODevice::ReadWrite);
-
-    m_device = QAudioDeviceInfo::defaultOutputDevice();
-    m_format = wf->fileFormat();
-    m_audioOutput = new QAudioOutput(m_device, m_format);
-    /* Figure out how to change, replace or append data to the buffer
-    if (!buf->pop(cbuf))
-        qDebug() << "hot diggity";
-        */
-    qDebug() << "bytearray" << qByteArray.size() << qByteArray.count() << qByteArray.isEmpty() << qByteArray.data();
-    m_audioOutput->start(&qBuf);
-    qDebug() << "qbuf" << qBuf.size() << qBuf.bytesAvailable();
-
-    // How to continuously play? Check if it's done? Continuously add data?
+    qDebug() << "hi.";
 }
 
 Playback::~Playback()
@@ -58,35 +11,59 @@ Playback::~Playback()
     qDebug() << "Good bye ya";
 }
 
-bool Playback::initialize(const QString &fileName)
+void Playback::runthis()
 {
-    if(wf->open(fileName))
-    {
-        m_format = wf->fileFormat();
-        qByteArray = wf->readAll();
-        qBuf.setBuffer(&qByteArray);
-        qBuf.open(QIODevice::ReadWrite);
-        return true;
-    }
-    return false;
-}
+    qByteArray = QByteArray();
+    qBuf.setBuffer(&qByteArray);
+    qBuf.open(QIODevice::ReadWrite);
 
-void Playback::play()
-{
+    wf = new WavFile();
+    wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
+
     m_device = QAudioDeviceInfo::defaultOutputDevice();
-    m_audioOutput = new QAudioOutput(m_device, m_format);
+    m_audioOutput = new QAudioOutput(m_device, wf->fileFormat());
     m_audioOutput->start(&qBuf);
-    qDebug() << qBuf.size() << qBuf.bytesAvailable();
+    read_data();
 }
 
-void Playback::pause()
+// Testing
+void Playback::write_data()
 {
+    char *write = (char*)malloc(BUFSIZE);
 
-    m_audioOutput->suspend();
+    for (int i = 0; i < CIRBUFMAX; i++)
+    {
+        wf->read(write, BUFSIZE);
+        write_buffer(bufs, write);
+    }
 }
 
-void Playback::resume()
-{
 
-    m_audioOutput->resume();
+void Playback::read_data()
+{
+    char *readbuf = (char*)malloc(CIRBUFSIZE);
+    char *testing = (char*)malloc(CIRBUFSIZE);
+    QByteArray qba;
+    for (int i = 0; i < 100; i++)
+    {
+        write_buffer(&CBuf, (wf->read(CIRBUFSIZE)).data());
+    }
+    for (int i = 0; i < 100; i++)
+    {
+        if(CBuf._count != 0)
+        {
+            read_buffer(&CBuf, testing);
+            qba = QByteArray(testing, CIRBUFSIZE);
+            qByteArray.append(qba);
+        }
+    }
+
+//    for(int i = 0; i < 200; i++)
+//    {
+//        qByteArray.append(wf->read(CIRBUFSIZE));
+//    }
+//    for(int i = 0; i < 200; i++)
+//    {
+//        qByteArray.append(wf->read(CIRBUFSIZE));
+//    }
 }
