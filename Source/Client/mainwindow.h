@@ -51,6 +51,8 @@ private slots:
 
     void on_playPauseButton_clicked(bool checked);
 
+    void on_volumeSlider_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     int icon;

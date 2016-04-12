@@ -53,6 +53,11 @@ void MainWindow::on_actionResume_triggered()
     test->resume();
 }
 
+void MainWindow::on_volumeSlider_valueChanged(int value)
+{
+    test->updateVolume((float)(value / 100.0F));
+}
+
 void MainWindow::on_actionTest_2_triggered()
 {
     test2 = new Recording();

@@ -82,7 +82,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -179,8 +179,34 @@ color: white;
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Equalizer</string>
+      <string>Settings</string>
      </attribute>
+     <widget class="QSlider" name="volumeSlider">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>70</y>
+        <width>321</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>30</y>
+        <width>101</width>
+        <height>19</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Volume</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QPushButton" name="playPauseButton">

@@ -90,3 +90,8 @@ void Playback::resume()
 
     m_audioOutput->resume();
 }
+
+void Playback::updateVolume(float vol)
+{
+    m_audioOutput->setVolume(vol);
+}
