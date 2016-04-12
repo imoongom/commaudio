@@ -100,7 +100,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -140,8 +140,7 @@ border: 0;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: #524FA1;
-color: white;
- box-shadow: 3px 3px 5px 6px #ccc;</string>
+color: white;</string>
       </property>
       <property name="text">
        <string>Connect</string>
@@ -192,6 +191,28 @@ color: white;
       </property>
       <property name="styleSheet">
        <string notr="true">border: 0;</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Voice</string>
+     </attribute>
+     <widget class="QPushButton" name="pushToTalk">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>120</y>
+        <width>181</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #524FA1;
+color: white;</string>
+      </property>
+      <property name="text">
+       <string>Push to Talk</string>
       </property>
      </widget>
     </widget>
@@ -364,7 +385,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>21</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">

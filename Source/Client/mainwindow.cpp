@@ -156,3 +156,16 @@ void MainWindow::appendMusicPk(){
 
 
 }
+
+void MainWindow::on_pushToTalk_clicked(bool checked)
+{
+    if (!checked) {
+        ui->pushToTalk->setStyleSheet("background-color:#454389");
+        ui->pushToTalk->setCheckable(true);
+        // toggled
+    } else {
+        // not toggled
+        ui->pushToTalk->setStyleSheet("background-color:#524FA1");
+
+    }
+}
