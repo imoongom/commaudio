@@ -22,7 +22,7 @@ void UDPRecvThread::run(){
     char buffer[DATA_BUFSIZE];
 
     //start TCP Server
-    emit startTCP();
+   // emit startTCP();
 
     // initialize address information
     memset(&InternetAddr, 0, sizeof(InternetAddr));
@@ -55,7 +55,7 @@ void UDPRecvThread::run(){
                 emit closeSock();
                 return ;
             }
-            if (WSAWaitForMultipleEvents(1, &SI.Overlapped.hEvent, FALSE, INFINITE, FALSE) == WAIT_TIMEOUT) {
+            if (WSAWaitForMultipleEvents(1, &SI.Overlapped.hEvent, FALSE, 7000, FALSE) == WAIT_TIMEOUT) {
                 qDebug("NONO WSAWitForMultipleEvents\n");
                 return ;
             }

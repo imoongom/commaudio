@@ -13,6 +13,7 @@
 #include "playback.h"
 #include "recording.h"
 #include "playlist.h"
+#include "socket/clienttcp.h"
 #include "socket/clientudp.h"
 #include "socket/udprecvthread.h"
 #include "socket/threadhandler.h"
@@ -31,9 +32,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
 public slots:
     void toggleIcon();
-
+    void appendMusicPk();
 private slots:
 
     void on_actionPlaylist_triggered();
@@ -45,6 +47,8 @@ private slots:
     void on_playPauseButton_clicked(bool checked);
 
     void on_volumeSlider_valueChanged(int value);
+
+    void on_connectButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -58,6 +62,13 @@ private:
     QString fname3 = QString(":/qss_icons/rc/stopButton.png");
 
     WavFile *wf;
+
+    QThread *TCPThread;
+    QThread *UDPThread;
+    QThread *playThread;
+    QThread *musicThread;
+    Playback *addPk;
+
 };
 
 #endif // MAINWINDOW_H

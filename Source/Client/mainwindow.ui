@@ -100,13 +100,13 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
       <string>Connect</string>
      </attribute>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="lineEdit_ip">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -129,7 +129,7 @@ border: 0;</string>
        <string>IP Address</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="connectButton">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -166,7 +166,7 @@ color: white;
        <string>Socket</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="lineEdit_port">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -364,7 +364,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>30</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
