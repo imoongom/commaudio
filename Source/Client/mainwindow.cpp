@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+ClientTCP *tcpcl;
+ClientUDP *udpCl;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -99,4 +102,55 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
     }
+}
+
+void MainWindow::on_connectButton_clicked()
+{
+    //get input value
+    QString host_ip_addr = ui->lineEdit_ip->text();
+    int host_port_no = ui->lineEdit_port->text().toInt();
+
+    TCPThread = new QThread();
+
+    ThreadHandler *TCPhandler = new ThreadHandler();
+    UDPRecvThread *multiThread = new UDPRecvThread(this);
+
+    //initialize tcp and udp
+    if(host_ip_addr.size()==0 && host_port_no == NULL)
+        tcpcl = new ClientTCP();
+    else
+        tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
+
+    //initialize and connect UDP
+    udpCl = new ClientUDP();
+    if(!udpCl->Start() || !udpCl->initData() ||!udpCl->multiSetup()){
+        udpCl->close();
+        return ;
+    }
+
+    TCPhandler->moveToThread(TCPThread);
+
+    connect(multiThread, SIGNAL(recvData()), this, SLOT(appendMusicPk()));
+
+
+    TCPThread->start();
+    multiThread->start();
+
+    TCPhandler->TCPThread();
+
+}
+
+
+void MainWindow::appendMusicPk(){
+
+    char buffer[CIRBUFSIZE];
+    if(CBuf._count ==0)
+        return;
+    read_buffer(&CBuf, &buffer);
+    qDebug("CBUFFER readed");
+//    addPk->moveToThread(musicThread);
+//    musicThread->start();
+
+
+
 }

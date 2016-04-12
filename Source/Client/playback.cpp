@@ -71,6 +71,7 @@ void Playback::read_data()
 //    {
 //        qByteArray.append(wf->read(CIRBUFSIZE));
 //    }
+
 }
 
 void Playback::updateVolume(float vol)
