@@ -44,3 +44,5 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     qdarkstyle/style.qrc
+
+CONFIG += c++11

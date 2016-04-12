@@ -1,6 +1,10 @@
 #include "threadhandler.h"
 #include "clienttcp.h"
 #include "clientudp.h"
+#include <QDebug>
+
+extern ClientTCP *tcpcl;
+extern ClientUDP *udpCl;
 
 ThreadHandler::ThreadHandler(QObject *parent) : QObject(parent)
 {
@@ -41,18 +45,19 @@ void ThreadHandler::createThread() {
     WaitForMultipleObjects(2, ThreadHandles, TRUE, INFINITE);
 
 */
-    WaitForSingleObject(ThreadHandle, INFINITE);
+    WaitForSingleObject(ThreadHandle, 2000);
     printf("### TCP SERVER thread CREATED!!!!!!!!\n");
 }
 
 //1st thread function
 void ThreadHandler::TCPThread() {
-    ClientTCP tcpcl;
-    if(tcpcl.TCPConnect()){
+ //   ClientTCP tcpcl;
+    if(!tcpcl->TCPConnect()){
         return ;
     }
 
-    tcpcl.createThread();
+    tcpcl->TCPcreateThread();
+    qDebug()<< "TCP creat Thread";
 }
 
 //2nd thread function

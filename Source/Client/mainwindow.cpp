@@ -1,11 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+ClientTCP *tcpcl;
+ClientUDP *udpCl;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    initBuffer(&CBuf);
 
     // QString fname = QString(":/qss_icons/rc/play-circle1.png");
     //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
@@ -38,34 +43,9 @@ void MainWindow::toggleIcon()
 
 }
 
-void MainWindow::on_actionTest_1_triggered()
-{
-    test = new Playback();
-}
-
-void MainWindow::on_actionPause_triggered()
-{
-    test->pause();
-}
-
-void MainWindow::on_actionResume_triggered()
-{
-    test->resume();
-}
-
 void MainWindow::on_volumeSlider_valueChanged(int value)
 {
     test->updateVolume((float)(value / 100.0F));
-}
-
-void MainWindow::on_actionTest_2_triggered()
-{
-    test2 = new Recording();
-}
-
-void MainWindow::on_actionPause2_triggered()
-{
-    test2->pause();
 }
 
 void MainWindow::on_actionPlaylist_triggered()
@@ -78,19 +58,6 @@ void MainWindow::on_actionPlaylist_triggered()
     qDebug() << "got list";
 
 }
-
-void MainWindow::on_actionRingBuf_triggered()
-{
-    /*
-    CircularBuffer *cb;
-    initBuffer(cb);
-    Playback *cbtest = new Playback(cb);
-    */
-
-    Playback *pb = new Playback(new RingBuffer());
-
-}
-
 
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
@@ -108,6 +75,23 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
 }
 
+void MainWindow::on_actionCB_triggered()
+{
+
+    CBufs cb;
+    initBuffer(&cb);
+    test = new Playback();
+
+
+    QThread *t = new QThread;
+    test->moveToThread(t);
+    connect(t, SIGNAL(started()), test, SLOT(runthis()));
+    t->start();
+
+//    test->write_data();
+//    test->read_data();
+}
+
 void MainWindow::on_playPauseButton_clicked(bool checked)
 {
     if (!checked) {
@@ -118,4 +102,57 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
     }
+}
+
+void MainWindow::on_connectButton_clicked()
+{
+    //get input value
+    QString host_ip_addr = ui->lineEdit_ip->text();
+    int host_port_no = ui->lineEdit_port->text().toInt();
+
+    TCPThread = new QThread();
+    musicThread = new QThread();
+    ThreadHandler *TCPhandler = new ThreadHandler();
+    UDPRecvThread *multiThread = new UDPRecvThread(this);
+    addPk = new Playback();
+    //initialize tcp and udp
+    if(host_ip_addr.size()==0 && host_port_no == NULL)
+        tcpcl = new ClientTCP();
+    else
+        tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
+
+    //initialize and connect UDP
+    udpCl = new ClientUDP();
+    if(!udpCl->Start() || !udpCl->initData() ||!udpCl->multiSetup()){
+        udpCl->close();
+        return ;
+    }
+
+    TCPhandler->moveToThread(TCPThread);
+    addPk->moveToThread(musicThread);
+
+    connect(multiThread, SIGNAL(recvData()), this, SLOT(appendMusicPk()));
+
+
+    TCPThread->start();
+    multiThread->start();
+
+    TCPhandler->TCPThread();
+    addPk->runthis();
+
+}
+
+//dummy to make space circularbuffer
+void MainWindow::appendMusicPk(){
+    addPk->read_data();
+ //   char buffer[CIRBUFSIZE];
+//    if(CBuf._count ==0)
+//        return;
+//    read_buffer(&CBuf, &buffer);
+//    qDebug("CBUFFER readed");
+//    addPk->moveToThread(musicThread);
+//    musicThread->start();
+
+
+
 }

@@ -13,9 +13,12 @@
 #include "playback.h"
 #include "recording.h"
 #include "playlist.h"
+#include "socket/clienttcp.h"
 #include "socket/clientudp.h"
 #include "socket/udprecvthread.h"
 #include "socket/threadhandler.h"
+#include "socket/circularbuffer.h"
+#include "wavfile.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,29 +32,23 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
 public slots:
     void toggleIcon();
-
+    void appendMusicPk();
 private slots:
-    void on_actionTest_1_triggered();
-
-    void on_actionPause_triggered();
-
-    void on_actionResume_triggered();
-
-    void on_actionTest_2_triggered();
-
-    void on_actionPause2_triggered();
 
     void on_actionPlaylist_triggered();
 
     void on_actionJoin_Multicast_triggered();
 
-    void on_actionRingBuf_triggered();
+    void on_actionCB_triggered();
 
     void on_playPauseButton_clicked(bool checked);
 
     void on_volumeSlider_valueChanged(int value);
+
+    void on_connectButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -63,6 +60,14 @@ private:
     QString fname = QString(":/qss_icons/rc/play-circle1.png");
     QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
     QString fname3 = QString(":/qss_icons/rc/stopButton.png");
+
+    WavFile *wf;
+
+    QThread *TCPThread;
+    QThread *UDPThread;
+    QThread *playThread;
+    QThread *musicThread;
+    Playback *addPk;
 
 };
 

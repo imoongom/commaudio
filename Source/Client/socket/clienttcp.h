@@ -18,7 +18,7 @@ public:
     //method
     static DWORD WINAPI TCPThreadConnect(void * Param);
     boolean TCPConnect();
-    void createThread();
+    void TCPcreateThread();
     void TCPRecv();
     void TCPSend(char * message);
     void TCPSend2(char * message);

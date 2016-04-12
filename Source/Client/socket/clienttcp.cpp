@@ -66,7 +66,7 @@ boolean ClientTCP::TCPConnect() {
     return true;
 }
 
-void ClientTCP::createThread() {
+void ClientTCP::TCPcreateThread() {
     qDebug("### TCP CLIENT create Thread\n");
     HANDLE ThreadHandle;
     if ((ThreadHandle = CreateThread(NULL, 0, TCPThreadConnect, this, 0, NULL)) == NULL)
@@ -74,7 +74,7 @@ void ClientTCP::createThread() {
         qDebug("CreateThread failed with error %d\n", GetLastError());
         return;
     }
-    WaitForSingleObject(ThreadHandle, INFINITE);
+    WaitForSingleObject(ThreadHandle, 2000);
     qDebug("### TCP CLIENT thread CREATED!!!!!!!!\n");
 }
 
@@ -113,7 +113,7 @@ void ClientTCP::TCPRecv() {
 
         }
             qDebug("RECV : %s\n", SI->DataBuf.buf);
-        if ((WSAWaitForMultipleEvents(1, &SI->Overlapped.hEvent, FALSE, INFINITE, FALSE)) == WAIT_TIMEOUT) {
+        if ((WSAWaitForMultipleEvents(1, &SI->Overlapped.hEvent, FALSE, 5000, FALSE)) == WAIT_TIMEOUT) {
             qDebug("READ DOME");
             return;
         }
@@ -121,9 +121,10 @@ void ClientTCP::TCPRecv() {
 
         i++;
            // wsprintf(temp2, "[sendback]%s\nHELLO THIS IS TCP  CLIENT[%d] SEND!!\n", (SI->DataBuf.buf).c_str(), i);
-
+        qDebug()<<"TCPSEND PASS";
         TCPSend(temp);
-        //memset(&temp, '\0', BUFSIZE);
+        qDebug()<<"EMPTY BUFFER";
+        memset(&temp, '\0', BUFSIZE);
     }
 }
 
@@ -161,7 +162,7 @@ void ClientTCP::TCPSend(char * message) {
         qDebug("READ DOME");
         return;
     }
-
+  //  memset(&SI->DataBuf.buf, '\0', BUFSIZE);
         SI->BytesSEND += SendBytes;
 
 }
