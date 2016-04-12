@@ -140,7 +140,7 @@ void MainWindow::on_connectButton_clicked()
 
 }
 
-
+//dummy to make space circularbuffer
 void MainWindow::appendMusicPk(){
 
     char buffer[CIRBUFSIZE];
