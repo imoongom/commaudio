@@ -6,25 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>635</width>
     <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>900</width>
+    <width>635</width>
     <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>900</width>
+    <width>635</width>
     <height>600</height>
    </size>
   </property>
@@ -100,7 +100,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -129,7 +129,7 @@ border: 0;</string>
        <string>IP Address</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="buttonTcpConnect">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -192,37 +192,6 @@ color: white;
       </property>
       <property name="styleSheet">
        <string notr="true">border: 0;</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Settings</string>
-     </attribute>
-     <widget class="QSlider" name="volumeSlider">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>70</y>
-        <width>321</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_8">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>30</y>
-        <width>101</width>
-        <height>19</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Volume</string>
       </property>
      </widget>
     </widget>
@@ -324,38 +293,6 @@ color: rgb(161, 161, 161);</string>
      <string>/ 3:25</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="userList">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>60</y>
-      <width>191</width>
-      <height>451</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;
-</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>10</y>
-      <width>161</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 57 8pt &quot;DINPro-Medium&quot;;
-font: 57 14pt &quot;Roboto Medium&quot;;
-color: white;</string>
-    </property>
-    <property name="text">
-     <string>Users</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
@@ -363,8 +300,8 @@ color: white;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>900</width>
-     <height>30</height>
+     <width>635</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -377,15 +314,14 @@ color: white;</string>
     <addaction name="separator"/>
     <addaction name="actionJoin_Multicast"/>
    </widget>
-   <widget class="QMenu" name="menuAudio_Test">
+   <widget class="QMenu" name="menuPlaylist">
     <property name="title">
-     <string>Audio Test</string>
+     <string>Playlist</string>
     </property>
-    <addaction name="actionPlaylist"/>
-    <addaction name="actionCB"/>
+    <addaction name="actionAdd_Songs"/>
    </widget>
    <addaction name="menuConnections"/>
-   <addaction name="menuAudio_Test"/>
+   <addaction name="menuPlaylist"/>
   </widget>
   <action name="action_Request_Playlist">
    <property name="text">
@@ -544,6 +480,31 @@ color: white;</string>
     <string>Disconnect</string>
    </property>
   </action>
+  <action name="actionTest_1">
+   <property name="text">
+    <string>Test 1</string>
+   </property>
+  </action>
+  <action name="actionPause">
+   <property name="text">
+    <string>Pause</string>
+   </property>
+  </action>
+  <action name="actionResume">
+   <property name="text">
+    <string>Resume</string>
+   </property>
+  </action>
+  <action name="actionTest_2">
+   <property name="text">
+    <string>Test 2</string>
+   </property>
+  </action>
+  <action name="actionPause2">
+   <property name="text">
+    <string>Pause2</string>
+   </property>
+  </action>
   <action name="actionPlaylist">
    <property name="text">
     <string>Playlist</string>
@@ -554,9 +515,9 @@ color: white;</string>
     <string>Join Multicast</string>
    </property>
   </action>
-  <action name="actionCB">
+  <action name="actionAdd_Songs">
    <property name="text">
-    <string>CB</string>
+    <string>Add Songs</string>
    </property>
   </action>
  </widget>

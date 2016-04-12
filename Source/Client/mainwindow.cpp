@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    initBuffer(&CBuf);
+
     // QString fname = QString(":/qss_icons/rc/play-circle1.png");
     //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
     // QString fname3 = QString(":/qss_icons/rc/stopButton.png");
@@ -38,29 +40,9 @@ void MainWindow::toggleIcon()
 
 }
 
-void MainWindow::on_actionTest_1_triggered()
+void MainWindow::on_volumeSlider_valueChanged(int value)
 {
-    test = new Playback();
-}
-
-void MainWindow::on_actionPause_triggered()
-{
-    test->pause();
-}
-
-void MainWindow::on_actionResume_triggered()
-{
-    test->resume();
-}
-
-void MainWindow::on_actionTest_2_triggered()
-{
-    test2 = new Recording();
-}
-
-void MainWindow::on_actionPause2_triggered()
-{
-    test2->pause();
+    test->updateVolume((float)(value / 100.0F));
 }
 
 void MainWindow::on_actionPlaylist_triggered()
@@ -73,19 +55,6 @@ void MainWindow::on_actionPlaylist_triggered()
     qDebug() << "got list";
 
 }
-
-void MainWindow::on_actionRingBuf_triggered()
-{
-    /*
-    CircularBuffer *cb;
-    initBuffer(cb);
-    Playback *cbtest = new Playback(cb);
-    */
-
-    Playback *pb = new Playback(new RingBuffer());
-
-}
-
 
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
@@ -103,10 +72,31 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
 }
 
-void MainWindow::on_playPauseButton_clicked()
+void MainWindow::on_actionCB_triggered()
 {
-    playPauseFlag = true;
 
-    ui->playPauseButton->setIcon(QIcon(fname2));
+    CBufs cb;
+    initBuffer(&cb);
+    test = new Playback();
 
+
+    QThread *t = new QThread;
+    test->moveToThread(t);
+    connect(t, SIGNAL(started()), test, SLOT(runthis()));
+    t->start();
+
+//    test->write_data();
+//    test->read_data();
+}
+
+void MainWindow::on_playPauseButton_clicked(bool checked)
+{
+    if (!checked) {
+        ui->playPauseButton->setIcon(QIcon(fname2));
+        ui->playPauseButton->setCheckable(true);
+        // do pause stuff here
+    } else {
+        ui->playPauseButton->setIcon(QIcon(fname));
+        // do Play stuff here
+    }
 }

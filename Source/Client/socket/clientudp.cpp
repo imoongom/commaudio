@@ -79,7 +79,7 @@ boolean ClientUDP::multiSetup(){
 
 }
 boolean ClientUDP::initData(){
-    initBuffer(&CBuf);
+//    initBuffer(&CBuf);
  //   if((fstream = fopen("NeYo-SoSick.wav", "wb"))== NULL){
     if((fstream = fopen("nananafile.txt", "wb"))== NULL){
         qDebug() << "file open fail\n";

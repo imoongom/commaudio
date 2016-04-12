@@ -2,8 +2,6 @@
 #define GLOBAL_H
 #include <winsock2.h>
 #include <iostream>
-#include "socket/circularbuffer.h"
-
 
 #define BUFMAX  128
 #define BUFSIZE 8192
@@ -25,7 +23,6 @@
 #define MUSIC_LIST  20001
 #define CLIENT_LIST 20002
 
-
 typedef struct _SOCKET_INFORMATION {
    OVERLAPPED Overlapped;
    SOCKET Socket;
@@ -43,11 +40,9 @@ typedef struct TCP_MESSSAGE{
 
 }TCP_MESG;
 
-
 extern SOCKET hSock;
 extern SOCKET tcpSock;
 extern int sockPort;
-//static SOCKET hSocket;
-extern struct CBuffer CBuf;
-extern SOCKADDR_IN stLclAddr,  InternetAddr;
+extern SOCKADDR_IN stLclAddr, stDstAddr;
+
 #endif // GLOBAL_H
