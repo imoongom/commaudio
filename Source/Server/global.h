@@ -44,5 +44,7 @@ extern SOCKET hSock;
 extern SOCKET tcpSock;
 extern int sockPort;
 extern SOCKADDR_IN stLclAddr, stDstAddr;
+extern bool udpConnected;
+extern bool tcpConnected;
 
 #endif // GLOBAL_H

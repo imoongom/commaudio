@@ -28,7 +28,7 @@ void UDPSendWorker::Run(){
 
     // Read and send until end of file
     qDebug() << "Sending " << filename << " data over UDP...";
-    while (!file.atEnd()) {
+    while (!file.atEnd() && udpConnected) {
         QByteArray line = file.read(DATA_BUFSIZE);
         char *sbuf = new char[DATA_BUFSIZE];
         strcpy(sbuf, line.data()); // strcpy not best way

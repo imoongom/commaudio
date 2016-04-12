@@ -1,5 +1,7 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 #include "ui_mainwindow.h"
+bool udpConnected = false;
+bool tcpConnected = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,7 +24,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_playPauseButton_clicked(bool checked)
 {
-    if (!checked) {
+    if (!checked && udpConnected) {
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
 
@@ -43,43 +45,59 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
     }
 }
 
-void MainWindow::on_buttonTcpConnect_clicked() {
-    // TODO: get user input port
-    int tcpPort = TCP_DEFAULT_PORT;
+void MainWindow::on_buttonTcpConnect_clicked(bool checked) {
+    if (!checked && !tcpConnected) {
+        ui->buttonTcpConnect->setCheckable(true);
 
-    // QThread for TCP control
-    tcpControlWorkerThread = new QThread;
-    tcpControlWorker = new TCPControlWorker;
-    tcpControlWorker->moveToThread(tcpControlWorkerThread);
+        // TODO: get user input port
+        int tcpPort = TCP_DEFAULT_PORT;
 
-    // Start TCP control thread and connect signals & slots
-    connect(tcpControlWorker, SIGNAL(SignalInitSocket(int)), tcpControlWorker, SLOT(InitSocket(int)));
-    //connect(tcpControlWorker, SIGNAL(AcceptedClient(int)), tcpControlWorker, SLOT(HandleNewClient(int)));
-    connect(tcpControlWorker, SIGNAL(ClosedSocket()), tcpControlWorker, SLOT(CloseSocket()));
-    connect(tcpControlWorker, SIGNAL(finished()), tcpControlWorkerThread, SLOT(quit()));
-    connect(tcpControlWorker, SIGNAL(finished()), tcpControlWorker, SLOT(deleteLater()));
-    connect(tcpControlWorkerThread, SIGNAL(finished()), tcpControlWorkerThread, SLOT(deleteLater()));
+        // QThread for TCP control
+        tcpControlWorkerThread = new QThread;
+        tcpControlWorker = new TCPControlWorker;
+        tcpControlWorker->moveToThread(tcpControlWorkerThread);
 
-    tcpControlWorkerThread->start();
+        // Start TCP control thread and connect signals & slots
+        connect(tcpControlWorker, SIGNAL(SignalInitSocket(int)), tcpControlWorker, SLOT(InitSocket(int)));
+        connect(tcpControlWorker, SIGNAL(AcceptedClient(int)), this, SLOT(HandleNewClient(int)));
+        connect(tcpControlWorker, SIGNAL(ClosedSocket()), tcpControlWorker, SLOT(CloseSocket()));
+        connect(tcpControlWorker, SIGNAL(finished()), tcpControlWorkerThread, SLOT(quit()));
+        connect(tcpControlWorker, SIGNAL(finished()), tcpControlWorker, SLOT(deleteLater()));
+        connect(tcpControlWorkerThread, SIGNAL(finished()), tcpControlWorkerThread, SLOT(deleteLater()));
 
-    emit tcpControlWorker->SignalInitSocket(tcpPort);
+        tcpControlWorkerThread->start();
+
+        tcpConnected = true;
+        emit tcpControlWorker->SignalInitSocket(tcpPort);
+    } else if (checked && tcpConnected) {
+        tcpControlWorker->finished();
+        tcpControlWorker->CloseSocket();
+        tcpConnected = false;
+    }
 }
 
-void MainWindow::on_actionJoin_Multicast_triggered() {
-    // Setup UDP
-    serverUdp = new ServerUDP();
-    // TODO: get user input port
-    if (!serverUdp->InitSocket(TIMECAST_PORT)) {
-        qDebug() << "InitSocket error, closing socket";
+void MainWindow::on_actionJoin_Multicast_triggered(bool checked) {
+    if (!checked && !udpConnected) {
+        ui->actionJoin_Multicast->setCheckable(true);
+        // Setup UDP
+        serverUdp = new ServerUDP();
+        // TODO: get user input port
+        if (!serverUdp->InitSocket(TIMECAST_PORT)) {
+            qDebug() << "InitSocket error, closing socket";
+            serverUdp->CloseSocket();
+            return;
+        } else if (!serverUdp->InitData()) {
+            qDebug() << "InitData error, closing socket";
+            serverUdp->CloseSocket();
+            return;
+        } else if(!serverUdp->MulticastSettings(TIMECAST_ADDR)) {
+            qDebug() << "MulticastSettings error";
+            serverUdp->CloseSocket();
+            return;
+        }
+        udpConnected = true;
+    } else if (checked && udpConnected){
         serverUdp->CloseSocket();
-        return;
-    } else if (!serverUdp->InitData()) {
-        qDebug() << "InitData error, closing socket";
-        serverUdp->CloseSocket();
-        return;
-    } else if(!serverUdp->MulticastSettings(TIMECAST_ADDR)) {
-        qDebug() << "MulticastSettings error";
-        serverUdp->CloseSocket();
-        return;
+        udpConnected = false;
     }
 }

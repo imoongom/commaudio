@@ -10,47 +10,49 @@ struct ip_mreq stMreq; // Multicast interface structure
 
 /* Initialize Windows socket */
 boolean ServerUDP::InitSocket(int port) {
-    qDebug() << "ServerUDP:: Initializing UDP connection";
-   int opt = 1;
-   SOCKADDR_IN locAddr;
+    if (!udpConnected) {
+        qDebug() << "ServerUDP:: Initializing UDP connection";
+        int opt = 1;
+        SOCKADDR_IN locAddr;
 
-   if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-   {
-        qDebug() << "WSAStartup failed with error" << WSAGetLastError();
-        return false;
-   }
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+        {
+            qDebug() << "WSAStartup failed with error" << WSAGetLastError();
+            return false;
+        }
 
-   // Get a datagram socket for listening
-   if ((hSock = WSASocket(AF_INET,SOCK_DGRAM, IPPROTO_UDP, NULL, 0,
-                                             WSA_FLAG_OVERLAPPED)) == INVALID_SOCKET) {
-        qDebug() << "WSASocket() failed with error " << WSAGetLastError();
-        WSACleanup();
-        return false;
-   }
+        // Get a datagram socket for listening
+        if ((hSock = WSASocket(AF_INET,SOCK_DGRAM, IPPROTO_UDP, NULL, 0,
+                                                 WSA_FLAG_OVERLAPPED)) == INVALID_SOCKET) {
+            qDebug() << "WSASocket() failed with error " << WSAGetLastError();
+            WSACleanup();
+            return false;
+        }
 
-   // Allow socket to reuse port
-   if (setsockopt(hSock, SOL_SOCKET, SO_REUSEADDR, (const char *)&opt, sizeof(opt)) < 0)
-   {
-       qDebug() << "setsockopt() SO_REUSEADDR with error " << WSAGetLastError();
-       WSACleanup();
-       return false;
-   }
+        // Allow socket to reuse port
+        if (setsockopt(hSock, SOL_SOCKET, SO_REUSEADDR, (const char *)&opt, sizeof(opt)) < 0)
+        {
+           qDebug() << "setsockopt() SO_REUSEADDR with error " << WSAGetLastError();
+           WSACleanup();
+           return false;
+        }
 
-   // Name the socket (assign the local port number to receive on)
-   stLclAddr.sin_family = AF_INET;
-   stLclAddr.sin_addr.s_addr = htonl(INADDR_ANY); // any address
-   stLclAddr.sin_port = 0; // any port
+        // Name the socket (assign the local port number to receive on)
+        stLclAddr.sin_family = AF_INET;
+        stLclAddr.sin_addr.s_addr = htonl(INADDR_ANY); // any address
+        stLclAddr.sin_port = 0; // any port
 
-   // Bind address to socket
-   if (bind(hSock, (LPSOCKADDR)&stLclAddr, sizeof(stLclAddr)) == SOCKET_ERROR)
-   {
-       qDebug() << "bind() failed with error " << WSAGetLastError();
-       WSACleanup();
-       return false;
-   }
+        // Bind address to socket
+        if (bind(hSock, (LPSOCKADDR)&stLclAddr, sizeof(stLclAddr)) == SOCKET_ERROR)
+        {
+           qDebug() << "bind() failed with error " << WSAGetLastError();
+           WSACleanup();
+           return false;
+        }
 
-   qDebug() << "UDP connection established on socket: " << hSock << " port : " << port;
-
+        udpConnected = true;
+        qDebug() << "UDP connection established on socket: " << hSock << " port : " << port;
+    }
    return true;
 }
 
@@ -144,19 +146,27 @@ boolean ServerUDP::InitData() {
 }
 
 void ServerUDP::CloseSocket() {
-    multicastAddr.imr_multiaddr.s_addr = inet_addr(hostAddr);
-    multicastAddr.imr_interface.s_addr = INADDR_ANY;
+    if (udpConnected) {
+        qDebug() << "Closing UDP socket...";
+        multicastAddr.imr_multiaddr.s_addr = inet_addr(hostAddr);
+        multicastAddr.imr_interface.s_addr = INADDR_ANY;
 
-    if (setsockopt(hSock, IPPROTO_IP, IP_DROP_MEMBERSHIP, (char *)&multicastAddr,
-                   sizeof(multicastAddr)) == SOCKET_ERROR) {
-        qDebug(
-            "setsockopt() IP_DROP_MEMBERSHIP address %s failed, Err: %d\n",
-            hostAddr, WSAGetLastError());
+        /*
+        if (setsockopt(hSock, IPPROTO_IP, IP_DROP_MEMBERSHIP, (char *)&multicastAddr,
+                       sizeof(multicastAddr)) == SOCKET_ERROR) {
+            qDebug(
+                "setsockopt() IP_DROP_MEMBERSHIP address %s failed, Err: %d\n",
+                hostAddr, WSAGetLastError());
+        }
+        */
+
+        /* Close the socket */
+        closesocket(hSock);
+
+        /* Tell WinSock we're leaving */
+        WSACleanup();
+
+        udpConnected = false;
+        qDebug() << "Closed UDP socket";
     }
-
-    /* Close the socket */
-    closesocket(hSock);
-
-    /* Tell WinSock we're leaving */
-    WSACleanup();
 }

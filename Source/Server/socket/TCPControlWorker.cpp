@@ -1,5 +1,6 @@
 #include <iostream>
-#include<QDebug>
+#include <QApplication>
+#include <QDebug>
 #include "TCPControlWorker.h"
 
 /* Initialize Windows socket */
@@ -39,7 +40,7 @@ void TCPControlWorker::InitSocket(int port) {
     }
 
     // Accept clients
-    while (1) {
+    while (tcpConnected) {
         clientLen= sizeof(clientAddr);
 
         if ((acceptedClientSocket = accept (listeningSocket, (struct sockaddr *)&clientAddr, &clientLen)) == -1) {
@@ -105,13 +106,9 @@ boolean TCPControlWorker::SendAll(char *message, LPDWORD lpNumberOfBytesSent) {
 }
 
 void TCPControlWorker::CloseSocket(){
+    qDebug() << "Closing TCP socket...";
     closesocket(listeningSocket);
     WSACleanup();
     emit ClosedSocket();
+    qDebug() << "Closed TCP socket.";
 }
-
-/*
-void HandleNewClient(int socket) {
-    // here we'd update the connected users list, may not have one though
-}
-*/
