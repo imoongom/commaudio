@@ -103,10 +103,14 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
 }
 
-void MainWindow::on_playPauseButton_clicked()
+void MainWindow::on_playPauseButton_clicked(bool checked)
 {
-    playPauseFlag = true;
-
-    ui->playPauseButton->setIcon(QIcon(fname2));
-
+    if (!checked) {
+        ui->playPauseButton->setIcon(QIcon(fname2));
+        ui->playPauseButton->setCheckable(true);
+        // do pause stuff here
+    } else {
+        ui->playPauseButton->setIcon(QIcon(fname));
+        // do Play stuff here
+    }
 }
