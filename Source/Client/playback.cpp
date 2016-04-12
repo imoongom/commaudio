@@ -81,7 +81,6 @@ void Playback::play()
 
 void Playback::pause()
 {
-
     m_audioOutput->suspend();
 }
 
