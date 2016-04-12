@@ -100,7 +100,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -129,7 +129,7 @@ border: 0;</string>
        <string>IP Address</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="buttonTcpConnect">
       <property name="geometry">
        <rect>
         <x>320</x>
