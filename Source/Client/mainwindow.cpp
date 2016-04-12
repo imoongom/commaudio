@@ -40,6 +40,11 @@ void MainWindow::toggleIcon()
 
 }
 
+void MainWindow::on_volumeSlider_valueChanged(int value)
+{
+    test->updateVolume((float)(value / 100.0F));
+}
+
 void MainWindow::on_actionPlaylist_triggered()
 {
     list = new Playlist("../Demo");
@@ -84,25 +89,14 @@ void MainWindow::on_actionCB_triggered()
     wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
 }
 
-void MainWindow::on_actionCB_Add_triggered()
+void MainWindow::on_playPauseButton_clicked(bool checked)
 {
-    char *write = (char*)malloc(CIRBUFSIZE);
-
-    qDebug() << CBuf._count << sizeof(CBuf.buffer);
-    for (int i = 0; i < CIRBUFMAX; i++)
-    {
-        if(wf->read(write, CIRBUFSIZE) > 0)
-            write_buffer(&CBuf, write);
+    if (!checked) {
+        ui->playPauseButton->setIcon(QIcon(fname2));
+        ui->playPauseButton->setCheckable(true);
+        // do pause stuff here
+    } else {
+        ui->playPauseButton->setIcon(QIcon(fname));
+        // do Play stuff here
     }
-    qDebug() << "End:" << CBuf._count << sizeof(CBuf.buffer);
-//    test->write_data();
-    /*
-    QThread* thread = new QThread;
-    Worker* worker = new Worker();
-    worker->moveToThread(thread);
-
-    connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    thread->start();
-    thread->finished();
-    */
 }

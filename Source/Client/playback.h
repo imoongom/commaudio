@@ -29,11 +29,13 @@ public:
     Playback();
     ~Playback();
 
+
     void write_data();
 
 public slots:
     void runthis();
     void read_data();
+    void updateVolume(float vol);
 
 private:
     WavFile *wf;
