@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>892</width>
+    <width>636</width>
     <height>588</height>
    </rect>
   </property>
@@ -82,7 +82,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -176,11 +176,6 @@ color: white;
        <string notr="true">border: 0;</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Equalizer</string>
-     </attribute>
     </widget>
    </widget>
    <widget class="QPushButton" name="playPauseButton">
@@ -280,38 +275,6 @@ color: rgb(161, 161, 161);</string>
      <string>/ 3:25</string>
     </property>
    </widget>
-   <widget class="QListWidget" name="userList">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>60</y>
-      <width>191</width>
-      <height>451</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;
-</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>10</y>
-      <width>161</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 57 8pt &quot;DINPro-Medium&quot;;
-font: 57 14pt &quot;Roboto Medium&quot;;
-color: white;</string>
-    </property>
-    <property name="text">
-     <string>Users</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
@@ -319,7 +282,7 @@ color: white;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>892</width>
+     <width>636</width>
      <height>31</height>
     </rect>
    </property>
@@ -333,19 +296,7 @@ color: white;</string>
     <addaction name="separator"/>
     <addaction name="actionJoin_Multicast"/>
    </widget>
-   <widget class="QMenu" name="menuAudio_Test">
-    <property name="title">
-     <string>Audio Test</string>
-    </property>
-    <addaction name="actionTest_1"/>
-    <addaction name="actionPause"/>
-    <addaction name="actionResume"/>
-    <addaction name="actionTest_2"/>
-    <addaction name="actionPause2"/>
-    <addaction name="actionPlaylist"/>
-   </widget>
    <addaction name="menuConnections"/>
-   <addaction name="menuAudio_Test"/>
   </widget>
   <action name="action_Request_Playlist">
    <property name="text">
