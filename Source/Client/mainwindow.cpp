@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    initBuffer(&CBuf);
+
     // QString fname = QString(":/qss_icons/rc/play-circle1.png");
     //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
     // QString fname3 = QString(":/qss_icons/rc/stopButton.png");
@@ -38,34 +40,9 @@ void MainWindow::toggleIcon()
 
 }
 
-void MainWindow::on_actionTest_1_triggered()
-{
-    test = new Playback();
-}
-
-void MainWindow::on_actionPause_triggered()
-{
-    test->pause();
-}
-
-void MainWindow::on_actionResume_triggered()
-{
-    test->resume();
-}
-
 void MainWindow::on_volumeSlider_valueChanged(int value)
 {
     test->updateVolume((float)(value / 100.0F));
-}
-
-void MainWindow::on_actionTest_2_triggered()
-{
-    test2 = new Recording();
-}
-
-void MainWindow::on_actionPause2_triggered()
-{
-    test2->pause();
 }
 
 void MainWindow::on_actionPlaylist_triggered()
@@ -78,19 +55,6 @@ void MainWindow::on_actionPlaylist_triggered()
     qDebug() << "got list";
 
 }
-
-void MainWindow::on_actionRingBuf_triggered()
-{
-    /*
-    CircularBuffer *cb;
-    initBuffer(cb);
-    Playback *cbtest = new Playback(cb);
-    */
-
-    Playback *pb = new Playback(new RingBuffer());
-
-}
-
 
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
@@ -106,6 +70,23 @@ void MainWindow::on_actionJoin_Multicast_triggered()
     connect(multiThread, SIGNAL(recvData()), udp, SLOT(writeFile()));
     multiThread->start();
 
+}
+
+void MainWindow::on_actionCB_triggered()
+{
+
+    CBufs cb;
+    initBuffer(&cb);
+    test = new Playback();
+
+
+    QThread *t = new QThread;
+    test->moveToThread(t);
+    connect(t, SIGNAL(started()), test, SLOT(runthis()));
+    t->start();
+
+    wf = new WavFile();
+    wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
 }
 
 void MainWindow::on_playPauseButton_clicked(bool checked)
