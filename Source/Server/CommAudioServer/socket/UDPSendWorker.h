@@ -13,10 +13,9 @@ private:
     ServerUDP *_serverUdp;
 
 private slots:
-    void run();
+    void Run();
 signals:
-    void SendData();
-    void StartTCP();
+    void SentData();
     void CloseSocket();
 };
 

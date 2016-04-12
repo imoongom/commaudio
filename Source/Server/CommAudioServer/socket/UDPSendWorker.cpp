@@ -11,7 +11,7 @@ UDPSendWorker::UDPSendWorker(ServerUDP *serverUdp) :
 
 }
 
-void UDPSendWorker::run(){
+void UDPSendWorker::Run(){
     qDebug() << "Running UDPSendWorker";
     SOCKET_INFORMATION      SI;
     DWORD SendBytes;
@@ -25,6 +25,7 @@ void UDPSendWorker::run(){
     qDebug() << "ServerUDP::InitData() success";
 
     // Read and send until end of file
+    qDebug() << "Sending data over UDP...";
     while (!file.atEnd()) {
         QByteArray line = file.read(DATA_BUFSIZE);
         char *sbuf = new char[DATA_BUFSIZE];
@@ -64,7 +65,8 @@ void UDPSendWorker::run(){
         if(!WSAGetOverlappedResult(SI.Socket, &(SI.Overlapped), &SI.BytesSEND, FALSE, &flags)) {
             qDebug() << "SeverUDP::WSAGetOverlappedResult failed with errno" << WSAGetLastError();
         }
-        qDebug() << "ServerUDP::WSASendTo Bytes Sent: " << SI.BytesSEND;
+        //qDebug() << "ServerUDP::WSASendTo Bytes Sent: " << SI.BytesSEND;
     }
-    emit SendData();
+    qDebug() << "UDPSendWorker::Run complete, emitting SentData signal";
+    emit SentData();
 }

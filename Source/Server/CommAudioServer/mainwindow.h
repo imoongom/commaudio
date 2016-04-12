@@ -12,7 +12,7 @@
 
 #include <QMainWindow>
 #include "socket/UDPSendWorker.h"
-#include "socket/ServerTCP.h"
+#include "socket/TCPControlWorker.h"
 #include "socket/ServerUDP.h"
 
 namespace Ui {
@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow
 private slots:
     void on_buttonStart_clicked();
     void on_buttonMulticast_clicked();
-    void send_finished();
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -35,11 +35,12 @@ private:
     Ui::MainWindow *ui;
 
     ServerUDP *serverUdp;
-    ServerTCP *serverTcp;
+
+    QThread *tcpControlWorkerThread;
+    TCPControlWorker *tcpControlWorker;
 
     QThread *udpSendWorkerThread;
     UDPSendWorker *udpSendWorker;
-
 };
 
 #endif // MAINWINDOW_H
