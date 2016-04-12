@@ -12,13 +12,28 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = CommAudioServer
 TEMPLATE = app
 
+LIBS += -lws2_32
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    socket/ServerUDP.cpp \
+    socket/CircularBuffer.cpp \
+    socket/UDPSendWorker.cpp \
+    socket/TCPControlWorker.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    global.h \
+    socket/Server.h \
+    socket/ServerUDP.h \
+    socket/CircularBuffer.h \
+    socket/UDPSendWorker.h \
+    socket/TCPControlWorker.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES +=
+
+CONFIG += c++11
 
 RESOURCES += \
     qdarkstyle/style.qrc
