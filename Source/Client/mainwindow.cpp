@@ -53,6 +53,11 @@ void MainWindow::on_actionResume_triggered()
     test->resume();
 }
 
+void MainWindow::on_volumeSlider_valueChanged(int value)
+{
+    test->updateVolume((float)(value / 100.0F));
+}
+
 void MainWindow::on_actionTest_2_triggered()
 {
     test2 = new Recording();
@@ -103,10 +108,14 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
 }
 
-void MainWindow::on_playPauseButton_clicked()
+void MainWindow::on_playPauseButton_clicked(bool checked)
 {
-    playPauseFlag = true;
-
-    ui->playPauseButton->setIcon(QIcon(fname2));
-
+    if (!checked) {
+        ui->playPauseButton->setIcon(QIcon(fname2));
+        ui->playPauseButton->setCheckable(true);
+        // do pause stuff here
+    } else {
+        ui->playPauseButton->setIcon(QIcon(fname));
+        // do Play stuff here
+    }
 }

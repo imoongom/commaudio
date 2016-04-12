@@ -47,10 +47,11 @@ private slots:
 
     void on_actionJoin_Multicast_triggered();
 
-    void on_playPauseButton_clicked();
-
     void on_actionRingBuf_triggered();
 
+    void on_playPauseButton_clicked(bool checked);
+
+    void on_volumeSlider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;

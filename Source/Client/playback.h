@@ -30,6 +30,7 @@ public:
     void play();
     void pause();
     void resume();
+    void updateVolume(float vol);
 
 private:
     WavFile *wf;
