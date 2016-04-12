@@ -85,8 +85,8 @@ void MainWindow::on_actionCB_triggered()
     connect(t, SIGNAL(started()), test, SLOT(runthis()));
     t->start();
 
-    wf = new WavFile();
-    wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
+//    test->write_data();
+//    test->read_data();
 }
 
 void MainWindow::on_playPauseButton_clicked(bool checked)
