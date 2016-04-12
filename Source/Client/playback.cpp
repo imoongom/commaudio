@@ -23,18 +23,23 @@ void Playback::runthis()
     m_device = QAudioDeviceInfo::defaultOutputDevice();
     m_audioOutput = new QAudioOutput(m_device, wf->fileFormat());
     m_audioOutput->start(&qBuf);
+    write_data();
     read_data();
 }
 
 // Testing
 void Playback::write_data()
 {
-    char *write = (char*)malloc(BUFSIZE);
+//    char *write = (char*)malloc(BUFSIZE);
 
-    for (int i = 0; i < CIRBUFMAX; i++)
+//    for (int i = 0; i < CIRBUFMAX; i++)
+//    {
+//        wf->read(write, BUFSIZE);
+//        write_buffer(bufs, write);
+//    }
+    for (int i = 0; i < 100; i++)
     {
-        wf->read(write, BUFSIZE);
-        write_buffer(bufs, write);
+        write_buffer(&CBuf, (wf->read(CIRBUFSIZE)).data());
     }
 }
 
@@ -44,10 +49,10 @@ void Playback::read_data()
     char *readbuf = (char*)malloc(CIRBUFSIZE);
     char *testing = (char*)malloc(CIRBUFSIZE);
     QByteArray qba;
-    for (int i = 0; i < 100; i++)
-    {
-        write_buffer(&CBuf, (wf->read(CIRBUFSIZE)).data());
-    }
+//    for (int i = 0; i < 100; i++)
+//    {
+//        write_buffer(&CBuf, (wf->read(CIRBUFSIZE)).data());
+//    }
     for (int i = 0; i < 100; i++)
     {
         if(CBuf._count != 0)
