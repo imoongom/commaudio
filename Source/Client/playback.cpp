@@ -18,13 +18,13 @@ void Playback::runthis()
     qBuf.open(QIODevice::ReadWrite);
 
     wf = new WavFile();
-    wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
+   // wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
 
     m_device = QAudioDeviceInfo::defaultOutputDevice();
-    m_audioOutput = new QAudioOutput(m_device, wf->fileFormat());
+    m_audioOutput = new QAudioOutput(m_device, m_device.preferredFormat());
     m_audioOutput->start(&qBuf);
-    write_data();
-    read_data();
+ //   write_data();
+  //  read_data();
 }
 
 // Testing
@@ -37,7 +37,7 @@ void Playback::write_data()
 //        wf->read(write, BUFSIZE);
 //        write_buffer(bufs, write);
 //    }
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 200; i++)
     {
         write_buffer(&CBuf, (wf->read(CIRBUFSIZE)).data());
     }
@@ -53,15 +53,15 @@ void Playback::read_data()
 //    {
 //        write_buffer(&CBuf, (wf->read(CIRBUFSIZE)).data());
 //    }
-    for (int i = 0; i < 100; i++)
-    {
-        if(CBuf._count != 0)
+    //for (int i = 0; i < 100; i++)
+   // {
+        while(CBuf._count != 0)
         {
             read_buffer(&CBuf, testing);
             qba = QByteArray(testing, CIRBUFSIZE);
             qByteArray.append(qba);
         }
-    }
+  //  }
 
 //    for(int i = 0; i < 200; i++)
 //    {

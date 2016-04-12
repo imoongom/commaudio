@@ -111,10 +111,10 @@ void MainWindow::on_connectButton_clicked()
     int host_port_no = ui->lineEdit_port->text().toInt();
 
     TCPThread = new QThread();
-
+    musicThread = new QThread();
     ThreadHandler *TCPhandler = new ThreadHandler();
     UDPRecvThread *multiThread = new UDPRecvThread(this);
-
+    addPk = new Playback();
     //initialize tcp and udp
     if(host_ip_addr.size()==0 && host_port_no == NULL)
         tcpcl = new ClientTCP();
@@ -129,6 +129,7 @@ void MainWindow::on_connectButton_clicked()
     }
 
     TCPhandler->moveToThread(TCPThread);
+    addPk->moveToThread(musicThread);
 
     connect(multiThread, SIGNAL(recvData()), this, SLOT(appendMusicPk()));
 
@@ -137,17 +138,18 @@ void MainWindow::on_connectButton_clicked()
     multiThread->start();
 
     TCPhandler->TCPThread();
+    addPk->runthis();
 
 }
 
 //dummy to make space circularbuffer
 void MainWindow::appendMusicPk(){
-
-    char buffer[CIRBUFSIZE];
-    if(CBuf._count ==0)
-        return;
-    read_buffer(&CBuf, &buffer);
-    qDebug("CBUFFER readed");
+    addPk->read_data();
+ //   char buffer[CIRBUFSIZE];
+//    if(CBuf._count ==0)
+//        return;
+//    read_buffer(&CBuf, &buffer);
+//    qDebug("CBUFFER readed");
 //    addPk->moveToThread(musicThread);
 //    musicThread->start();
 
