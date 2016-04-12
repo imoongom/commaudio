@@ -12,6 +12,7 @@ public:
     virtual boolean InitSocket(int port) = 0;
     virtual boolean SendOne(LPSOCKET_INFORMATION SockInfo, char * message) = 0;
     virtual boolean SendAll(char *message, LPDWORD lpNumberOfBytesSent) = 0;
+    virtual void CloseSocket() = 0;
 
 protected:
     SOCKET_INFORMATION socketInformation;

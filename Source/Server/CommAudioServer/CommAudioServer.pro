@@ -17,18 +17,18 @@ LIBS += -lws2_32
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    socket/ServerTCP.cpp \
     socket/ServerUDP.cpp \
     socket/CircularBuffer.cpp \
-    socket/UDPSendWorker.cpp
+    socket/UDPSendWorker.cpp \
+    socket/TCPControlWorker.cpp
 
 HEADERS  += mainwindow.h \
     global.h \
-    socket/ServerTCP.h \
     socket/Server.h \
     socket/ServerUDP.h \
     socket/CircularBuffer.h \
-    socket/UDPSendWorker.h
+    socket/UDPSendWorker.h \
+    socket/TCPControlWorker.h
 
 FORMS    += mainwindow.ui
 

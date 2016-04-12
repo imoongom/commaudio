@@ -142,7 +142,7 @@ boolean ServerUDP::InitData() {
     return true;
 }
 
-boolean ServerUDP::CloseSocket() {
+void ServerUDP::CloseSocket() {
     multicastAddr.imr_multiaddr.s_addr = inet_addr(hostAddr);
     multicastAddr.imr_interface.s_addr = INADDR_ANY;
 
@@ -158,6 +158,4 @@ boolean ServerUDP::CloseSocket() {
 
     /* Tell WinSock we're leaving */
     WSACleanup();
-
-    return (0);
 }
