@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    initBuffer(&CBuf);
+
     // QString fname = QString(":/qss_icons/rc/play-circle1.png");
     //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
     // QString fname3 = QString(":/qss_icons/rc/stopButton.png");
@@ -38,31 +40,6 @@ void MainWindow::toggleIcon()
 
 }
 
-void MainWindow::on_actionTest_1_triggered()
-{
-    test = new Playback();
-}
-
-void MainWindow::on_actionPause_triggered()
-{
-    test->pause();
-}
-
-void MainWindow::on_actionResume_triggered()
-{
-    test->resume();
-}
-
-void MainWindow::on_actionTest_2_triggered()
-{
-    test2 = new Recording();
-}
-
-void MainWindow::on_actionPause2_triggered()
-{
-    test2->pause();
-}
-
 void MainWindow::on_actionPlaylist_triggered()
 {
     list = new Playlist("../Demo");
@@ -73,19 +50,6 @@ void MainWindow::on_actionPlaylist_triggered()
     qDebug() << "got list";
 
 }
-
-void MainWindow::on_actionRingBuf_triggered()
-{
-    /*
-    CircularBuffer *cb;
-    initBuffer(cb);
-    Playback *cbtest = new Playback(cb);
-    */
-
-    Playback *pb = new Playback(new RingBuffer());
-
-}
-
 
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
@@ -103,10 +67,42 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
 }
 
-void MainWindow::on_playPauseButton_clicked()
+void MainWindow::on_actionCB_triggered()
 {
-    playPauseFlag = true;
 
-    ui->playPauseButton->setIcon(QIcon(fname2));
+    CBufs cb;
+    initBuffer(&cb);
+    test = new Playback();
 
+
+    QThread *t = new QThread;
+    test->moveToThread(t);
+    connect(t, SIGNAL(started()), test, SLOT(runthis()));
+    t->start();
+
+    wf = new WavFile();
+    wf->open("../Demo/OMFG_-_Hello_(Will__Tim_Remix).wav");
+}
+
+void MainWindow::on_actionCB_Add_triggered()
+{
+    char *write = (char*)malloc(CIRBUFSIZE);
+
+    qDebug() << CBuf._count << sizeof(CBuf.buffer);
+    for (int i = 0; i < CIRBUFMAX; i++)
+    {
+        if(wf->read(write, CIRBUFSIZE) > 0)
+            write_buffer(&CBuf, write);
+    }
+    qDebug() << "End:" << CBuf._count << sizeof(CBuf.buffer);
+//    test->write_data();
+    /*
+    QThread* thread = new QThread;
+    Worker* worker = new Worker();
+    worker->moveToThread(thread);
+
+    connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    thread->start();
+    thread->finished();
+    */
 }
