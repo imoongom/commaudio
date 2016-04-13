@@ -100,7 +100,7 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
 border: 0;</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -215,6 +215,11 @@ color: white;</string>
        <string>Push to Talk</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>File Transfer</string>
+     </attribute>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -385,7 +390,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>30</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
