@@ -10,6 +10,7 @@
 #include <QMediaPlaylist>
 #include <QDebug>
 
+#include "filetransfer.h"
 #include "playback.h"
 #include "recording.h"
 #include "playlist.h"
@@ -78,10 +79,15 @@ private:
     QThread *playThread;
     QThread *musicThread;
     QThread *voiceThread;
+    QThread *fileTransferThread;
+
     Playback *addPk;
     Playback *addVoice;
+
     UDPRecvThread *udpThread;
     UDPRecvThread *multiThread;
+
+    Filetransfer *ft;
 };
 
 #endif // MAINWINDOW_H

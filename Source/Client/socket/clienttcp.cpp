@@ -5,6 +5,8 @@ ClientTCP::ClientTCP(std::string  host, int portNum, QObject *parent) : QObject(
 {
     strcpy(tcp_host_addr, host.c_str());
     tcp_port = portNum;
+
+    TCPConnect();
 }
 
 
