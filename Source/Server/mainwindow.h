@@ -27,8 +27,9 @@ public:
 
 private slots:
     void on_playPauseButton_clicked(bool checked);
-    void on_buttonTcpConnect_clicked();
-    void on_actionJoin_Multicast_triggered();
+    void on_buttonTcpConnect_clicked(bool checked);
+    void on_actionJoin_Multicast_triggered(bool checked);
+    void HandleNewClient(int socket);
 
 private:
     Ui::MainWindow *ui;

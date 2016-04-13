@@ -3,7 +3,7 @@
 
 #include <cstring>
 #include <stdlib.h> // malloc, free
-#include "global.h"
+#include "Global.h"
 
 #include <cstring>
 #include <stdlib.h> // malloc, free
