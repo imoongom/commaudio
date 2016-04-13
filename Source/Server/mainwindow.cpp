@@ -1,7 +1,13 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
+#include "../Client/socket/circularbuffer.h"
+
 bool udpConnected = false;
 bool tcpConnected = false;
+
+struct CBuffer CBuf, CBufSend;
+struct CBuffer CBufOut;
+qint64 songPos = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->stopButton->setStyleSheet("QPushButton{border: none;outline: none;}");
     ui->stopButton->setIcon(QIcon(fname3));
+
+    initBuffer(&CBuf);
+    initBuffer(&CBufSend);
+    initBuffer(&CBufOut);
 }
 
 MainWindow::~MainWindow()
@@ -28,17 +38,34 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
 
+        // QThread for file reading and buffering
+        fileBufferWorkerThread = new QThread;
+        fileBufferWorker = new FileBufferWorker();
+        fileBufferWorker->moveToThread(fileBufferWorkerThread);
+
+        // QThread for playback
+        playbackWorkerThread = new QThread;
+        playbackWorker = new Playback(&CBuf);
+        playbackWorker->moveToThread(playbackWorkerThread);
+
         // QThread for sending
         udpSendWorkerThread = new QThread;
         udpSendWorker = new UDPSendWorker(serverUdp);
         udpSendWorker->moveToThread(udpSendWorkerThread);
 
-        connect(udpSendWorkerThread, SIGNAL(started()), udpSendWorker, SLOT(Run()));
+        // Play music when there's data in cbuf
+        //connect(playbackWorkerThread, SIGNAL(started()), playbackWorker, SLOT(runthis()));
+        connect(this, SIGNAL(StartReadingFile(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
+        connect(fileBufferWorker, SIGNAL(WroteToCBuf(qint64)), this, SLOT(PlayMusic(qint64)));
+        connect(playbackWorker, SIGNAL(CanSendNextData(qint64, QByteArray)), udpSendWorker, SLOT(SendBufferedData(qint64, QByteArray)));
+        connect(udpSendWorker, SIGNAL(CanReadNextData(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
         connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
         connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
 
+        this->StartReadingFile(songPos);
+        fileBufferWorkerThread->start();
+        playbackWorker->runthis();
         udpSendWorkerThread->start();
-
     } else {
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
@@ -119,3 +146,10 @@ void MainWindow::HandleNewClient(QString ipAddr, int socket) {
 
     clientServiceThread->start();
 }
+
+/* Audio playback of data in circular buffer */
+void MainWindow::PlayMusic(qint64 pos) {
+    playbackWorker->read_data(pos);
+}
+
+

@@ -27,5 +27,4 @@ void read_buffer(CBufs * Buf, void * data);
 
 void clean_buffer(CBufs * Buf);
 
-
 #endif // CIRCULARBUFFER_H

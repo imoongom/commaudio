@@ -2,6 +2,7 @@
 #include <QFile>
 #include "../Global.h"
 #include "ServerUDP.h"
+#include "../Client/socket/circularbuffer.h"
 using namespace std;
 
 SOCKET hSock;
@@ -167,6 +168,11 @@ void ServerUDP::CloseSocket() {
         WSACleanup();
 
         udpConnected = false;
+
+        /* Clear circular buffer */
+        clean_buffer(&CBuf);
+        clean_buffer(&CBufSend);
+
         qDebug() << "Closed UDP socket";
     }
 }
