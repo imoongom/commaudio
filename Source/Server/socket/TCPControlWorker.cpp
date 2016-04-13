@@ -1,9 +1,12 @@
 #include <iostream>
-#include<QDebug>
+#include <QApplication>
+#include <QDebug>
 #include "TCPControlWorker.h"
 
 /* Initialize Windows socket */
 void TCPControlWorker::InitSocket(int port) {
+    QString acceptedClientIp;
+
     qDebug() << "In TCPControlWorker::InitSocket()";
     if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0 ) { //No useable DLL
         qDebug() << "DLL not found!\n";
@@ -15,8 +18,6 @@ void TCPControlWorker::InitSocket(int port) {
         qDebug() << "Can't create a socket";
         return;
     }
-
-    qDebug() << "port: " << port << " socket: " << listeningSocket;
 
     // Initialize and set up the address structure
     memset((char *)&serverAddr, 0, sizeof(struct sockaddr_in));
@@ -30,16 +31,18 @@ void TCPControlWorker::InitSocket(int port) {
         return;
     }
 
+    qDebug() << "TCP connection established on socket: " << listeningSocket<< " port: " << port;
+    qDebug() << "Socket Initialized. Listening for TCP connections...";
+
     // Listen for connections
     // queue up to 5 connect requests
-    qDebug() << "TCP Socket Initialized. Listening for TCP connections...";
     if (listen(listeningSocket, 5) == SOCKET_ERROR) {
         qDebug() << "Error on listen: " << WSAGetLastError();
         return;
     }
 
     // Accept clients
-    while (1) {
+    while (tcpConnected) {
         clientLen= sizeof(clientAddr);
 
         if ((acceptedClientSocket = accept (listeningSocket, (struct sockaddr *)&clientAddr, &clientLen)) == -1) {
@@ -51,8 +54,9 @@ void TCPControlWorker::InitSocket(int port) {
 
         // Add client to map
         connectedClients[inet_ntoa(clientAddr.sin_addr)] = acceptedClientSocket;
+        acceptedClientIp = inet_ntoa(clientAddr.sin_addr);
 
-        emit AcceptedClient(acceptedClientSocket);
+        emit AcceptedClient(acceptedClientIp, acceptedClientSocket);
     }
     emit finished();
 }
@@ -105,13 +109,9 @@ boolean TCPControlWorker::SendAll(char *message, LPDWORD lpNumberOfBytesSent) {
 }
 
 void TCPControlWorker::CloseSocket(){
+    qDebug() << "Closing TCP socket...";
     closesocket(listeningSocket);
     WSACleanup();
     emit ClosedSocket();
+    qDebug() << "Closed TCP socket.";
 }
-
-/*
-void HandleNewClient(int socket) {
-    // here we'd update the connected users list, may not have one though
-}
-*/

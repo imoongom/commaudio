@@ -4,8 +4,12 @@
 ClientTCP *tcpcl;
 ClientUDP *udpCl;
 
+
 struct CBuffer CBuf;
 struct CBuffer CBufOut;
+
+boolean _UDPconnectOn;
+boolean _TCPconnectOn;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -73,6 +77,7 @@ void MainWindow::on_actionJoin_Multicast_triggered()
         udp->close();
         return ;
     }
+
     connect(multiThread, SIGNAL(startTCP()), TCPthread, SLOT(createThread()));
     connect(multiThread, SIGNAL(recvData()), udp, SLOT(writeFile()));
     multiThread->start();
@@ -117,6 +122,10 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
 
 void MainWindow::on_connectButton_clicked()
 {
+    if(_UDPconnectOn || _TCPconnectOn){
+       return;
+    }
+
     //get input value
     QString host_ip_addr = ui->lineEdit_ip->text();
     int host_port_no = ui->lineEdit_port->text().toInt();
@@ -136,8 +145,10 @@ void MainWindow::on_connectButton_clicked()
     udpCl = new ClientUDP();
     if(!udpCl->Start() || !udpCl->initData() ||!udpCl->multiSetup()){
         udpCl->close();
+        _UDPconnectOn = false;
         return ;
     }
+    _UDPconnectOn = true;
 
     TCPhandler->moveToThread(TCPThread);
     addPk->moveToThread(musicThread);
@@ -168,9 +179,23 @@ void MainWindow::appendMusicPk(){
 
 }
 
+<<<<<<< HEAD
 void MainWindow::on_actionRecording_triggered()
 {
 //    test2->record();
     test->read_data();
 //    delete test2;
+=======
+void MainWindow::on_pushToTalk_clicked(bool checked)
+{
+    if (!checked) {
+        ui->pushToTalk->setStyleSheet("background-color:#454389");
+        ui->pushToTalk->setCheckable(true);
+        // toggled
+    } else {
+        // not toggled
+        ui->pushToTalk->setStyleSheet("background-color:#524FA1");
+
+    }
+>>>>>>> ecc341a63e7e0406bca7b8eddf2c24c8f4503991
 }

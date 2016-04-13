@@ -12,6 +12,7 @@
 #include "socket/UDPSendWorker.h"
 #include "socket/ServerUDP.h"
 #include "socket/TCPControlWorker.h"
+#include "socket/ClientServiceWorker.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,8 +28,9 @@ public:
 
 private slots:
     void on_playPauseButton_clicked(bool checked);
-    void on_buttonTcpConnect_clicked();
-    void on_actionJoin_Multicast_triggered();
+    void on_buttonTcpConnect_clicked(bool checked);
+    void on_actionJoin_Multicast_triggered(bool checked);
+    void HandleNewClient(QString ipAddr, int socket);
 
 private:
     Ui::MainWindow *ui;
@@ -41,11 +43,14 @@ private:
 
     ServerUDP *serverUdp;
 
-    QThread *tcpControlWorkerThread;
-    TCPControlWorker *tcpControlWorker;
-
     QThread *udpSendWorkerThread;
+    QThread *tcpControlWorkerThread;
+    QThread *clientServiceThread;
+
     UDPSendWorker *udpSendWorker;
+    TCPControlWorker *tcpControlWorker;
+    ClientServiceWorker *clientServiceWorker;
+
 };
 
 #endif // MAINWINDOW_H

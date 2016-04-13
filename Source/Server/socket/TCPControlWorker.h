@@ -1,9 +1,11 @@
 #ifndef TCPCONTROLWORKER_H
 #define TCPCONTROLWORKER_H
+
 #include <QObject>
 #include <QMap>
-#include "../global.h"
+#include "../Global.h"
 #include "Server.h"
+#include "ClientServiceWorker.h"
 
 class TCPControlWorker : public QObject {
     Q_OBJECT
@@ -14,7 +16,6 @@ public:
         CloseSocket();
     }
 
-    boolean AcceptClient();
     boolean SendOne(LPSOCKET_INFORMATION socketInformation, char * message);
     boolean SendOne2(LPSOCKET_INFORMATION socketInformation, char* message);
     boolean SendAll(char *message, LPDWORD lpNumberOfBytesSent);
@@ -22,13 +23,12 @@ public:
 signals:
     void SignalInitSocket(int port);
     void ClosedSocket();
-    void AcceptedClient(int socket);
+    void AcceptedClient(QString ipAddr, int socket);
     void finished();
 
-private slots:
+public slots:
     void InitSocket(int port);
     void CloseSocket();
-    //void HandleNewClient(int socket);
 
 private:
     SOCKET listeningSocket, acceptedClientSocket;
@@ -39,6 +39,8 @@ private:
     int numConnectedClients = 0;
 
     QMap<QString, int> connectedClients;
+
+
 };
 
 #endif // TCPCONTROLWORKER_H
