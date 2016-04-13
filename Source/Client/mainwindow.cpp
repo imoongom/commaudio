@@ -4,6 +4,9 @@
 ClientTCP *tcpcl;
 ClientUDP *udpCl;
 
+boolean _UDPconnectOn;
+boolean _TCPconnectOn;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -69,6 +72,7 @@ void MainWindow::on_actionJoin_Multicast_triggered()
         udp->close();
         return ;
     }
+
     connect(multiThread, SIGNAL(startTCP()), TCPthread, SLOT(createThread()));
     connect(multiThread, SIGNAL(recvData()), udp, SLOT(writeFile()));
     multiThread->start();
@@ -106,6 +110,10 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
 
 void MainWindow::on_connectButton_clicked()
 {
+    if(_UDPconnectOn || _TCPconnectOn){
+       return;
+    }
+
     //get input value
     QString host_ip_addr = ui->lineEdit_ip->text();
     int host_port_no = ui->lineEdit_port->text().toInt();
@@ -125,8 +133,10 @@ void MainWindow::on_connectButton_clicked()
     udpCl = new ClientUDP();
     if(!udpCl->Start() || !udpCl->initData() ||!udpCl->multiSetup()){
         udpCl->close();
+        _UDPconnectOn = false;
         return ;
     }
+    _UDPconnectOn = true;
 
     TCPhandler->moveToThread(TCPThread);
     addPk->moveToThread(musicThread);

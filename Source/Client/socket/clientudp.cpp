@@ -4,6 +4,7 @@
 
 
 struct CBuffer CBuf;
+extern boolean _UDPconnectOn;
 
 boolean ClientUDP::Start() {
     int nRet;
@@ -115,11 +116,11 @@ int ClientUDP::close() {
             "setsockopt() IP_DROP_MEMBERSHIP address %s failed, Err: %d\n",
             hostAddr, WSAGetLastError());
     }
-
+    clean_buffer(&CBuf);
     /* Close the socket */
     closesocket(hSock);
     fclose(fstream);
-
+    _UDPconnectOn = false;
     /* Tell WinSock we're leaving */
     WSACleanup();
 

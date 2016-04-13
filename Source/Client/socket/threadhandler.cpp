@@ -5,7 +5,7 @@
 
 extern ClientTCP *tcpcl;
 extern ClientUDP *udpCl;
-
+extern boolean _TCPconnectOn;
 ThreadHandler::ThreadHandler(QObject *parent) : QObject(parent)
 {
 
@@ -53,9 +53,10 @@ void ThreadHandler::createThread() {
 void ThreadHandler::TCPThread() {
  //   ClientTCP tcpcl;
     if(!tcpcl->TCPConnect()){
+        _TCPconnectOn = false;
         return ;
     }
-
+    _TCPconnectOn = true;
     tcpcl->TCPcreateThread();
     qDebug()<< "TCP creat Thread";
 }
