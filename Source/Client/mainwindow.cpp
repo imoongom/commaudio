@@ -4,6 +4,9 @@
 ClientTCP *tcpcl;
 ClientUDP *udpCl;
 
+struct CBuffer CBuf;
+struct CBuffer CBufOut;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -11,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     initBuffer(&CBuf);
+    initBuffer(&CBufOut);
 
     // QString fname = QString(":/qss_icons/rc/play-circle1.png");
     //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
@@ -81,6 +85,7 @@ void MainWindow::on_actionCB_triggered()
     CBufs cb;
     initBuffer(&cb);
     test = new Playback();
+    test2 = new Recording();
 
 
     QThread *t = new QThread;
@@ -88,6 +93,12 @@ void MainWindow::on_actionCB_triggered()
     connect(t, SIGNAL(started()), test, SLOT(runthis()));
     t->start();
 
+    QThread *t2 = new QThread;
+    test2->moveToThread(t2);
+    connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
+    t2->start();
+
+    test->read_data();
 //    test->write_data();
 //    test->read_data();
 }
@@ -155,4 +166,11 @@ void MainWindow::appendMusicPk(){
 
 
 
+}
+
+void MainWindow::on_actionRecording_triggered()
+{
+//    test2->record();
+    test->read_data();
+//    delete test2;
 }

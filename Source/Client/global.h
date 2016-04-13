@@ -49,5 +49,6 @@ extern SOCKET tcpSock;
 extern int sockPort;
 //static SOCKET hSocket;
 extern struct CBuffer CBuf;
+extern struct CBuffer CBufOut;
 extern SOCKADDR_IN stLclAddr,  InternetAddr;
 #endif // GLOBAL_H
