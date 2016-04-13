@@ -61,11 +61,11 @@ void UDPRecvThread::run(){
             }
 
         }
-        qDebug("RECV: %s\n", SI.DataBuf.buf);
+        //qDebug("RECV: %s\n", SI.DataBuf.buf);
 
         //add on Circular buffer
         write_buffer(&CBuf, SI.DataBuf.buf);
-        qDebug()<<"RECEV SUCCESS";
+        //qDebug()<<"RECEV SUCCESS";
         emit recvData();
 
     }

@@ -12,14 +12,14 @@ void initBuffer(CBufs * Buf){
     Buf->_readPtr = &Buf->buffer;
     Buf->_endPtr = &Buf->buffer[CIRBUFSIZE*CIRBUFMAX];
     std::memset(Buf->buffer, '\0',CIRBUFSIZE*CIRBUFMAX);
-    qDebug()<<"BUFFEr SIZE: " << sizeof(Buf->buffer);
+    //qDebug()<<"BUFFEr SIZE: " << sizeof(Buf->buffer);
 }
 
 void write_buffer(CBufs * Buf, const void * data){
 
-    qDebug()<<"write buf : " << (char*)data;
+    //qDebug()<<"write buf : " << (char*)data;
     if(Buf->_count == CIRBUFMAX ){
-        qDebug() << "SIZE FULL";
+        //qDebug() << "SIZE FULL";
         return;
     }
     if(Buf->_writePtr == Buf->_endPtr){
@@ -27,7 +27,7 @@ void write_buffer(CBufs * Buf, const void * data){
     }
 
     std::memcpy(Buf->_writePtr, (char*)data, CIRBUFSIZE);
-    qDebug()<<"WHAT IS wrteptr?" << (char*)(Buf->_writePtr);
+    //qDebug()<<"WHAT IS wrteptr?" << (char*)(Buf->_writePtr);
     Buf->_writePtr+=CIRBUFSIZE;
     if(Buf->_writePtr == Buf->_endPtr){
         qDebug() << "******END POINT";
