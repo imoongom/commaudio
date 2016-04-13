@@ -21,7 +21,6 @@ void Playback::runthis()
     m_audioOutput = new QAudioOutput(m_device, m_device.preferredFormat());
     m_audioOutput->start(&qBuf);
 }
-
 void Playback::read_data()
 {
     char *readbuf = (char*)malloc(CIRBUFSIZE);
@@ -31,8 +30,8 @@ void Playback::read_data()
             read_buffer(&CBuf, readbuf);
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
+            //emit CanSendNextData(qba);
         }
-//        qDebug() << "me too yo";
 }
 
 void Playback::updateVolume(float vol)

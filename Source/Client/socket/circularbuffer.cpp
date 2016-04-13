@@ -27,10 +27,10 @@ void write_buffer(CBufs * Buf, const void * data){
     }
 
     std::memcpy(Buf->_writePtr, (char*)data, CIRBUFSIZE);
-    //qDebug()<<"WHAT IS wrteptr?" << (char*)(Buf->_writePtr);
+    //qDebug()<<"writeptr: " << (char*)(Buf->_writePtr);
     Buf->_writePtr+=CIRBUFSIZE;
     if(Buf->_writePtr == Buf->_endPtr){
-        qDebug() << "******END POINT";
+        //qDebug() << "******END POINT";
         Buf->_writePtr = &Buf->buffer;
     }
     Buf->_count++;
@@ -46,7 +46,7 @@ void write_buffer(CBufs * Buf, const void * data){
 }
 
 void read_buffer(CBufs * Buf, void * data){
-//    qDebug()<<"READ buf " << Buf->_count;
+    //qDebug()<<"Read buf " << Buf->_count;
     if(Buf->_count == 0)
         return ;
     std::memcpy(data, Buf->_readPtr, CIRBUFSIZE);
@@ -55,7 +55,7 @@ void read_buffer(CBufs * Buf, void * data){
     if(Buf->_readPtr == Buf->_endPtr)
         Buf->_readPtr = &Buf->buffer;
     Buf->_count--;
- //  qDebug()<<"read buf : " << (char*)data << " left "<< Buf->_count;
+    //qDebug()<<"read buf : " << (char*)data << " left "<< Buf->_count;
 
 }
 

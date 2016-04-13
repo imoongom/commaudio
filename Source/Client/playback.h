@@ -33,6 +33,10 @@ public slots:
     void read_data();
     void updateVolume(float vol);
 
+signals:
+    void CanSendNextData(qint64 filePos, QByteArray qByteArray);
+    void CanReadNextData(qint64 filePos);
+
 private:
     QAudioFormat m_format;
     QAudioDeviceInfo m_device;
