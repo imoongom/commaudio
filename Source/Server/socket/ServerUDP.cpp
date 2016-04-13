@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <QFile>
-#include "../global.h"
+#include "../Global.h"
 #include "ServerUDP.h"
 using namespace std;
 
