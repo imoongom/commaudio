@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     wavfile.cpp \
     recording.cpp \
     playlist.cpp \
-    ringbuffer.cpp \
     socket/circularbuffer.cpp \
     socket/clientudp.cpp \
     socket/udprecvthread.cpp \
@@ -33,7 +32,6 @@ HEADERS  += mainwindow.h \
     recording.h \
     playlist.h \
     global.h \
-    ringbuffer.h \
     socket/circularbuffer.h \
     socket/clientudp.h \
     socket/udprecvthread.h \
