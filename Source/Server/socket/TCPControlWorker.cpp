@@ -5,6 +5,8 @@
 
 /* Initialize Windows socket */
 void TCPControlWorker::InitSocket(int port) {
+    QString acceptedClientIp;
+
     qDebug() << "In TCPControlWorker::InitSocket()";
     if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0 ) { //No useable DLL
         qDebug() << "DLL not found!\n";
@@ -52,8 +54,9 @@ void TCPControlWorker::InitSocket(int port) {
 
         // Add client to map
         connectedClients[inet_ntoa(clientAddr.sin_addr)] = acceptedClientSocket;
+        acceptedClientIp = inet_ntoa(clientAddr.sin_addr);
 
-        emit AcceptedClient(acceptedClientSocket);
+        emit AcceptedClient(acceptedClientIp, acceptedClientSocket);
     }
     emit finished();
 }

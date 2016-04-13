@@ -15,19 +15,22 @@ TEMPLATE = app
 LIBS += -lws2_32
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     socket/ServerUDP.cpp \
     socket/CircularBuffer.cpp \
     socket/UDPSendWorker.cpp \
-    socket/TCPControlWorker.cpp
+    socket/TCPControlWorker.cpp \
+    socket/ClientServiceWorker.cpp \
+    MainWindow.cpp
 
-HEADERS  += mainwindow.h \
-    global.h \
+HEADERS  += \
     socket/Server.h \
     socket/ServerUDP.h \
     socket/CircularBuffer.h \
     socket/UDPSendWorker.h \
-    socket/TCPControlWorker.h
+    socket/TCPControlWorker.h \
+    socket/ClientServiceWorker.h \
+    MainWindow.h \
+    Global.h
 
 FORMS    += mainwindow.ui
 
