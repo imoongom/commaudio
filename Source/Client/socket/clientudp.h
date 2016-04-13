@@ -20,9 +20,9 @@ public:
     boolean Start(SOCKET * sock, int port);
     boolean multiSetup(SOCKET * sock);
     boolean initData();
-    void sendVoice(char *ip);
 
-    int close();
+
+    int UDPClose();
 
 
 
@@ -35,7 +35,12 @@ public:
 
     struct ip_mreq stMreq;         /* Multicast interface structure */
 
-
+    int _type;
+signals:
+    void voiceGo(char*);
+public slots:
+    void voiceStart();
+    void sendVoice(char *ip);
 };
 
 

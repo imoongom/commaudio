@@ -32,11 +32,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void udpRecvSetup();
+    void temp_add_music();
 
 
 public slots:
     void toggleIcon();
     void appendMusicPk();
+    void testVoiceRecv();
 private slots:
 
     void on_actionPlaylist_triggered();
@@ -78,7 +80,8 @@ private:
     QThread *voiceThread;
     Playback *addPk;
     Playback *addVoice;
-
+    UDPRecvThread *udpThread;
+    UDPRecvThread *multiThread;
 };
 
 #endif // MAINWINDOW_H
