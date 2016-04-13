@@ -3,7 +3,7 @@
 #include <winsock2.h>
 #include <QObject>
 
-#define TCP_DEFAULT_HOST "10.1.0.64"
+#define TCP_DEFAULT_HOST "127.0.0.1"
 #define TCP_DEFAULT_PORT 7000
 #define BUFSIZE     1024
 

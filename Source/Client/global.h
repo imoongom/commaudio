@@ -44,6 +44,9 @@ typedef struct TCP_MESSSAGE{
 }TCP_MESG;
 
 
+extern boolean _TCPconnectOn;
+extern boolean _UDPconnectOn;
+
 extern SOCKET hSock;
 extern SOCKET tcpSock;
 extern int sockPort;

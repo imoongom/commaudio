@@ -190,6 +190,7 @@ void ClientTCP::Send(int type, char* name, char* message){
 }
 
 void ClientTCP::CloseTCP(){
+    _TCPconnectOn = false;
     closesocket(tcpSock);
     return;
 }
