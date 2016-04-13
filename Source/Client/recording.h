@@ -1,6 +1,7 @@
 #ifndef RECORDING_H
 #define RECORDING_H
 
+#include <QObject>
 #include <QAudioFormat>
 #include <QAudioDeviceInfo>
 #include <QAudioInput>
@@ -10,13 +11,22 @@
 
 #include <QAudioOutput>
 
-class Recording
+#include<QThread>
+
+#include "socket/circularbuffer.h"
+
+class Recording : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit Recording();
     ~Recording();
     void record();
     void pause();
+
+public slots:
+    void runthis();
 
 private:
     QAudioFormat m_format;
