@@ -2,6 +2,16 @@
 
 Recording::Recording()
 {
+    qDebug() << "wassup";
+}
+
+Recording::~Recording()
+{
+
+}
+
+void Recording::runthis()
+{
     qByteArray = QByteArray();
     qBuf.setBuffer(&qByteArray);
     qBuf.open(QIODevice::ReadWrite);
@@ -22,18 +32,25 @@ Recording::Recording()
     }
 
     m_audioInput = new QAudioInput(m_device, m_format);
-    qDebug() << "wowee";
     m_audioInput->start(&qBuf);
-}
-
-Recording::~Recording()
-{
-
+    while(m_audioInput->state() == QAudio::ActiveState)
+    {
+        qDebug() << "at leat im here";
+        write_buffer(&CBuf, (qBuf.read(CIRBUFSIZE)).data());
+    }
+//    m_audioInput->suspend();
 }
 
 void Recording::record()
 {
-
+    m_audioInput->resume();
+    QThread::sleep(5);
+    while(!qBuf.buffer().isEmpty())
+    {
+        qDebug() << "at leat im here";
+        write_buffer(&CBuf, (qBuf.read(CIRBUFSIZE)).data());
+    }
+    qDebug() << "I'm done yo";
 }
 
 void Recording::pause()

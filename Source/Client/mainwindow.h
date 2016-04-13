@@ -50,6 +50,8 @@ private slots:
 
     void on_connectButton_clicked();
 
+    void on_actionRecording_triggered();
+
 private:
     Ui::MainWindow *ui;
     int icon;

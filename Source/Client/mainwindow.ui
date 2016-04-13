@@ -364,7 +364,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -383,6 +383,7 @@ color: white;</string>
     </property>
     <addaction name="actionPlaylist"/>
     <addaction name="actionCB"/>
+    <addaction name="actionRecording"/>
    </widget>
    <addaction name="menuConnections"/>
    <addaction name="menuAudio_Test"/>
@@ -557,6 +558,11 @@ color: white;</string>
   <action name="actionCB">
    <property name="text">
     <string>CB</string>
+   </property>
+  </action>
+  <action name="actionRecording">
+   <property name="text">
+    <string>Recording</string>
    </property>
   </action>
  </widget>
