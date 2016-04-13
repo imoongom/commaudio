@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->userList->addItem("Oscar");
   //  connect(ui->playPauseButton, SIGNAL(clicked()), this, SLOT(toggleIcon()));
 
+    test = NULL;
 }
 
 MainWindow::~MainWindow()
@@ -59,7 +60,8 @@ void MainWindow::toggleIcon()
 
 void MainWindow::on_volumeSlider_valueChanged(int value)
 {
-    test->updateVolume((float)(value / 100.0F));
+    if(test != NULL)
+        test->updateVolume((float)(value / 100.0F));
 }
 
 void MainWindow::on_actionPlaylist_triggered()
