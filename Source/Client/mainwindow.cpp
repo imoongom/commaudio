@@ -236,4 +236,15 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
 }
 
 
+void MainWindow::on_pushButton_pressed()
+{
+    ui->pushButton->setStyleSheet("background-color:#454389");
+}
 
+void MainWindow::on_pushButton_released()
+{
+    ui->pushButton->setStyleSheet("background-color:#524FA1;color:white;");
+    QString temp = ui->playList->currentItem()->text();
+
+    // get name of file, request to server, server sends back file
+}

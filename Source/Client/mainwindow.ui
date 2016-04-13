@@ -97,10 +97,11 @@ font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">font: 57 11pt &quot;Roboto Medium&quot;;
-border: 0;</string>
+border: 0;
+</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -186,11 +187,28 @@ color: white;</string>
         <x>0</x>
         <y>0</y>
         <width>571</width>
-        <height>331</height>
+        <height>271</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">border: 0;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>280</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #524FA1;
+color: white;</string>
+      </property>
+      <property name="text">
+       <string>Download</string>
       </property>
      </widget>
     </widget>
@@ -385,7 +403,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>30</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
