@@ -34,7 +34,7 @@ public slots:
     void updateVolume(float vol);
 
 signals:
-    void CanSendNextData(qint64 filePos, QByteArray qByteArray);
+    void CanSendNextData(QByteArray qba);
     void CanReadNextData(qint64 filePos);
 
 private:

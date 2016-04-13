@@ -55,10 +55,9 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         // Play music when there's data in cbuf
         connect(fileBufferWorkerThread, SIGNAL(started()), fileBufferWorker, SLOT(ReadFileAndBuffer()));
         connect(fileBufferWorker, SIGNAL(WroteToCBuf()), this, SLOT(PlayMusic()));
-        //connect(playbackWorker, SIGNAL(CanSendNextData(qint64, QByteArray)), udpSendWorker, SLOT(SendBufferedData(qint64, QByteArray)));
-        //connect(playbackWorker, SIGNAL(CanReadNextData(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
-        //connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
-        //connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
+        connect(playbackWorker, SIGNAL(CanSendNextData(QByteArray)), udpSendWorker, SLOT(SendBufferedData(QByteArray)));
+        connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
+        connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
 
         fileBufferWorkerThread->start();
         playbackWorker->runthis();

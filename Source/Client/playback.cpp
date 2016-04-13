@@ -1,5 +1,6 @@
 #include "playback.h"
 
+int bytesSent = 0;
 
 Playback::Playback()
 {
@@ -21,17 +22,31 @@ void Playback::runthis()
     m_audioOutput = new QAudioOutput(m_device, m_device.preferredFormat());
     m_audioOutput->start(&qBuf);
 }
+
 void Playback::read_data()
 {
     char *readbuf = (char*)malloc(CIRBUFSIZE);
     QByteArray qba;
+    QByteArray qbaToSend;
+    qint64 processedBytes;
+
+    if (m_audioOutput->state() == 0) {
+        processedBytes = (m_audioOutput->elapsedUSecs()) / m_device.preferredFormat().sampleRate() * 1000;
+        //qDebug() << "processed bytes: " << processedBytes << "bytesSent: " << bytesSent;
+        if (processedBytes > bytesSent) {
+            bytesSent += DATA_BUFSIZE;
+            qbaToSend = qba.mid(bytesSent - DATA_BUFSIZE, bytesSent);
+            qDebug() << "Emitting can send at pos " << bytesSent;
+            emit CanSendNextData(qbaToSend);
+        }
+
         while(CBuf._count != 0)
         {
             read_buffer(&CBuf, readbuf);
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
-            //emit CanSendNextData(qba);
         }
+    }
 }
 
 void Playback::updateVolume(float vol)

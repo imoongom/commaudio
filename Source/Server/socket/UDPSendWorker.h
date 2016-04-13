@@ -13,7 +13,7 @@ private:
     ServerUDP *_serverUdp;
     bool doneReadingFile = false;
 private slots:
-    void SendBufferedData(qint64 filePos, QByteArray qByteArray);
+    void SendBufferedData(QByteArray qByteArray);
 signals:
     void SentData();
     void CloseSocket();

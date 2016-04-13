@@ -13,7 +13,7 @@ UDPSendWorker::UDPSendWorker(ServerUDP *serverUdp) :
 }
 
 /* Send buffered data until EOF */
-void UDPSendWorker::SendBufferedData(qint64 filePos, QByteArray qByteArray) {
+void UDPSendWorker::SendBufferedData(QByteArray qByteArray) {
     qDebug() << "UDPSendWorker::SendBufferedData";
     SOCKET_INFORMATION SI;
     DWORD SendBytes;
