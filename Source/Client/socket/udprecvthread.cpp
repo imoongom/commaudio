@@ -4,12 +4,11 @@
 #include <QDebug>
 
 
-SOCKET hSock;
 int sockPort;
 
-UDPRecvThread::UDPRecvThread(QObject *parent) : QThread(parent)
+UDPRecvThread::UDPRecvThread(SOCKET sock, QObject *parent) : QThread(parent)
 {
-
+    hSock = sock;
 }
 
 void UDPRecvThread::run(){
@@ -25,11 +24,13 @@ void UDPRecvThread::run(){
    // emit startTCP();
 
     // initialize address information
+
     memset(&InternetAddr, 0, sizeof(InternetAddr));
     InternetAddr.sin_family = AF_INET;
     InternetAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     InternetAddr.sin_port = htons(TIMECAST_PORT);//sockPort);
 
+    qDebug()<<"[SOCKET SETUP START" << hSock;
 
     //initialize socket information
     SI.Overlapped.hEvent = WSACreateEvent();
@@ -37,7 +38,7 @@ void UDPRecvThread::run(){
     SI.DataBuf.buf = buffer;
     SI.DataBuf.len = DATA_BUFSIZE;
 
-
+    qDebug()<<"[MULTI THREAD] SOCKET NUM: "<<multiSock;
     destlen = sizeof(SOCKADDR);
 
     //read message until timeout

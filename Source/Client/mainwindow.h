@@ -31,6 +31,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void udpRecvSetup();
 
 
 public slots:
@@ -74,7 +75,9 @@ private:
     QThread *UDPThread;
     QThread *playThread;
     QThread *musicThread;
+    QThread *voiceThread;
     Playback *addPk;
+    Playback *addVoice;
 
 };
 

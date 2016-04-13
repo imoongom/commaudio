@@ -17,9 +17,10 @@ class ClientUDP :public QObject{
     Q_OBJECT
 public:
 
-    boolean Start();
-    boolean multiSetup();
+    boolean Start(SOCKET * sock, int port);
+    boolean multiSetup(SOCKET * sock);
     boolean initData();
+    void sendVoice(char *ip);
 
     int close();
 
@@ -34,8 +35,7 @@ public:
 
     struct ip_mreq stMreq;         /* Multicast interface structure */
 
-public slots:
-    void writeFile();
+
 };
 
 

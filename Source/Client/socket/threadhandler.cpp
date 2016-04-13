@@ -64,6 +64,6 @@ void ThreadHandler::TCPThread() {
 //2nd thread function
 void ThreadHandler::MultiThread() {
     ClientUDP cl;
-    cl.Start();
+
 
 }
