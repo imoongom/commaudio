@@ -59,7 +59,7 @@ void MainWindow::on_buttonTcpConnect_clicked(bool checked) {
 
         // Start TCP control thread and connect signals & slots
         connect(tcpControlWorker, SIGNAL(SignalInitSocket(int)), tcpControlWorker, SLOT(InitSocket(int)));
-        connect(tcpControlWorker, SIGNAL(AcceptedClient(int)), this, SLOT(HandleNewClient(int)));
+        connect(tcpControlWorker, SIGNAL(AcceptedClient(QString, int)), this, SLOT(HandleNewClient(QString, int)));
         connect(tcpControlWorker, SIGNAL(ClosedSocket()), tcpControlWorker, SLOT(CloseSocket()));
         connect(tcpControlWorker, SIGNAL(finished()), tcpControlWorkerThread, SLOT(quit()));
         connect(tcpControlWorker, SIGNAL(finished()), tcpControlWorker, SLOT(deleteLater()));
@@ -97,7 +97,25 @@ void MainWindow::on_actionJoin_Multicast_triggered(bool checked) {
         }
         udpConnected = true;
     } else if (checked && udpConnected){
+        ui->playPauseButton->setIcon(QIcon(fname2));
+        ui->playPauseButton->setCheckable(true);
         serverUdp->CloseSocket();
         udpConnected = false;
     }
+}
+
+/* Update the client list and start a new service thread for a new client */
+void MainWindow::HandleNewClient(QString ipAddr, int socket) {
+    // QThread for servicing client (receiving requests over TCP)
+    clientServiceThread = new QThread;
+    clientServiceWorker = new ClientServiceWorker(ipAddr, socket);
+    clientServiceWorker->moveToThread(clientServiceThread);
+
+    connect(clientServiceThread, SIGNAL(started()), clientServiceWorker, SLOT(ListenForRequests()));
+    connect(clientServiceWorker, SIGNAL(ReceivedRequest(QString)), clientServiceWorker, SLOT(ProcessRequest(QString)));
+    connect(clientServiceWorker, SIGNAL(finished()), clientServiceThread, SLOT(quit()));
+    connect(clientServiceWorker, SIGNAL(finished()), clientServiceThread, SLOT(deleteLater()));
+    connect(clientServiceThread, SIGNAL(finished()), clientServiceThread, SLOT(deleteLater()));
+
+    clientServiceThread->start();
 }

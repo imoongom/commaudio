@@ -19,7 +19,7 @@ void UDPSendWorker::Run(){
     char buffer[DATA_BUFSIZE];
 
 
-    QString filename = "../Demo/Tristam_-_Till_Its_Over.wav";
+    QString filename = "../Demo/Party_In_The_USA-Miley_Cyrus.wav";
 
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
