@@ -2,9 +2,6 @@
 #include "../global.h"
 #include <QDebug>
 
-
-struct CBuffer CBuf;
-
 boolean ClientUDP::Start() {
     int nRet;
     BOOL  fFlag;
