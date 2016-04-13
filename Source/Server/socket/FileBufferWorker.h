@@ -2,6 +2,7 @@
 #define FILEBUFFERWORKER_H
 
 #include <QObject>
+#include <QFile>
 
 class FileBufferWorker : public QObject
 {
@@ -9,9 +10,11 @@ class FileBufferWorker : public QObject
 public:
     FileBufferWorker();
 private slots:
-    void ReadFileAndBuffer();
+    void ReadFileAndBuffer(qint64 pos);
 signals:
-    void WroteToCBuf();
+    void WroteToCBuf(qint64 pos);
+private:
+    QFile file;
 };
 
 #endif // FILEBUFFERWORKER_H

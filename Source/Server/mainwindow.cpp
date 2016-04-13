@@ -7,6 +7,7 @@ bool tcpConnected = false;
 
 struct CBuffer CBuf, CBufSend;
 struct CBuffer CBufOut;
+qint64 songPos = 0;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +45,7 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
 
         // QThread for playback
         playbackWorkerThread = new QThread;
-        playbackWorker = new Playback();
+        playbackWorker = new Playback(&CBuf);
         playbackWorker->moveToThread(playbackWorkerThread);
 
         // QThread for sending
@@ -53,12 +54,15 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         udpSendWorker->moveToThread(udpSendWorkerThread);
 
         // Play music when there's data in cbuf
-        connect(fileBufferWorkerThread, SIGNAL(started()), fileBufferWorker, SLOT(ReadFileAndBuffer()));
-        connect(fileBufferWorker, SIGNAL(WroteToCBuf()), this, SLOT(PlayMusic()));
-        connect(playbackWorker, SIGNAL(CanSendNextData(QByteArray)), udpSendWorker, SLOT(SendBufferedData(QByteArray)));
+        //connect(playbackWorkerThread, SIGNAL(started()), playbackWorker, SLOT(runthis()));
+        connect(this, SIGNAL(StartReadingFile(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
+        connect(fileBufferWorker, SIGNAL(WroteToCBuf(qint64)), this, SLOT(PlayMusic(qint64)));
+        connect(playbackWorker, SIGNAL(CanSendNextData(qint64, QByteArray)), udpSendWorker, SLOT(SendBufferedData(qint64, QByteArray)));
+        connect(udpSendWorker, SIGNAL(CanReadNextData(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
         connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
         connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
 
+        this->StartReadingFile(songPos);
         fileBufferWorkerThread->start();
         playbackWorker->runthis();
         udpSendWorkerThread->start();
@@ -144,8 +148,8 @@ void MainWindow::HandleNewClient(QString ipAddr, int socket) {
 }
 
 /* Audio playback of data in circular buffer */
-void MainWindow::PlayMusic() {
-    playbackWorker->read_data();
+void MainWindow::PlayMusic(qint64 pos) {
+    playbackWorker->read_data(pos);
 }
 
 

@@ -13,11 +13,11 @@ private:
     ServerUDP *_serverUdp;
     bool doneReadingFile = false;
 private slots:
-    void SendBufferedData(QByteArray qByteArray);
+    void SendBufferedData(qint64 pos ,QByteArray qByteArray);
 signals:
     void SentData();
     void CloseSocket();
-    //void CanReadNextData(qint64 filePos);
+    void CanReadNextData(qint64 pos);
 };
 
 #endif // UDPSENDWORKER_H

@@ -13,7 +13,7 @@ UDPSendWorker::UDPSendWorker(ServerUDP *serverUdp) :
 }
 
 /* Send buffered data until EOF */
-void UDPSendWorker::SendBufferedData(QByteArray qByteArray) {
+void UDPSendWorker::SendBufferedData(qint64 pos, QByteArray qByteArray) {
     qDebug() << "UDPSendWorker::SendBufferedData";
     SOCKET_INFORMATION SI;
     DWORD SendBytes;
@@ -47,7 +47,7 @@ void UDPSendWorker::SendBufferedData(QByteArray qByteArray) {
         }
         qDebug() << "ServerUDP::WSASendTo message sent: " << SI.DataBuf.buf;
         //Sleep(5);
-        //emit CanReadNextData(filePos);
+        emit CanReadNextData(pos);
         qDebug() << "Done sending, can read next data";
     }
     else if (doneReadingFile) {

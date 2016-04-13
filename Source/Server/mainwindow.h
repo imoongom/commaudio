@@ -33,11 +33,11 @@ private slots:
     void on_buttonTcpConnect_clicked(bool checked);
     void on_actionJoin_Multicast_triggered(bool checked);
     void HandleNewClient(QString ipAddr, int socket);
-    void PlayMusic();
+    void PlayMusic(qint64 pos);
 
 signals:
     void StartReadingFile(qint64 qint);
-    void CanSendBufferedData(QByteArray qByteArray);
+    void CanSendBufferedData(qint64, QByteArray qByteArray);
 
 private:
     Ui::MainWindow *ui;

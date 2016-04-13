@@ -12,11 +12,12 @@ public:
     static DWORD WINAPI MAINThreadConnect(void * Param);
     static DWORD WINAPI MAINThreadConnect2(void * Param);
 
-    void TCPThread();
+
     void MultiThread();
 
 public slots:
     void createThread();
+    void TCPThread();
 };
 
 

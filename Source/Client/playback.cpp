@@ -1,10 +1,13 @@
 #include "playback.h"
 
-int bytesSent = 0;
 
-Playback::Playback()
+qint64 processedBytes = 0;
+
+Playback::Playback(struct CBuffer * buffer)
 {
     qDebug() << "hi.";
+    playBuf = buffer;
+
 }
 
 Playback::~Playback()
@@ -23,28 +26,31 @@ void Playback::runthis()
     m_audioOutput->start(&qBuf);
 }
 
-void Playback::read_data()
+void Playback::read_data(qint64 pos)
 {
     char *readbuf = (char*)malloc(CIRBUFSIZE);
     QByteArray qba;
     QByteArray qbaToSend;
-    qint64 processedBytes;
 
+    // While audio is playing
     if (m_audioOutput->state() == 0) {
-        processedBytes = (m_audioOutput->elapsedUSecs()) / m_device.preferredFormat().sampleRate() * 1000;
-        //qDebug() << "processed bytes: " << processedBytes << "bytesSent: " << bytesSent;
-        if (processedBytes > bytesSent) {
-            bytesSent += DATA_BUFSIZE;
-            qbaToSend = qba.mid(bytesSent - DATA_BUFSIZE, bytesSent);
-            qDebug() << "Emitting can send at pos " << bytesSent;
-            emit CanSendNextData(qbaToSend);
-        }
-
-        while(CBuf._count != 0)
+        processedBytes = (m_audioOutput->elapsedUSecs() / m_device.preferredFormat().sampleRate());
+        qDebug() << "processed bytes: " << processedBytes << "bytesSent: " << pos;
+        while(playBuf->_count != 0)
         {
-            read_buffer(&CBuf, readbuf);
+            read_buffer(playBuf, readbuf);
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
+            qbaToSend = qba.mid(pos, pos + DATA_BUFSIZE);
+            // should emit when the playback has reached end of bufsize
+            emit CanSendNextData(pos + DATA_BUFSIZE, qbaToSend);
+            /*
+            if (processedBytes >= pos) {
+                qDebug() << "Emitting can send at pos " << pos;
+                pos += DATA_BUFSIZE;
+                emit CanSendNextData(pos, qbaToSend);
+            }
+            */
         }
     }
 }

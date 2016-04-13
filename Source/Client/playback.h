@@ -13,7 +13,7 @@
 #include <QBuffer>
 #include <QtConcurrent/QtConcurrent>
 #include <QDataStream>
-
+#include "../Server/socket/UDPSendWorker.h"
 #include "socket/circularbuffer.h"
 #include "global.h"
 
@@ -25,17 +25,17 @@ class Playback : public QObject
     Q_OBJECT
 
 public:
-    Playback();
+    Playback(struct CBuffer * buffer);
     ~Playback();
 
 public slots:
     void runthis();
-    void read_data();
+    void read_data(qint64 pos);
     void updateVolume(float vol);
 
 signals:
-    void CanSendNextData(QByteArray qba);
-    void CanReadNextData(qint64 filePos);
+    void CanSendNextData(qint64 pos, QByteArray qba);
+    //void CanReadNextData(qint64 filePos);
 
 private:
     QAudioFormat m_format;
@@ -44,6 +44,8 @@ private:
 
     QByteArray qByteArray;
     QBuffer qBuf;
+    struct CBuffer *playBuf;
+    UDPSendWorker *udpSendWorker;
 };
 
 #endif // PLAYBACK_H
