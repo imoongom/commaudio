@@ -1,7 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 #include <iostream>
-#include "../global.h"
+#include "../Global.h"
 
 // Virtual base class to be inherited for TCP and UDP sending
 class Server {

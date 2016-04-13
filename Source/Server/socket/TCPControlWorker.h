@@ -25,10 +25,9 @@ signals:
     void AcceptedClient(int socket);
     void finished();
 
-private slots:
+public slots:
     void InitSocket(int port);
     void CloseSocket();
-    //void HandleNewClient(int socket);
 
 private:
     SOCKET listeningSocket, acceptedClientSocket;

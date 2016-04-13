@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
     QString styleSheet = QLatin1String(file.readAll());
     a.setStyleSheet(styleSheet);
 
+   // w.setWindowFlags(Qt::FramelessWindowHint);
     w.show();
 
     return a.exec();

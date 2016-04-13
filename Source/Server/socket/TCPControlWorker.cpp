@@ -1,5 +1,6 @@
 #include <iostream>
-#include<QDebug>
+#include <QApplication>
+#include <QDebug>
 #include "TCPControlWorker.h"
 
 /* Initialize Windows socket */
@@ -16,8 +17,6 @@ void TCPControlWorker::InitSocket(int port) {
         return;
     }
 
-    qDebug() << "port: " << port << " socket: " << listeningSocket;
-
     // Initialize and set up the address structure
     memset((char *)&serverAddr, 0, sizeof(struct sockaddr_in));
     serverAddr.sin_family = AF_INET;
@@ -30,16 +29,18 @@ void TCPControlWorker::InitSocket(int port) {
         return;
     }
 
+    qDebug() << "TCP connection established on socket: " << listeningSocket<< " port: " << port;
+    qDebug() << "Socket Initialized. Listening for TCP connections...";
+
     // Listen for connections
     // queue up to 5 connect requests
-    qDebug() << "TCP Socket Initialized. Listening for TCP connections...";
     if (listen(listeningSocket, 5) == SOCKET_ERROR) {
         qDebug() << "Error on listen: " << WSAGetLastError();
         return;
     }
 
     // Accept clients
-    while (1) {
+    while (tcpConnected) {
         clientLen= sizeof(clientAddr);
 
         if ((acceptedClientSocket = accept (listeningSocket, (struct sockaddr *)&clientAddr, &clientLen)) == -1) {
@@ -105,13 +106,9 @@ boolean TCPControlWorker::SendAll(char *message, LPDWORD lpNumberOfBytesSent) {
 }
 
 void TCPControlWorker::CloseSocket(){
+    qDebug() << "Closing TCP socket...";
     closesocket(listeningSocket);
     WSACleanup();
     emit ClosedSocket();
+    qDebug() << "Closed TCP socket.";
 }
-
-/*
-void HandleNewClient(int socket) {
-    // here we'd update the connected users list, may not have one though
-}
-*/
