@@ -2,8 +2,6 @@
 #include "../global.h"
 #include <QDebug>
 
-
-struct CBuffer CBuf;
 extern boolean _UDPconnectOn;
 
 boolean ClientUDP::Start() {
