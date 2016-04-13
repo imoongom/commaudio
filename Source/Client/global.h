@@ -28,6 +28,9 @@
 #define CLIENT_LIST 20002
 
 
+#define UDP_CLIENT 1001
+#define MULTI_CLIENT 1002
+
 typedef struct _SOCKET_INFORMATION {
    OVERLAPPED Overlapped;
    SOCKET Socket;

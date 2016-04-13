@@ -6,9 +6,10 @@
 
 int sockPort;
 
-UDPRecvThread::UDPRecvThread(SOCKET sock, QObject *parent) : QThread(parent)
+UDPRecvThread::UDPRecvThread(SOCKET sock, int port, QObject *parent) : QThread(parent)
 {
     hSock = sock;
+    hPort = port;
 }
 
 void UDPRecvThread::run(){
@@ -28,7 +29,7 @@ void UDPRecvThread::run(){
     memset(&InternetAddr, 0, sizeof(InternetAddr));
     InternetAddr.sin_family = AF_INET;
     InternetAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    InternetAddr.sin_port = htons(TIMECAST_PORT);//sockPort);
+    InternetAddr.sin_port = htons(hPort);//sockPort);
 
     qDebug()<<"[SOCKET SETUP START" << hSock;
 
@@ -56,8 +57,8 @@ void UDPRecvThread::run(){
                 emit closeSock();
                 return ;
             }
-            if (WSAWaitForMultipleEvents(1, &SI.Overlapped.hEvent, FALSE, 7000, FALSE) == WAIT_TIMEOUT) {
-                qDebug("NONO WSAWitForMultipleEvents\n");
+            if (WSAWaitForMultipleEvents(1, &SI.Overlapped.hEvent, FALSE, 10000, FALSE) == WAIT_TIMEOUT) {
+                qDebug("NONO WSAWitForMultipleEvents\n  %d", SI.Socket);
                 return ;
             }
 
@@ -66,7 +67,7 @@ void UDPRecvThread::run(){
 
         //add on Circular buffer
         write_buffer(&CBuf, SI.DataBuf.buf);
-        //qDebug()<<"RECEV SUCCESS";
+        //qDebug()<<"RECEV SUCCESS "<<hSock;
         emit recvData();
 
     }
