@@ -54,6 +54,9 @@ private slots:
 
     void on_pushToTalk_clicked(bool checked);
 
+    void on_pushButton_pressed();
+
+    void on_pushButton_released();
 private:
     Ui::MainWindow *ui;
     int icon;
