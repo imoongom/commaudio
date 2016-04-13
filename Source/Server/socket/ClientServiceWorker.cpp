@@ -53,6 +53,7 @@ void ClientServiceWorker::ListenForRequests() {
 }
 
 void ClientServiceWorker::ProcessRequest(QString request) {
+    /*
     switch(request[0]) {
     case 'a':
         // download
@@ -64,6 +65,6 @@ void ClientServiceWorker::ProcessRequest(QString request) {
         // voice
         break;
     }
-
+    */
     emit ProcessedRequest();
 }
