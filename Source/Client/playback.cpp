@@ -1,9 +1,10 @@
 #include "playback.h"
 
 
-Playback::Playback()
+Playback::Playback(struct CBuffer * buffer)
 {
     qDebug() << "hi.";
+    playBuf = buffer;
 }
 
 Playback::~Playback()
@@ -26,13 +27,12 @@ void Playback::read_data()
 {
     char *readbuf = (char*)malloc(CIRBUFSIZE);
     QByteArray qba;
-        while(CBuf._count != 0)
+        while(playBuf->_count != 0)
         {
-            read_buffer(&CBuf, readbuf);
+            read_buffer(playBuf, readbuf);
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
         }
-//        qDebug() << "me too yo";
 }
 
 void Playback::updateVolume(float vol)

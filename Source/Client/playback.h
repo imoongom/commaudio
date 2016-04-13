@@ -25,7 +25,7 @@ class Playback : public QObject
     Q_OBJECT
 
 public:
-    Playback();
+    Playback(struct CBuffer * buffer);
     ~Playback();
 
 public slots:
@@ -40,6 +40,7 @@ private:
 
     QByteArray qByteArray;
     QBuffer qBuf;
+    struct CBuffer *playBuf;
 };
 
 #endif // PLAYBACK_H

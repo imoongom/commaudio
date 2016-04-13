@@ -1,5 +1,6 @@
 #include "clientudp.h"
 #include "../global.h"
+
 #include <QDebug>
 
 boolean ClientUDP::Start(SOCKET* sock, int port) {
@@ -11,6 +12,7 @@ boolean ClientUDP::Start(SOCKET* sock, int port) {
     WSADATA stWSAData;
 
     nPort = port;
+    _type = UDP_CLIENT;
 
        /* Init WinSock */
     nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
@@ -43,22 +45,28 @@ boolean ClientUDP::Start(SOCKET* sock, int port) {
     locAddr.sin_family = AF_INET;
     locAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     locAddr.sin_port = htons(nPort);
+
+
     nRet = bind(hSocket, (struct sockaddr*) &locAddr, sizeof(locAddr));
     if (nRet == SOCKET_ERROR) {
         qDebug("bind() port: %d failed, Err: %d\n", nPort,
             WSAGetLastError());
         return false;
     }
-
+    
     qDebug("[UDPBIND]hSocket : %d\thSock: %d\n",hSocket, *sock);
     return true;
 }
 
+void ClientUDP::voiceStart(){
+    emit voiceGo("127.0.0.1");
+}
 
 boolean ClientUDP::multiSetup(SOCKET *sock){
     int nRet;
     qDebug("[multiSetup]hSocket : %d\thSock: %d\n",hSocket, *sock);
 
+    _type = MULTI_CLIENT;
     /* Join the multicast group so we can receive from it */
     stMreq.imr_multiaddr.s_addr = inet_addr(hostAddr);
     stMreq.imr_interface.s_addr = INADDR_ANY;
@@ -97,6 +105,17 @@ void ClientUDP::sendVoice(char *ip){
         SOCKADDR_IN InetAddr;
         struct hostent *voiceHost;
 
+        DWORD nRet;
+        WSADATA stWSAData;
+
+           /* Init WinSock */
+        nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
+        if (nRet != 0) {
+            qDebug("WSAStartup failed: %d\r\n", nRet);
+            return ;
+        }
+
+
         qDebug()<<"[VoiceSend] START";
         if ((SIVoice = (LPSOCKET_INFORMATION)GlobalAlloc(GPTR, sizeof(SOCKET_INFORMATION)))
             == NULL)
@@ -111,13 +130,13 @@ void ClientUDP::sendVoice(char *ip){
            qDebug("[VoiceSend]socket() failed with error %d\n", WSAGetLastError());
             return;
         }
-
-        if ((voiceHost = gethostbyname(ip)) == NULL)
+        /*
+        if ((voiceHost = gethostbyname("127.0.0.1")) == NULL)
         {
             qDebug("[VoiceSend]Unable to resolve host name");
             return;
         }
-
+*/
         SIVoice->Socket = voiceTo;
         SIVoice->DataBuf.buf = temp;
         SIVoice->DataBuf.len = DATA_BUFSIZE;
@@ -126,30 +145,38 @@ void ClientUDP::sendVoice(char *ip){
 
         InetAddr.sin_family = AF_INET;
         InetAddr.sin_port = htons(UDP_DEFAULT_PORT);
-        InetAddr.sin_addr.s_addr = *((unsigned long*)voiceHost->h_addr);
 
+       // memcpy((char *)&InetAddr.sin_addr.s_addr, voiceHost->h_addr, voiceHost->h_length);
+        if((InetAddr.sin_addr.s_addr = inet_addr(ip))==INADDR_NONE)
+        {
+            qDebug() << "INVALID IP ";
+        }
 
+        qDebug()<<"[VoiceSend] SETUP FINISHED " << _VoiceChat;
         while (_VoiceChat) {
-            if(CBufOut._count ==0)
+    //        qDebug() << "Voice Chat startL " <<CBufOut._count;
+            if(CBufOut._count == 0)
                 continue;
+            qDebug()<<"VoiceChat SEND " << voiceTo;
             read_buffer(&CBufOut, temp);
+
+            memcpy(SIVoice->DataBuf.buf, temp, DATA_BUFSIZE);
 
             memset(&SIVoice->Overlapped, '\0', sizeof(SIVoice->Overlapped));
             SIVoice->Overlapped.hEvent = WSACreateEvent();
 
-            memcpy(&SIVoice->DataBuf.buf, temp, DATA_BUFSIZE);
             if (WSASendTo(SIVoice->Socket, &(SIVoice->DataBuf), 1, &SendBytes, 0,
                 (SOCKADDR *)&InetAddr, sizeof(InetAddr), &(SIVoice->Overlapped), NULL) == SOCKET_ERROR)
             {
                 if (WSAGetLastError() != WSAEWOULDBLOCK && WSAGetLastError() != WSA_IO_PENDING)
                 {
-                    qDebug("[VoiceSend]WSASend() failed with error %d\n", WSAGetLastError());
+                    qDebug("[VoiceSend]WSASendto() failed with error %d\n", WSAGetLastError());
                     return;
                 }
 
             }
 
-            if (WSAWaitForMultipleEvents(1, &SIVoice->Overlapped.hEvent, FALSE, 100, FALSE)== WAIT_TIMEOUT) {
+            if (WSAWaitForMultipleEvents(1, &SIVoice->Overlapped.hEvent, FALSE, 1000, FALSE)== WAIT_TIMEOUT) {
                 qDebug("[VoiceSend]UDP SEND TimeOut");
                 //close();
                 return;
@@ -163,28 +190,42 @@ void ClientUDP::sendVoice(char *ip){
 
 }
 
-int ClientUDP::close() {
+int ClientUDP::UDPClose() {
     int nRet;
 
-    stMreq.imr_multiaddr.s_addr = inet_addr(hostAddr);
-    stMreq.imr_interface.s_addr = INADDR_ANY;
-    nRet = setsockopt(hSocket, IPPROTO_IP, IP_DROP_MEMBERSHIP, (char *)&stMreq,
-        sizeof(stMreq));
+    switch(_type){
+    case UDP_CLIENT:
+        _UDPconnectOn = false;
+        break;
+    case MULTI_CLIENT:
+        stMreq.imr_multiaddr.s_addr = inet_addr(hostAddr);
+        stMreq.imr_interface.s_addr = INADDR_ANY;
+        nRet = setsockopt(hSocket, IPPROTO_IP, IP_DROP_MEMBERSHIP, (char *)&stMreq,
+            sizeof(stMreq));
 
-    if (nRet == SOCKET_ERROR) {
-        qDebug(
-            "setsockopt() IP_DROP_MEMBERSHIP address %s failed, Err: %d\n",
-            hostAddr, WSAGetLastError());
+        if (nRet == SOCKET_ERROR) {
+            qDebug(
+                "setsockopt() IP_DROP_MEMBERSHIP address %s failed, Err: %d\n",
+                hostAddr, WSAGetLastError());
+        }
+        _MULTIconnectOn = false;
+        break;
+    default:
+        qDebug() << "WRONG Access to close socket";
+        return -1;
     }
-    clean_buffer(&CBuf);
+
+
+    clean_buffer(_type==UDP_CLIENT?&CBufOut:&CBuf);
     /* Close the socket */
     closesocket(hSocket);
-    fclose(fstream);
-    _MULTIconnectOn = false;
-    /* Tell WinSock we're leaving */
-    WSACleanup();
 
-    return (0);
+
+    /* Tell WinSock we're leaving */
+    if(!_MULTIconnectOn && !_UDPconnectOn && !_TCPconnectOn)
+        WSACleanup();
+
+    return -1;
 }
 
 
