@@ -179,13 +179,13 @@ void MainWindow::appendMusicPk(){
 
 }
 
-<<<<<<< HEAD
 void MainWindow::on_actionRecording_triggered()
 {
 //    test2->record();
     test->read_data();
 //    delete test2;
-=======
+}
+
 void MainWindow::on_pushToTalk_clicked(bool checked)
 {
     if (!checked) {
@@ -197,5 +197,4 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
         ui->pushToTalk->setStyleSheet("background-color:#524FA1");
 
     }
->>>>>>> ecc341a63e7e0406bca7b8eddf2c24c8f4503991
 }
