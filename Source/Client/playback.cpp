@@ -32,7 +32,7 @@ void Playback::read_data()
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
         }
-        qDebug() << "me too yo";
+//        qDebug() << "me too yo";
 }
 
 void Playback::updateVolume(float vol)

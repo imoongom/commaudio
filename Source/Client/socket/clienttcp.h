@@ -2,9 +2,10 @@
 #define CLIENTTCP_H
 #include <winsock2.h>
 #include <QObject>
+#include "./global.h"
 
-#define TCP_DEFAULT_HOST "127.0.0.1"
-#define TCP_DEFAULT_PORT 7000
+//#define TCP_DEFAULT_HOST "127.0.0.1"
+//#define TCP_DEFAULT_PORT 7000
 #define BUFSIZE     1024
 
 class ClientTCP : public QObject

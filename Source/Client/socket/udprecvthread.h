@@ -3,13 +3,17 @@
 
 #include <QThread>
 #include <winsock2.h>
-
+#include "./global.h"
 
 class UDPRecvThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit UDPRecvThread(QObject *parent =0);
+    explicit UDPRecvThread(SOCKET sock, QObject *parent =0);
+    SOCKET_INFORMATION      SI;
+    SOCKADDR_IN InternetAddr;
+    SOCKET hSock;
+    struct hostent *host;
 private:
     void run();
 signals:

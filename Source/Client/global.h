@@ -16,6 +16,8 @@
 #define TIMECAST_ADDR "234.5.6.7"
 #define TIMECAST_PORT 8910
 
+#define UDP_DEFAULT_PORT 8000
+
 //client side type flag
 #define MUSIC_DOWNLOAD 10001
 #define MUSIC_REQUEST  10002
@@ -46,9 +48,13 @@ typedef struct TCP_MESSSAGE{
 
 extern boolean _TCPconnectOn;
 extern boolean _UDPconnectOn;
+extern boolean _MULTIconnectOn;
+extern boolean _VoiceChat;
 
-extern SOCKET hSock;
+extern SOCKET multiSock;
+extern SOCKET udpSock;
 extern SOCKET tcpSock;
+
 extern int sockPort;
 //static SOCKET hSocket;
 extern struct CBuffer CBuf;

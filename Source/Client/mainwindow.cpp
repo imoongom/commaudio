@@ -3,13 +3,19 @@
 
 ClientTCP *tcpcl;
 ClientUDP *udpCl;
+ClientUDP *multiCl;
 
+SOCKET udpSock;
+SOCKET multiSock;
+SOCKET tcpSock;
 
 struct CBuffer CBuf;
 struct CBuffer CBufOut;
 
 boolean _UDPconnectOn;
 boolean _TCPconnectOn;
+boolean _MULTIconnectOn;
+boolean _VoiceChat;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -69,19 +75,56 @@ void MainWindow::on_actionPlaylist_triggered()
 
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
-    ThreadHandler *TCPthread = new ThreadHandler();
-    UDPRecvThread *multiThread = new UDPRecvThread(this);
+
+    if(_MULTIconnectOn)
+        return;
+
+    musicThread = new QThread();
+    addPk = new Playback();
     qDebug() << "JOIN multicast";
-    ClientUDP *udp = new ClientUDP();
-    if(!udp->Start() || !udp->initData() ||!udp->multiSetup()){
-        udp->close();
+    multiCl = new ClientUDP();
+    if(!multiCl->Start(&multiSock, TIMECAST_PORT) || !multiCl->multiSetup(&multiSock)){
+        multiCl->close();
         return ;
     }
+    qDebug()<<"[MULTI] : multisetup socket opened "<<multiSock;
+    _MULTIconnectOn = true;
+    addPk->moveToThread(musicThread);
+ UDPRecvThread *multiThread = new UDPRecvThread(multiSock, this);
+    connect(multiThread, SIGNAL(recvData()), this, SLOT(appendMusicPk()));
 
-    connect(multiThread, SIGNAL(startTCP()), TCPthread, SLOT(createThread()));
-    connect(multiThread, SIGNAL(recvData()), udp, SLOT(writeFile()));
     multiThread->start();
 
+   // test->read_data();
+    addPk->runthis();
+    qDebug()<<"[MULTI] THREAD STARTED "<<multiSock;
+
+
+}
+
+void MainWindow::udpRecvSetup(){
+    if(_MULTIconnectOn)
+        return;
+
+    voiceThread = new QThread();
+    addVoice= new Playback();
+    qDebug() << "JOIN multicast";
+    udpCl = new ClientUDP();
+    if(!udpCl->Start(&udpSock,UDP_DEFAULT_PORT)){
+        udpCl->close();
+        return ;
+    }
+    qDebug()<<"[MULTI] : multisetup socket opened "<<udpSock;
+    _UDPconnectOn = true;
+    addPk->moveToThread(musicThread);
+    UDPRecvThread *udpThread = new UDPRecvThread(udpSock, this);
+    //connect(udpThread, SIGNAL(recvData()), this, SLOT(udpMusicPk()));
+
+    udpThread->start();
+
+   // test->read_data();
+    addVoice->runthis();
+    qDebug()<<"[MULTI] THREAD STARTED "<<udpSock;
 }
 
 void MainWindow::on_actionCB_triggered()
@@ -103,13 +146,13 @@ void MainWindow::on_actionCB_triggered()
     connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
     t2->start();
 
-    test->read_data();
 //    test->write_data();
 //    test->read_data();
 }
 
 void MainWindow::on_playPauseButton_clicked(bool checked)
 {
+
     if (!checked) {
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
@@ -122,7 +165,7 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
 
 void MainWindow::on_connectButton_clicked()
 {
-    if(_UDPconnectOn || _TCPconnectOn){
+    if(_TCPconnectOn){
        return;
     }
 
@@ -131,36 +174,27 @@ void MainWindow::on_connectButton_clicked()
     int host_port_no = ui->lineEdit_port->text().toInt();
 
     TCPThread = new QThread();
-    musicThread = new QThread();
+
     ThreadHandler *TCPhandler = new ThreadHandler();
-    UDPRecvThread *multiThread = new UDPRecvThread(this);
-    addPk = new Playback();
+
     //initialize tcp and udp
-    if(host_ip_addr.size()==0 && host_port_no == NULL)
+    if(host_ip_addr.size()==0 && host_port_no == 0)
         tcpcl = new ClientTCP();
     else
         tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
 
-    //initialize and connect UDP
-    udpCl = new ClientUDP();
-    if(!udpCl->Start() || !udpCl->initData() ||!udpCl->multiSetup()){
-        udpCl->close();
-        _UDPconnectOn = false;
-        return ;
-    }
-    _UDPconnectOn = true;
+    if(!_MULTIconnectOn)
+        on_actionJoin_Multicast_triggered();
+    qDebug()<<"Multi connect success";
+
+    if(!_UDPconnectOn)
+        udpRecvSetup();
+
+    qDebug()<<"UDP Connect success";
 
     TCPhandler->moveToThread(TCPThread);
-    addPk->moveToThread(musicThread);
-
-    connect(multiThread, SIGNAL(recvData()), this, SLOT(appendMusicPk()));
-
-
     TCPThread->start();
-    multiThread->start();
-
     TCPhandler->TCPThread();
-    addPk->runthis();
 
 }
 
@@ -188,6 +222,8 @@ void MainWindow::on_actionRecording_triggered()
 
 void MainWindow::on_pushToTalk_clicked(bool checked)
 {
+    qDebug()<<"Talk Pushed";
+    _VoiceChat = checked;
     if (!checked) {
         ui->pushToTalk->setStyleSheet("background-color:#454389");
         ui->pushToTalk->setCheckable(true);
@@ -195,6 +231,9 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
     } else {
         // not toggled
         ui->pushToTalk->setStyleSheet("background-color:#524FA1");
-
+        udpCl->sendVoice("127.0.0.1");
     }
 }
+
+
+
