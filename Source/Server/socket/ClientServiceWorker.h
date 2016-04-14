@@ -14,7 +14,7 @@ public:
     ~ClientServiceWorker() {}
 
 signals:
-    void ReceivedRequest(QString);
+    void ReceivedRequest(QString, int);
     void ProcessedRequest();
     //void ClientDisconnected();
     //void UpdateClientList();
@@ -23,14 +23,15 @@ signals:
 
 private slots:
     void ListenForRequests();
-    void ProcessRequest(QString);
+    void ProcessRequest(QString, int);
     //void ClientDisconnect();
 
 private:
     QString clientIpAddr;
     int clientSocket;
     SOCKET socket;
-    // boolean TransferFile();
+    void SendFileToClient(QString songName, SOCKET cSocket);
+
 
 };
 

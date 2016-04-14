@@ -37,6 +37,20 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
     qDebug() << "play button pressed";
     if (!checked && udpConnected) {
         ui->playPauseButton->setIcon(QIcon(fname2));
+          ui->playPauseButton->setCheckable(true);
+
+          // QThread for sending
+          udpSendWorkerThread = new QThread;
+          udpSendWorker = new UDPSendWorker(serverUdp);
+          udpSendWorker->moveToThread(udpSendWorkerThread);
+
+          connect(udpSendWorkerThread, SIGNAL(started()), udpSendWorker, SLOT(Run()));
+          connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
+          connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
+
+          udpSendWorkerThread->start();
+        /*
+        ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
 
         //ui->playList->currentItem()->text();
@@ -66,6 +80,7 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
        fileBufferWorkerThread->start();
        playbackWorker->runthis();
        udpSendWorkerThread->start();
+       */
     } else {
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
