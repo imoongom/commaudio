@@ -1,15 +1,55 @@
+/*------------------------------------------------------------------------------------------------------------------
+-- SOURCE FILE: playback.cpp
+--
+-- PROGRAM: CommAudio
+--
+-- FUNCTIONS:
+    Playback(struct CBuffer * buffer);
+    ~Playback();
+    void runthis();
+    void read_data();
+    void updateVolume(float vol);
+    void CanSendNextData(qint64 pos, QByteArray qba);
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- NOTES:
+-- THe class to play audio from a buffer to the machine's default output device.
+----------------------------------------------------------------------------------------------------------------------*/
 #include "playback.h"
 #include <QAudio>
 
 qint64 processedBytes = 0;
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: Playback
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: n/a
+--
+-- NOTES:
+-- Constructor
+----------------------------------------------------------------------------------------------------------------------*/
 Playback::Playback(struct CBuffer * buffer)
 {
     qDebug() << "hi.";
     playBuf = buffer;
     m_format = QAudioFormat();
 
-    m_format.setSampleRate(48000); // 48000
+    m_format.setSampleRate(44100); // 48000
     m_format.setChannelCount(2);
     m_format.setSampleSize(16);
     m_format.setCodec("audio/pcm");
@@ -19,11 +59,43 @@ Playback::Playback(struct CBuffer * buffer)
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: ~Playback
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: n/a
+--
+-- NOTES:
+-- Destructor
+----------------------------------------------------------------------------------------------------------------------*/
 Playback::~Playback()
 {
     qDebug() << "Good bye ya";
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: runthis
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- Main function to run inside a thread. Initializes all the required variables and devices.
+----------------------------------------------------------------------------------------------------------------------*/
 void Playback::runthis()
 {
 
@@ -41,6 +113,23 @@ void Playback::runthis()
     m_audioOutput = new QAudioOutput(m_device, m_format);
     m_audioOutput->start(&qBuf);
 }
+
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: read_data
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- Function to read from the buffer and store into the circular buffer for networking logic.
+----------------------------------------------------------------------------------------------------------------------*/
 void Playback::read_data()
 {
     qDebug()<<"READ DATA" << playBuf->_count;
@@ -70,32 +159,24 @@ void Playback::read_data()
             }
 
         }
-
 }
 
-/* eunwon's, previous version w/o parameter above
-void Playback::read_data()
-{
-    qDebug()<<"READ DATA" << playBuf->_count;
-    char *readbuf = (char*)malloc(CIRBUFSIZE);
-    QByteArray qba;
-    QByteArray qbaToSend;
-
-    // While audio is playing
-    if (m_audioOutput->state() == 0) {
-        char *readbuf = (char*)malloc(CIRBUFSIZE);
-        QByteArray qba;
-        while(playBuf->_count != 0)
-        {
-            read_buffer(playBuf, readbuf);
-            qba = QByteArray(readbuf, CIRBUFSIZE);
-            qByteArray.append(qba);
-            qbaToSend = qba.mid(pos, pos + DATA_BUFSIZE);
-        }
-    }
-}
-*/
-
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: updateVolume
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- Updates the volume of the device.
+----------------------------------------------------------------------------------------------------------------------*/
 void Playback::updateVolume(float vol)
 {
     m_audioOutput->setVolume(vol);

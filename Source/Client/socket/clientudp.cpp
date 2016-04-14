@@ -107,7 +107,7 @@ void ClientUDP::udpConn(){
 
     DWORD nRet;
     WSADATA stWSAData;
-    char ip[15] = "127.0.0.1";
+    char ip[15] = "192.168.0.15";
        /* Init WinSock */
     nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
     if (nRet != 0) {
@@ -144,7 +144,7 @@ void ClientUDP::udpConn(){
     memset(&InetAddr, 0, sizeof(InetAddr));
 
     InetAddr.sin_family = AF_INET;
-    InetAddr.sin_port = htons(UDP_DEFAULT_PORT);
+    InetAddr.sin_port = htons(1234);
 
    // memcpy((char *)&InetAddr.sin_addr.s_addr, voiceHost->h_addr, voiceHost->h_length);
     if((InetAddr.sin_addr.s_addr = inet_addr(ip))==INADDR_NONE)

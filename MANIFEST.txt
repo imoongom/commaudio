@@ -1,0 +1,27 @@
+
+COMP 4985 - Comm Audio
+
+Details of zipped package
+
+root directory: /commaudio/ 
+ - MANIFEST.txt
+ - README.md
+
+Source:     		/Source/
+ - Source code Client:  /Client/
+ - Source code Server:  /Server/
+
+Client:        		/Client/
+ - Source code:         *.cpp
+ - Stylesheets:         /qdarkstyle/
+ - Songs:               *.wav
+
+Server:        		/Server/
+ - Source code:         *.cpp
+ - Stylesheets:         /qdarkstyle/
+ - Songs:               *.wav
+
+Documentation:          /Documentation/
+ - Design.pdf
+ - Testing.pdf
+ - UserManual.pdf
