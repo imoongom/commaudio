@@ -20,12 +20,12 @@ SOURCES += main.cpp\
     wavfile.cpp \
     recording.cpp \
     playlist.cpp \
-    ringbuffer.cpp \
     socket/circularbuffer.cpp \
     socket/clientudp.cpp \
     socket/udprecvthread.cpp \
     socket/clienttcp.cpp \
-    socket/threadhandler.cpp
+    socket/threadhandler.cpp \
+    filetransfer.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
@@ -33,12 +33,12 @@ HEADERS  += mainwindow.h \
     recording.h \
     playlist.h \
     global.h \
-    ringbuffer.h \
     socket/circularbuffer.h \
     socket/clientudp.h \
     socket/udprecvthread.h \
     socket/clienttcp.h \
-    socket/threadhandler.h
+    socket/threadhandler.h \
+    filetransfer.h
 
 FORMS    += mainwindow.ui
 

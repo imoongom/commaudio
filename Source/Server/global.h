@@ -9,7 +9,7 @@
 #define MAXADDRSTR  16
 
 #define TCP_DEFAULT_HOST "127.0.0.1"
-#define TCP_DEFAULT_PORT 5000
+#define TCP_DEFAULT_PORT 7000
 
 #define TIMECAST_ADDR "234.5.6.7"
 #define TIMECAST_PORT 8910
@@ -46,5 +46,10 @@ extern int sockPort;
 extern SOCKADDR_IN stLclAddr, stDstAddr;
 extern bool udpConnected;
 extern bool tcpConnected;
+
+extern struct CBuffer CBuf, CBufSend;
+extern struct CBuffer CBufOut;
+
+extern qint64 songPos;
 
 #endif // GLOBAL_H

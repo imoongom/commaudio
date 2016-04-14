@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->userList->addItem("Oscar");
   //  connect(ui->playPauseButton, SIGNAL(clicked()), this, SLOT(toggleIcon()));
 
+    test = NULL;
+
     _UDPconnectOn = false;
     _TCPconnectOn = false;
     _MULTIconnectOn = false;
@@ -66,7 +68,8 @@ void MainWindow::toggleIcon()
 
 void MainWindow::on_volumeSlider_valueChanged(int value)
 {
-    test->updateVolume((float)(value / 100.0F));
+    if(test != NULL)
+        test->updateVolume((float)(value / 100.0F));
 }
 
 void MainWindow::on_actionPlaylist_triggered()
@@ -220,7 +223,7 @@ void MainWindow::on_connectButton_clicked()
 void MainWindow::on_actionRecording_triggered()
 {
 //    test2->record();
-    test->read_data();
+   // test->read_data();
 //    delete test2;
 }
 
@@ -297,6 +300,16 @@ void MainWindow::on_pushButton_released()
     QString temp = ui->playList->currentItem()->text();
 
     // get name of file, request to server, server sends back file
+    fileTransferThread = new QThread();
+    ft = new Filetransfer();
+    tcpcl = new ClientTCP();
+
+    ft->moveToThread(fileTransferThread);
+    connect(fileTransferThread, SIGNAL(started()), ft, SLOT(sendSongName()));
+    fileTransferThread->start();
+
+    tcpcl->TCPSend("song");
+
 }
 
 void MainWindow::on_pushButton_2_clicked()

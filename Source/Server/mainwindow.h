@@ -13,6 +13,8 @@
 #include "socket/ServerUDP.h"
 #include "socket/TCPControlWorker.h"
 #include "socket/ClientServiceWorker.h"
+#include "../Client/playback.h"
+#include "socket/FileBufferWorker.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +33,11 @@ private slots:
     void on_buttonTcpConnect_clicked(bool checked);
     void on_actionJoin_Multicast_triggered(bool checked);
     void HandleNewClient(QString ipAddr, int socket);
+    void PlayMusic(qint64 pos);
+
+signals:
+    void StartReadingFile(qint64 qint);
+    void CanSendBufferedData(qint64, QByteArray qByteArray);
 
 private:
     Ui::MainWindow *ui;
@@ -46,10 +53,14 @@ private:
     QThread *udpSendWorkerThread;
     QThread *tcpControlWorkerThread;
     QThread *clientServiceThread;
+    QThread *playbackWorkerThread;
+    QThread *fileBufferWorkerThread;
 
     UDPSendWorker *udpSendWorker;
     TCPControlWorker *tcpControlWorker;
     ClientServiceWorker *clientServiceWorker;
+    Playback *playbackWorker;
+    FileBufferWorker *fileBufferWorker;
 
 };
 
