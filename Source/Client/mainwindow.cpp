@@ -242,6 +242,21 @@ void MainWindow::udpRecvSetup(){
     qDebug()<<"[UDP] THREAD STARTED "<<udpSock;
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_actionCB_triggered
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: void
+--
+-- NOTES: DEPRECATED: Old testing function for circular buffer.
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_actionCB_triggered()
 {
 
@@ -347,6 +362,22 @@ void MainWindow::on_connectButton_clicked()
     TCPThread->start();
 
 }
+
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: call_TCP
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::call_TCP(){
     if(!tcpcl->TCPConnect()){
         qDebug()<<"TCP Connection fail";
@@ -364,13 +395,13 @@ void MainWindow::call_TCP(){
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER: Gabriel Lee
 --
--- PROGRAMMER:
+-- PROGRAMMER: Gabriel Lee
 --
 -- RETURNS: void
 --
--- NOTES:
+-- NOTES: DEPRECATED: Old testing function for testing recording and pause.
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_actionRecording_triggered()
 {
@@ -435,6 +466,21 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
     }
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: temp_add_music
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::temp_add_music(){
     QString filename = "../ChrisBrown-WithYou.wav";
 
@@ -458,6 +504,22 @@ void MainWindow::temp_add_music(){
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_pushButton_pressed
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+--
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_pressed()
 {
     ui->pushButton->setStyleSheet("background-color:#454389");
@@ -499,6 +561,22 @@ void MainWindow::on_pushButton_released()
     tcpcl->TCPSend(tempM);
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_pushButton_2_clicked
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+--
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_2_clicked()
 {
     udpRecvSetup();
