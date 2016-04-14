@@ -13,7 +13,8 @@
 #include "socket/ServerUDP.h"
 #include "socket/TCPControlWorker.h"
 #include "socket/ClientServiceWorker.h"
-#include "../Client/playback.h"
+#include "playback.h"
+#include "../Client/playlist.h"
 #include "socket/FileBufferWorker.h"
 
 namespace Ui {
@@ -33,7 +34,8 @@ private slots:
     void on_buttonTcpConnect_clicked(bool checked);
     void on_actionJoin_Multicast_triggered(bool checked);
     void HandleNewClient(QString ipAddr, int socket);
-    void PlayMusic(qint64 pos);
+    //void PlayMusic(qint64 pos);
+    void PlayMusic();
 
 signals:
     void StartReadingFile(qint64 qint);
@@ -61,7 +63,7 @@ private:
     ClientServiceWorker *clientServiceWorker;
     Playback *playbackWorker;
     FileBufferWorker *fileBufferWorker;
-
+    Playlist *playlist;
 };
 
 #endif // MAINWINDOW_H

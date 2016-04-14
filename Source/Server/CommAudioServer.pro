@@ -20,9 +20,9 @@ SOURCES += main.cpp\
     socket/TCPControlWorker.cpp \
     socket/ClientServiceWorker.cpp \
     MainWindow.cpp \
-    ../Client/playback.cpp \
-    ../Client/socket/circularbuffer.cpp \
-    socket/FileBufferWorker.cpp
+    socket/FileBufferWorker.cpp \
+    circularbuffer.cpp \
+    playback.cpp
 
 HEADERS  += \
     socket/Server.h \
@@ -32,9 +32,9 @@ HEADERS  += \
     socket/ClientServiceWorker.h \
     MainWindow.h \
     Global.h \
-    ../Client/playback.h \
-    ../Client/socket/circularbuffer.h \
-    socket/FileBufferWorker.h
+    socket/FileBufferWorker.h \
+    circularbuffer.h \
+    playback.h
 
 FORMS    += mainwindow.ui
 

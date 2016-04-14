@@ -2,7 +2,7 @@
 #include <QFile>
 #include "../Global.h"
 #include "ServerUDP.h"
-#include "../Client/socket/circularbuffer.h"
+#include "circularbuffer.h"
 using namespace std;
 
 SOCKET hSock;

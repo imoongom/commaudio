@@ -50,6 +50,4 @@ extern bool tcpConnected;
 extern struct CBuffer CBuf, CBufSend;
 extern struct CBuffer CBufOut;
 
-extern qint64 songPos;
-
 #endif // GLOBAL_H

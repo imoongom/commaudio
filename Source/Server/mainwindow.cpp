@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
-#include "../Client/socket/circularbuffer.h"
+#include "circularbuffer.h"
 
 bool udpConnected = false;
 bool tcpConnected = false;
@@ -34,10 +34,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_playPauseButton_clicked(bool checked)
 {
+    qDebug() << "play button pressed";
     if (!checked && udpConnected) {
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
 
+        //ui->playList->currentItem()->text();
         // QThread for file reading and buffering
         fileBufferWorkerThread = new QThread;
         fileBufferWorker = new FileBufferWorker();
@@ -45,7 +47,7 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
 
         // QThread for playback
         playbackWorkerThread = new QThread;
-        playbackWorker = new Playback(&CBuf);
+        playbackWorker = new Playback();
         playbackWorker->moveToThread(playbackWorkerThread);
 
         // QThread for sending
@@ -54,18 +56,16 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         udpSendWorker->moveToThread(udpSendWorkerThread);
 
         // Play music when there's data in cbuf
-        //connect(playbackWorkerThread, SIGNAL(started()), playbackWorker, SLOT(runthis()));
-        connect(this, SIGNAL(StartReadingFile(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
-        connect(fileBufferWorker, SIGNAL(WroteToCBuf(qint64)), this, SLOT(PlayMusic(qint64)));
-        connect(playbackWorker, SIGNAL(CanSendNextData(qint64, QByteArray)), udpSendWorker, SLOT(SendBufferedData(qint64, QByteArray)));
-        connect(udpSendWorker, SIGNAL(CanReadNextData(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
-        connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
-        connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
+       connect(fileBufferWorkerThread, SIGNAL(started()), fileBufferWorker, SLOT(ReadFileAndBuffer()));
+       connect(fileBufferWorker, SIGNAL(WroteToCBuf()), this, SLOT(PlayMusic()));
+       //connect(playbackWorker, SIGNAL(CanSendNextData(qint64, QByteArray)), udpSendWorker, SLOT(SendBufferedData(qint64, QByteArray)));
+       //connect(playbackWorker, SIGNAL(CanReadNextData(qint64)), fileBufferWorker, SLOT(ReadFileAndBuffer(qint64)));
+       connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
+       connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
 
-        this->StartReadingFile(songPos);
-        fileBufferWorkerThread->start();
-        playbackWorker->runthis();
-        udpSendWorkerThread->start();
+       fileBufferWorkerThread->start();
+       playbackWorker->runthis();
+       udpSendWorkerThread->start();
     } else {
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
@@ -139,7 +139,7 @@ void MainWindow::HandleNewClient(QString ipAddr, int socket) {
     clientServiceWorker->moveToThread(clientServiceThread);
 
     connect(clientServiceThread, SIGNAL(started()), clientServiceWorker, SLOT(ListenForRequests()));
-    connect(clientServiceWorker, SIGNAL(ReceivedRequest(QString)), clientServiceWorker, SLOT(ProcessRequest(QString)));
+    connect(clientServiceWorker, SIGNAL(ReceivedRequest(QString, int)), clientServiceWorker, SLOT(ProcessRequest(QString, int)));
     connect(clientServiceWorker, SIGNAL(finished()), clientServiceThread, SLOT(quit()));
     connect(clientServiceWorker, SIGNAL(finished()), clientServiceThread, SLOT(deleteLater()));
     connect(clientServiceThread, SIGNAL(finished()), clientServiceThread, SLOT(deleteLater()));
@@ -148,8 +148,19 @@ void MainWindow::HandleNewClient(QString ipAddr, int socket) {
 }
 
 /* Audio playback of data in circular buffer */
-void MainWindow::PlayMusic(qint64 pos) {
-    playbackWorker->read_data(pos);
+void MainWindow::PlayMusic() {
+    playbackWorker->read_data();
 }
 
+/*
+void MainWindow::on_actionPlaylist_triggered()
+{
+    list = new Playlist("../Demo");
+    list->update_list();
+    qDebug() << "updated";
+    ui->playList->clear();
+    ui->playList->addItems(list->get_playlist());
+    qDebug() << "got list";
 
+}
+*/
