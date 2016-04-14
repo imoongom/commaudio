@@ -20,6 +20,38 @@ boolean _TCPconnectOn;
 boolean _MULTIconnectOn;
 boolean _VoiceChat;
 
+/*------------------------------------------------------------------------------------------------------------------
+-- SOURCE FILE: mainwindow.cpp - An application that will stream music to other clients.
+--
+-- PROGRAM: CommAudio
+--
+-- FUNCTIONS:
+-- MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+-- MainWindow::~MainWindow()
+-- void MainWindow::on_volumeSlider_valueChanged(int value)
+-- void MainWindow::on_actionPlaylist_triggered()
+-- void MainWindow::on_actionJoin_Multicast_triggered()
+-- void MainWindow::udpRecvSetup()
+-- void MainWindow::on_playPauseButton_clicked(bool checked)
+-- void MainWindow::on_connectButton_clicked()
+-- void MainWindow::on_actionRecording_triggered()
+-- void MainWindow::on_pushToTalk_clicked(bool checked)
+-- void MainWindow::on_pushButton_released()
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- NOTES:
+-- The program will stream songs.
+----------------------------------------------------------------------------------------------------------------------*/
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -56,6 +88,25 @@ MainWindow::MainWindow(QWidget *parent) :
     _VoiceChat = false;
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: ~MainWindow
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Oscar Kwan
+--
+-- DESIGNER: Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- RETURNS:
+--
+-- NOTES:
+-- Destructor.
+----------------------------------------------------------------------------------------------------------------------*/
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -66,6 +117,24 @@ void MainWindow::toggleIcon()
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_volumeSlider_valueChanged
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Oscar Kwan
+--
+-- DESIGNER: Oscar Kwan
+--
+-- PROGRAMMER: Oscar Kwan
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- Updates the volume for the audio output.
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_volumeSlider_valueChanged(int value)
 {
     if(test != NULL)
@@ -83,6 +152,21 @@ void MainWindow::on_actionPlaylist_triggered()
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_actionJoin_Multicast_triggered
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_actionJoin_Multicast_triggered()
 {
 
@@ -112,6 +196,21 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: udpRecvSetup
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::udpRecvSetup(){
     if(_UDPconnectOn)
         return;
@@ -166,6 +265,22 @@ void MainWindow::on_actionCB_triggered()
 //    test->read_data();
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_playPauseButton_clicked
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Oscar Kwan
+--
+-- PROGRAMMER: Oscar Kwan
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- To toggle play and pause buttons.
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_playPauseButton_clicked(bool checked)
 {
 
@@ -173,32 +288,33 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
         // do pause stuff here
+
     } else {
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
     }
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_connectButton_clicked
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_connectButton_clicked()
 {
     if(_TCPconnectOn){
        return;
     }
-
-    //get input value
-    QString host_ip_addr = ui->lineEdit_ip->text();
-    int host_port_no = ui->lineEdit_port->text().toInt();
-
-    TCPThread = new QThread();
-
-    ThreadHandler *TCPhandler = new ThreadHandler();
-
-    //initialize tcp and udp
-    if(host_ip_addr.size()==0 && host_port_no == 0)
-        tcpcl = new ClientTCP();
-    else
-        tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
-
     if(!_MULTIconnectOn){
         qDebug()<<"???MULTI cnnect call";
         on_actionJoin_Multicast_triggered();
@@ -209,14 +325,53 @@ void MainWindow::on_connectButton_clicked()
         qDebug()<<"???UDP cnnect call";
         udpRecvSetup();
     }
-    qDebug()<<"###UDP Connect success :" << udpSock;
-    connect(TCPThread, SIGNAL(started()), TCPhandler, SLOT(TCPThread()));
+    //get input value
+    QString host_ip_addr = ui->lineEdit_ip->text();
+    int host_port_no = ui->lineEdit_port->text().toInt();
 
-    TCPhandler->moveToThread(TCPThread);
+    TCPThread = new QThread();
+
+    //ThreadHandler *TCPhandler = new ThreadHandler();
+
+    //initialize tcp and udp
+    if(host_ip_addr.size()==0 && host_port_no == 0)
+        tcpcl = new ClientTCP();
+    else
+        tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
+
+
+    qDebug()<<"###UDP Connect success :" << udpSock;
+    connect(TCPThread, SIGNAL(started()),this, SLOT(call_TCP()));
+    //TCPhandler->moveToThread(TCPThread);
+    tcpcl->moveToThread(TCPThread);
     TCPThread->start();
 
 }
+void MainWindow::call_TCP(){
+    if(!tcpcl->TCPConnect()){
+        qDebug()<<"TCP Connection fail";
+        _TCPconnectOn = false;
+        return ;
+    }
+    _TCPconnectOn = true;
+    tcpcl->TCPcreateThread();
+}
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_actionRecording_triggered
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_actionRecording_triggered()
 {
     test2->pause();
@@ -225,6 +380,21 @@ void MainWindow::on_actionRecording_triggered()
 //    delete test2;
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_pushToTalk_clicked
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushToTalk_clicked(bool checked)
 {    
 
@@ -293,6 +463,22 @@ void MainWindow::on_pushButton_pressed()
     ui->pushButton->setStyleSheet("background-color:#454389");
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_pushButton_released
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+--
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_released()
 {
     ui->pushButton->setStyleSheet("background-color:#524FA1;color:white;");
@@ -301,7 +487,7 @@ void MainWindow::on_pushButton_released()
     // get name of file, request to server, server sends back file
     fileTransferThread = new QThread();
     ft = new Filetransfer();
-    tcpcl = new ClientTCP();
+  // tcpcl = new ClientTCP();
 
     ft->moveToThread(fileTransferThread);
     connect(fileTransferThread, SIGNAL(started()), ft, SLOT(sendSongName()));

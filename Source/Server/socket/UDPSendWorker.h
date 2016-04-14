@@ -14,7 +14,7 @@ private:
     bool doneReadingFile = false;
 private slots:
     //void SendBufferedData(qint64 pos, QByteArray qByteArray);
-    void Run();
+    void Run(QString songName);
 signals:
     void SentData();
     void CloseSocket();

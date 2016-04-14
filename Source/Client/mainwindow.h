@@ -40,7 +40,7 @@ signals:
     void addMusic();
 public slots:
     void toggleIcon();
-
+    void call_TCP();
 
 private slots:
 

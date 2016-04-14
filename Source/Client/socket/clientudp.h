@@ -31,7 +31,7 @@ void sendVoice(char *ip);
     SOCKET hSocket;
     char hostAddr[MAXADDRSTR] = TIMECAST_ADDR;
     u_long lhostAddr;
-    u_short nPort;// = TIMECAST_PORT;
+    u_short nPort = TIMECAST_PORT;
     FILE *fstream;
 
 
