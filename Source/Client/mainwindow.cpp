@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <iostream>
-
+#include "global.h"
 ClientTCP *tcpcl;
 ClientUDP *udpCl;
 ClientUDP *multiCl;
@@ -122,14 +122,14 @@ void MainWindow::udpRecvSetup(){
     addVoice= new Playback(&CBufOut);
     qDebug() << "UDP JOIN";
     udpCl = new ClientUDP();
-    if(!udpCl->Start(&udpSock,UDP_DEFAULT_PORT)){
+    if(!udpCl->Start(&udpSock,TCP_DEFAULT_PORT)){
         udpCl->UDPClose();
         return ;
     }
     qDebug()<<"[UDP] : socket opened "<<udpSock;
     _UDPconnectOn = true;
     addVoice->moveToThread(voiceThread);
-    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, this);
+    udpThread = new UDPRecvThread(udpSock, TCP_DEFAULT_PORT, this);
 
     connect(voiceThread, SIGNAL(started()), addVoice, SLOT(runthis()));
     connect(udpThread, SIGNAL(recvData()), this, SLOT(testVoiceRecv()));
@@ -143,7 +143,7 @@ void MainWindow::udpRecvSetup(){
 
 void MainWindow::testVoiceRecv(){
     qDebug("VoiceReceived");
-    addVoice->read_data();
+    addVoice->read_data(0);
 }
 
 
@@ -223,7 +223,7 @@ void MainWindow::on_connectButton_clicked()
 
 //dummy to make space circularbuffer
 void MainWindow::appendMusicPk(){
-    addPk->read_data();
+    addPk->read_data(0);
  //   char buffer[CIRBUFSIZE];
 //    if(CBuf._count ==0)
 //        return;
@@ -239,7 +239,7 @@ void MainWindow::appendMusicPk(){
 void MainWindow::on_actionRecording_triggered()
 {
 //    test2->record();
-    test->read_data();
+    test->read_data(0);
 //    delete test2;
 }
 

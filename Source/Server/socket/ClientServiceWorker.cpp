@@ -20,7 +20,7 @@ void ClientServiceWorker::ListenForRequests() {
     }
 
     // Initialize socket information
-    SI->Socket = tcpSock;
+    SI->Socket = clientSocket;
     SI->Overlapped.hEvent = WSACreateEvent();
     SI->DataBuf.buf = buffer;
     SI->DataBuf.len = BUFSIZE;
