@@ -20,7 +20,7 @@ void ClientServiceWorker::ListenForRequests() {
     }
 
     // Initialize socket information
-    SI->Socket = tcpSock;
+    SI->Socket = clientSocket;
     SI->Overlapped.hEvent = WSACreateEvent();
     SI->DataBuf.buf = buffer;
     SI->DataBuf.len = BUFSIZE;
@@ -29,6 +29,8 @@ void ClientServiceWorker::ListenForRequests() {
     while (1) {
        memset(&SI->Overlapped, '\0', sizeof(SI->Overlapped));
        SI->Overlapped.hEvent = WSACreateEvent();
+
+       qDebug() << SI->Socket;
 
        if (WSARecv(SI->Socket, &(SI->DataBuf), 1, &RecvBytes, &Flags,&(SI->Overlapped), NULL) == SOCKET_ERROR) {
            if (WSAGetLastError() != WSAEWOULDBLOCK && WSAGetLastError() != WSA_IO_PENDING) {

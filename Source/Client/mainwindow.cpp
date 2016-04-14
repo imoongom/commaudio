@@ -306,4 +306,14 @@ void MainWindow::on_pushButton_released()
     QString temp = ui->playList->currentItem()->text();
 
     // get name of file, request to server, server sends back file
+    fileTransferThread = new QThread();
+    ft = new Filetransfer();
+    tcpcl = new ClientTCP();
+
+    ft->moveToThread(fileTransferThread);
+    connect(fileTransferThread, SIGNAL(started()), ft, SLOT(sendSongName()));
+    fileTransferThread->start();
+
+    tcpcl->TCPSend("song");
+
 }
