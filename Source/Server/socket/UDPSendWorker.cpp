@@ -4,7 +4,7 @@
 #include "UDPSendWorker.h"
 #include "../Global.h"
 #include "serverudp.h"
-#include "../Client/socket/circularbuffer.h"
+#include "circularbuffer.h"
 
 UDPSendWorker::UDPSendWorker(ServerUDP *serverUdp) :
     _serverUdp(serverUdp)

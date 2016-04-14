@@ -10,9 +10,11 @@ class FileBufferWorker : public QObject
 public:
     FileBufferWorker();
 private slots:
-    void ReadFileAndBuffer(qint64 pos);
+    //void ReadFileAndBuffer(qint64 pos);
+    void ReadFileAndBuffer();
 signals:
-    void WroteToCBuf(qint64 pos);
+    //void WroteToCBuf(qint64 pos);
+    void WroteToCBuf();
 private:
     QFile file;
 };
