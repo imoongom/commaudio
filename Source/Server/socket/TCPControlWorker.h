@@ -20,6 +20,7 @@ public:
     boolean SendOne2(LPSOCKET_INFORMATION socketInformation, char* message);
     boolean SendAll(char *message, LPDWORD lpNumberOfBytesSent);
     QString CreateClientMapMessage();
+    void SendFileToClient(QString title, SOCKET m_socket);
 
 signals:
     void SignalInitSocket(int port);
