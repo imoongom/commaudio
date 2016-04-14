@@ -283,7 +283,7 @@ void MainWindow::on_actionCB_triggered()
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: on_playPauseButton_clicked
 --
--- DATE: April 14, 2016
+-- DATE:     April 10, 2016
 --
 -- REVISIONS: (Date and Description)
 --
@@ -313,29 +313,34 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: on_connectButton_clicked
 --
--- DATE: April 14, 2016
+-- DATE:    April 10, 2016
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER:    Eunwon Moon
 --
--- PROGRAMMER:
+-- PROGRAMMER:  Eunwon Mon
 --
 -- RETURNS: void
 --
--- NOTES:
+-- NOTES:   This is normal connection with ip address
+--          If user click Connect button at the main window,
+--          start tcp, udp, and multicast connection
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_connectButton_clicked()
 {
     if(_TCPconnectOn){
        return;
     }
+
+    //check multicast connection
     if(!_MULTIconnectOn){
         qDebug()<<"???MULTI cnnect call";
         on_actionJoin_Multicast_triggered();
     }
     qDebug()<<"###Multi connect success :" << multiSock;
 
+    //check udp connection
     if(!_UDPconnectOn){
         qDebug()<<"???UDP cnnect call";
         udpRecvSetup();
@@ -346,18 +351,14 @@ void MainWindow::on_connectButton_clicked()
 
     TCPThread = new QThread();
 
-    //ThreadHandler *TCPhandler = new ThreadHandler();
-
-    //initialize tcp and udp
+    //initialize tcp
     if(host_ip_addr.size()==0 && host_port_no == 0)
         tcpcl = new ClientTCP();
     else
         tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
 
 
-    qDebug()<<"###UDP Connect success :" << udpSock;
     connect(TCPThread, SIGNAL(started()),this, SLOT(call_TCP()));
-    //TCPhandler->moveToThread(TCPThread);
     tcpcl->moveToThread(TCPThread);
     TCPThread->start();
 
@@ -366,17 +367,18 @@ void MainWindow::on_connectButton_clicked()
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: call_TCP
 --
--- DATE: April 14, 2016
+<<<<<<< HEAD
+-- DATE: April 10, 2016
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER:    Eunwon Moon
 --
--- PROGRAMMER:
+-- PROGRAMMER:  Eunwon Mon
 --
 -- RETURNS: void
 --
--- NOTES:
+-- NOTES:   This is to establish TCP connection when TCP thread start
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::call_TCP(){
     if(!tcpcl->TCPConnect()){
@@ -391,7 +393,7 @@ void MainWindow::call_TCP(){
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: on_actionRecording_triggered
 --
--- DATE: April 14, 2016
+-- DATE:    April 14, 2016
 --
 -- REVISIONS: (Date and Description)
 --
@@ -414,17 +416,19 @@ void MainWindow::on_actionRecording_triggered()
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: on_pushToTalk_clicked
 --
--- DATE: April 14, 2016
+-- DATE:    April 14, 2016
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER:    Eunwon Moon
 --
--- PROGRAMMER:
+-- PROGRAMMER:  Eunwon Moon
 --
--- RETURNS: void
+-- RETURNS:     void
 --
--- NOTES:
+-- NOTES:       This function is for voice chat
+--              make thread to receive and connect to UDP connection
+--              using signal
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushToTalk_clicked(bool checked)
 {    
@@ -439,20 +443,21 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
         QThread *t2 = new QThread;
         QThread *tempQ = new QThread();
         test2 = new Recording();
-        test2->moveToThread(t2);
-        speaker->moveToThread(tempQ);
 
         _VoiceChat = TRUE;
+       speaker->moveToThread(tempQ);
+        test2->moveToThread(t2);
         connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
         connect(tempQ, SIGNAL(started()), speaker, SLOT(udpConn()));
-        connect(speaker, SIGNAL(connected()), speaker, SLOT(sendVoice()));
-        //connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
-        connect(test2, SIGNAL(MicDataCapturing(Recording*)),speaker, SLOT(SendCapturedMicData(Recording*)));
+        connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
 
-        //connect(this, SIGNAL(addMusic()), speaker, SLOT(sendVoice()));
-        t2->start();
+
+//        connect(this, SIGNAL(addMusic()), speaker, SLOT(sendVoice()));
+
         tempQ->start();
-        //test2->runthis();
+        t2->start();
+
+        /*Test udp sending for voice chat using music*/
         //temp_add_music();
 
 
@@ -467,21 +472,22 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
 }
 
 /*------------------------------------------------------------------------------------------------------------------
--- FUNCTION: temp_add_music
+-- FUNCTION: on_pushToTalk_clicked
 --
--- DATE: April 14, 2016
+-- DATE:        April 14, 2016
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER:    Eunwon Moon
 --
--- PROGRAMMER:
+-- PROGRAMMER:  Eunwon Moon
 --
--- RETURNS: void
+-- RETURNS:     void
 --
--- NOTES:
+-- NOTES:       This function is to check sound transfer
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::temp_add_music(){
+
     QString filename = "../ChrisBrown-WithYou.wav";
 
     QFile file(filename);
@@ -532,13 +538,13 @@ void MainWindow::on_pushButton_pressed()
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER:        Krystal, Oscar
 --
--- PROGRAMMER:
+-- PROGRAMMER:      Krystal, Oscar
 --
 -- RETURNS: void
 --
--- NOTES:
+-- NOTES:   To request download
 --
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_released()
@@ -549,7 +555,7 @@ void MainWindow::on_pushButton_released()
     // get name of file, request to server, server sends back file
     fileTransferThread = new QThread();
     ft = new Filetransfer();
-  // tcpcl = new ClientTCP();
+
 
     ft->moveToThread(fileTransferThread);
     connect(fileTransferThread, SIGNAL(started()), ft, SLOT(sendSongName()));
@@ -575,7 +581,7 @@ void MainWindow::on_pushButton_released()
 -- RETURNS: void
 --
 -- NOTES:
---
+--     connect UDP Server
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_2_clicked()
 {

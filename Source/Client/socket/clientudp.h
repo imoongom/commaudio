@@ -43,12 +43,10 @@ signals:
     void VoiceDataSent(Recording *recording);
     void connected();
 public slots:
-    void voiceStart();
+
     void sendVoice();
     void udpConn();
-    void SendCapturedMicData(Recording *recording);
-//    void sendVoice(char *ip);
-    void PlaybackVoiceData(char* data, DWORD len);
+
 };
 
 

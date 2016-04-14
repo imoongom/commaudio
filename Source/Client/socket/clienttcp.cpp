@@ -10,14 +10,48 @@ ClientTCP::ClientTCP(std::string  host, int portNum, QObject *parent) : QObject(
 }
 
 
-
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	TCPThreadConnect
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	DWORD WINAPI TCPThreadConnect(void * Param)
+--                  Param : thread argument (object)
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to connect thread function(TCP Recv function)
+----------------------------------------------------------------------------------------------------------------------*/
 DWORD WINAPI ClientTCP::TCPThreadConnect(void * Param) {
     ClientTCP* cthis = (ClientTCP*)Param;
     cthis->TCPRecv();
     return NULL;
 }
 
-
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	TCPConnect
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	boolean
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to establish connection to TCP server
+----------------------------------------------------------------------------------------------------------------------*/
 boolean ClientTCP::TCPConnect() {
 
     SOCKADDR_IN InetAddr;
@@ -68,8 +102,28 @@ boolean ClientTCP::TCPConnect() {
     return true;
 }
 
+
+
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	TCPcreateThread
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void TCPcreateThread
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to create Thread using QT signal
+----------------------------------------------------------------------------------------------------------------------*/
 void ClientTCP::TCPcreateThread() {
-    qDebug("### TCP CLIENT create Thread\n");
+
     HANDLE ThreadHandle;
     if ((ThreadHandle = CreateThread(NULL, 0, TCPThreadConnect, this, 0, NULL)) == NULL)
     {
@@ -77,16 +131,32 @@ void ClientTCP::TCPcreateThread() {
         return;
     }
     WaitForSingleObject(ThreadHandle, 5000);
-   // qDebug("### TCP CLIENT thread CREATED!!!!!!!!\n");
+
 }
 
-// TCP Receive routine(Thread function)
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	TCPRecv
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void TCPRecv()
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to create Thread using QT signal
+----------------------------------------------------------------------------------------------------------------------*/
 void ClientTCP::TCPRecv() {
     qDebug() << "TCPRecv() waiting for data";
     LPSOCKET_INFORMATION SI;
     char temp[BUFSIZE] = "";
-    char temp2[BUFSIZE] = "";
-    DWORD  SendBytes, RecvBytes;
+    DWORD  RecvBytes;
     DWORD Flags = 0;
     int i = 0;
     if ((SI = (LPSOCKET_INFORMATION)GlobalAlloc(GPTR, sizeof(SOCKET_INFORMATION)))
@@ -121,18 +191,28 @@ void ClientTCP::TCPRecv() {
             qDebug("READ DOME");
             return;
         }
-
-
-        i++;
-           // wsprintf(temp2, "[sendback]%s\nHELLO THIS IS TCP  CLIENT[%d] SEND!!\n", (SI->DataBuf.buf).c_str(), i);
-        qDebug()<<"TCPSEND PASS";
-        //TCPSend(temp);
-        qDebug()<<"EMPTY BUFFER";
         memset(&temp, '\0', BUFSIZE);
     }
 }
 
-//TCP SEND FUNCTION using completion routine
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	TCPSend
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void TCPRecv()
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to send using TCP
+----------------------------------------------------------------------------------------------------------------------*/
 void ClientTCP::TCPSend(char * message) {
     qDebug()<<"TCP SEMD CALLED";
     LPSOCKET_INFORMATION SI;
@@ -168,7 +248,6 @@ void ClientTCP::TCPSend(char * message) {
         return;
     }
     qDebug()<<"SEND SUCCESS TO " << tcpSock << " " << SI->DataBuf.buf;
-  //  memset(&SI->DataBuf.buf, '\0', BUFSIZE);
         SI->BytesSEND += SendBytes;
 
 }
@@ -182,7 +261,24 @@ void ClientTCP::TCPSend2(char * message) {
     }
 }
 
-
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	Send
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void Send
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to generate structure and send message
+----------------------------------------------------------------------------------------------------------------------*/
 void ClientTCP::Send(int type, char* name, char* message){
     TCP_MESG sendForm;
 
@@ -194,7 +290,24 @@ void ClientTCP::Send(int type, char* name, char* message){
     //change to structure
     TCPSend(message);
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	CloseTCP
+--
+-- DATE: 		March 20, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void Send
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to close TCP socket
+----------------------------------------------------------------------------------------------------------------------*/
 void ClientTCP::CloseTCP(){
     _TCPconnectOn = false;
     closesocket(tcpSock);

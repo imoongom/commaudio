@@ -7,6 +7,24 @@
 int sockPort;
 Recording *gRecording;
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	UDPRecvThread
+--
+-- DATE: 		March 25, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	UDPRecvThread
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This is constructor of UDPRecvThread. initialize socket and port for UDPRecvThread class
+----------------------------------------------------------------------------------------------------------------------*/
 UDPRecvThread::UDPRecvThread(SOCKET sock, int port, struct CBuffer* buf, QObject *parent) : QThread(parent)
 {
     hSock = sock;
@@ -14,7 +32,25 @@ UDPRecvThread::UDPRecvThread(SOCKET sock, int port, struct CBuffer* buf, QObject
     writeCBuf =buf;
 }
 
-void UDPRecvThread::run(){
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	UDPClose
+--
+-- DATE: 		April 5, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 :  Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void udpConn
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This function is to receive data from udp or multicast socket.
+----------------------------------------------------------------------------------------------------------------------*/
+ void UDPRecvThread::run(){
     qDebug()<<"Start Thread\n";
     SOCKET_INFORMATION      SI;
     SOCKADDR_IN InternetAddr;
@@ -22,11 +58,6 @@ void UDPRecvThread::run(){
     DWORD flags = 0;
     int destlen;
     char buffer[DATA_BUFSIZE];
-
-    //start TCP Server
-   // emit startTCP();
-
-    // initialize address information
 
     memset(&InternetAddr, 0, sizeof(InternetAddr));
     InternetAddr.sin_family = AF_INET;
@@ -65,7 +96,6 @@ void UDPRecvThread::run(){
             }
 
         }
-     //   qDebug("RECV: %s\n", SI.DataBuf.buf);
 
         //add on Circular buffer
         write_buffer(&CBuf, SI.DataBuf.buf);

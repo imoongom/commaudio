@@ -1,10 +1,26 @@
+/*------------------------------------------------------------------------------------------------------------------
+-- SOURCE FILE: circularbuffer.cpp
+--
+-- PROGRAM:     CommAudio
+--
+-- FUNCTIONS:
+--          void initBuffer(CBufs *buf)
+--          void write_buffer(CBufs * Buf, const void * data)
+--          void read_buffer(CBufs * Buf, void * data);
+--          void clean_buffer(CBufs *Buf)
+--
+-- DATE:    March 18, 2016
+--
+-- DESIGNER:    Eunwon Moon
+--
+-- PROGRAMMER:  Eunwon Moon
+--
+-- NOTES:
+-- Circular buffer to control constant data read and write for voice
+--
+----------------------------------------------------------------------------------------------------------------------*/
 #include "circularbuffer.h"
 #include<QDebug>
-/*
-CircularBuffer::CircularBuffer(){
-
-}
-*/
 
 void initBuffer(CBufs * Buf){
     Buf->_count = 0;
@@ -12,42 +28,68 @@ void initBuffer(CBufs * Buf){
     Buf->_readPtr = &Buf->buffer;
     Buf->_endPtr = &Buf->buffer[CIRBUFSIZE*CIRBUFMAX];
     std::memset(Buf->buffer, '\0',CIRBUFSIZE*CIRBUFMAX);
-    //qDebug()<<"BUFFEr SIZE: " << sizeof(Buf->buffer);
 }
-
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	write_buffer
+--
+-- DATE: 		March 18, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void write_buffer(CBufs * Buf, const void * data)
+--
+-- RETURNS: void.
+--
+-- NOTES:
+--	This function is to write data into buffer.
+--  copy data and update the number of buffer
+----------------------------------------------------------------------------------------------------------------------*/
 void write_buffer(CBufs * Buf, const void * data){
 
-    //qDebug()<<"write buf : " << (char*)data;
+
     if(Buf->_count == CIRBUFMAX ){
-        //qDebug() << "SIZE FULL";
         return;
     }
     if(Buf->_writePtr == Buf->_endPtr){
-        qDebug() << "#######BUF END~!~~!~";
+        Buf->_writePtr = &Buf->buffer;
     }
 
     std::memcpy(Buf->_writePtr, (char*)data, CIRBUFSIZE);
     //qDebug()<<"writeptr: " << (char*)(Buf->_writePtr);
     Buf->_writePtr+=CIRBUFSIZE;
-    if(Buf->_writePtr == Buf->_endPtr){
-  //      qDebug() << "******END POINT";
 
+    //move write pointer to first
+    if(Buf->_writePtr == Buf->_endPtr){
         Buf->_writePtr = &Buf->buffer;
     }
     Buf->_count++;
-    /*
-    int i,cnt = 0;
-    for( i = 0; &Buf->buffer[i] != Buf->_writePtr;i++){
-        if(Buf->buffer[i] != '\0')
-            cnt++;
-    }
-*/
-//    qDebug() << "start Point" << &Buf->buffer<<"curPoint "<<Buf->_writePtr<< ", End Point " << Buf->_endPtr;
-//    qDebug() << "COUNT: " << cnt << ", i is "<<i;
+
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	write_buffer
+--
+-- DATE: 		March 18, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void write_buffer(CBufs * Buf, const void * data)
+--
+-- RETURNS: void.
+--
+-- NOTES:
+--	This function is to read data into buffer.
+--  copy data and delete in buffer for next data
+----------------------------------------------------------------------------------------------------------------------*/
 void read_buffer(CBufs * Buf, void * data){
-    //qDebug()<<"Read buf " << Buf->_count;
     if(Buf->_count == 0)
         return ;
     std::memcpy(data, Buf->_readPtr, CIRBUFSIZE);
@@ -56,10 +98,27 @@ void read_buffer(CBufs * Buf, void * data){
     if(Buf->_readPtr == Buf->_endPtr)
         Buf->_readPtr = &Buf->buffer;
     Buf->_count--;
-    //qDebug()<<"read buf : " << (char*)data << " left "<< Buf->_count;
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	clean_buffer
+--
+-- DATE: 		March 18, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	void clean_buffer(CBufs * Buf)
+--
+-- RETURNS: void.
+--
+-- NOTES:
+--	This function is to make buffer empty and make all value as a default
+----------------------------------------------------------------------------------------------------------------------*/
 void clean_buffer(CBufs * Buf){
     std::memset(Buf->buffer, '\0', sizeof(Buf->buffer));
     Buf->_writePtr = Buf->buffer;
