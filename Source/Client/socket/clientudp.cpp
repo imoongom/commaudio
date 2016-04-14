@@ -10,7 +10,7 @@
 --
 -- REVISIONS:
 --
--- DESIGNER	 : 	Eunwon Moon
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
 --
 -- PROGRAMMER: 	Eunwon Moon
 --
@@ -83,7 +83,7 @@ boolean ClientUDP::Start(SOCKET* sock, int port) {
 --
 -- REVISIONS:
 --
--- DESIGNER	 : 	Eunwon Moon
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
 --
 -- PROGRAMMER: 	Eunwon Moon
 --
@@ -122,7 +122,7 @@ boolean ClientUDP::multiSetup(SOCKET *sock){
 --
 -- REVISIONS:
 --
--- DESIGNER	 : 	Eunwon Moon
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
 --
 -- PROGRAMMER: 	Eunwon Moon
 --
@@ -186,7 +186,7 @@ void ClientUDP::udpConn(){
 --
 -- REVISIONS:
 --
--- DESIGNER	 : 	Eunwon Moon
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
 --
 -- PROGRAMMER: 	Eunwon Moon
 --
@@ -240,7 +240,7 @@ void ClientUDP::sendVoice(){//char *ip){
 --
 -- REVISIONS:
 --
--- DESIGNER	 : 	Eunwon Moon
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
 --
 -- PROGRAMMER: 	Eunwon Moon
 --
