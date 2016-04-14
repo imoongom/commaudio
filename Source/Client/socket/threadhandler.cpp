@@ -11,15 +11,28 @@ ThreadHandler::ThreadHandler(QObject *parent) : QObject(parent)
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION:	UDPRecvThread
+--
+-- DATE: 		March 25, 2016
+--
+-- REVISIONS:
+--
+-- DESIGNER	 : 	Eunwon Moon, Oscar Kwan, Gabriel Lee, Krystle Bulalakaw
+--
+-- PROGRAMMER: 	Eunwon Moon
+--
+-- INTERFACE: 	UDPRecvThread
+--
+-- RETURNS: void
+--
+-- NOTES:
+--	This is constructor of UDPRecvThread. initialize socket and port for UDPRecvThread class
+----------------------------------------------------------------------------------------------------------------------*/
 
 DWORD WINAPI ThreadHandler::MAINThreadConnect(void * Param) {
     ThreadHandler* cthis = (ThreadHandler*)Param;
     cthis->TCPThread();
-    return NULL;
-}
-DWORD WINAPI ThreadHandler::MAINThreadConnect2(void * Param) {
-    ThreadHandler* cthis = (ThreadHandler*)Param;
-    cthis->MultiThread();
     return NULL;
 }
 
@@ -33,18 +46,7 @@ void ThreadHandler::createThread() {
         printf("CreateThread failed with error %d\n", GetLastError());
         return;
     }
-/*
-    if ((ThreadHandle2 = CreateThread(NULL, 0, MAINThreadConnect2, this, 0, NULL)) == NULL)
-    {
-        printf("CreateThread failed with error %d\n", GetLastError());
-        return;
-    }
 
-    ThreadHandles[0] = ThreadHandle;
-    ThreadHandles[1] = ThreadHandle2;
-    WaitForMultipleObjects(2, ThreadHandles, TRUE, INFINITE);
-
-*/
     WaitForSingleObject(ThreadHandle, 2000);
     printf("### TCP SERVER thread CREATED!!!!!!!!\n");
 }
