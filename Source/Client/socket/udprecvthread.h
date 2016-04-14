@@ -22,6 +22,7 @@ signals:
     void recvData();
     void startTCP();
     void closeSock();
+    void SignalPlaybackVoiceData(char* data, DWORD len);
 };
 
 #endif // UDPRECVTHREAD_H
