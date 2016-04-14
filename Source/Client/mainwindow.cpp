@@ -287,6 +287,7 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
         // do pause stuff here
+
     } else {
         ui->playPauseButton->setIcon(QIcon(fname));
         // do Play stuff here
