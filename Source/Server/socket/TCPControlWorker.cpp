@@ -53,8 +53,24 @@ void TCPControlWorker::InitSocket(int port) {
         qDebug() << "Accepted client" << inet_ntoa(clientAddr.sin_addr);
 
         // Add client to map
-        connectedClients[inet_ntoa(clientAddr.sin_addr)] = acceptedClientSocket;
         acceptedClientIp = inet_ntoa(clientAddr.sin_addr);
+        qDebug() << "Inserting into map " << acceptedClientSocket << " : " << acceptedClientIp;
+        connectedClients.insert(acceptedClientSocket, acceptedClientIp);
+
+        // Send client map to all clients
+        QString qMessage = CreateClientMapMessage();
+        qDebug() << "qMessage: " << qMessage;
+        //char* sendMessage = qMessage.toUtf8().data();
+        char *temp = new char[ qMessage.length() + 1 ]; // + 1 for zero in the end of string
+        memcpy(temp, qMessage.toUtf8().constData(), qMessage.length() + 1);
+
+        qDebug() << "sendmessage: " << temp;
+        for (QMap<int, QString>::iterator it = connectedClients.begin(); it != connectedClients.end(); ++it) {
+            qDebug() << "Sending " << temp << " to socket" << it.key();
+            send(it.key(), temp, BUFSIZE, 0);
+        }
+
+        delete []temp;
 
         emit AcceptedClient(acceptedClientIp, acceptedClientSocket);
     }
@@ -97,9 +113,9 @@ boolean TCPControlWorker::SendOne2(LPSOCKET_INFORMATION socketInformation, char*
 
 /* Send to all connected clients */
 boolean TCPControlWorker::SendAll(char *message, LPDWORD lpNumberOfBytesSent) {
-    QMap<QString, int>::iterator i;
+    QMap<int, QString>::iterator i;
     for(i = connectedClients.begin(); i != connectedClients.end(); i++) {
-        int socket = i.value();
+        int socket = i.key();
         if(send(socket, message, DATA_BUFSIZE, 0) == -1) {
             qDebug() << "Broadcast() failed for client IP: " << i.key() << " error: " << WSAGetLastError();
             return false;
@@ -114,4 +130,16 @@ void TCPControlWorker::CloseSocket(){
     WSACleanup();
     emit ClosedSocket();
     qDebug() << "Closed TCP socket.";
+}
+
+QString TCPControlWorker::CreateClientMapMessage() {
+    QString result = "";
+    int i = 1;
+
+    for (QMap<int, QString>::iterator it = connectedClients.begin(); it != connectedClients.end(); ++it, ++i) {
+        result += "@" + it.value();
+        qDebug() << "result: " << result;
+    }
+
+    return result;    
 }

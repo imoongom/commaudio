@@ -19,6 +19,7 @@ public:
     boolean SendOne(LPSOCKET_INFORMATION socketInformation, char * message);
     boolean SendOne2(LPSOCKET_INFORMATION socketInformation, char* message);
     boolean SendAll(char *message, LPDWORD lpNumberOfBytesSent);
+    QString CreateClientMapMessage();
 
 signals:
     void SignalInitSocket(int port);
@@ -38,7 +39,7 @@ private:
     int clientLen;
     int numConnectedClients = 0;
 
-    QMap<QString, int> connectedClients;
+    QMap<int, QString> connectedClients;
 
 
 };
