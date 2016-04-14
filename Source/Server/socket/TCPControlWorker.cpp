@@ -64,10 +64,10 @@ void TCPControlWorker::InitSocket(int port) {
         char *temp = new char[ qMessage.length() + 1 ]; // + 1 for zero in the end of string
         memcpy(temp, qMessage.toUtf8().constData(), qMessage.length() + 1);
 
-        qDebug() << "sendmessage: " << sendMessage;
+        qDebug() << "sendmessage: " << temp;
         for (QMap<int, QString>::iterator it = connectedClients.begin(); it != connectedClients.end(); ++it) {
-            qDebug() << "Sending " << sendMessage << " to socket" << it.key();
-            send(it.key(), sendMessage, BUFSIZE, 0);
+            qDebug() << "Sending " << temp << " to socket" << it.key();
+            send(it.key(), temp, BUFSIZE, 0);
         }
 
         delete []temp;

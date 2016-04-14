@@ -62,5 +62,7 @@ extern int sockPort;
 //static SOCKET hSocket;
 extern struct CBuffer CBuf;
 extern struct CBuffer CBufOut;
+extern struct CBuffer UDPbuf;
+
 extern SOCKADDR_IN stLclAddr,  InternetAddr;
 #endif // GLOBAL_H

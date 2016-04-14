@@ -30,6 +30,8 @@ void ClientServiceWorker::ListenForRequests() {
        memset(&SI->Overlapped, '\0', sizeof(SI->Overlapped));
        SI->Overlapped.hEvent = WSACreateEvent();
 
+       qDebug() << SI->Socket;
+
        if (WSARecv(SI->Socket, &(SI->DataBuf), 1, &RecvBytes, &Flags,&(SI->Overlapped), NULL) == SOCKET_ERROR) {
            if (WSAGetLastError() != WSAEWOULDBLOCK && WSAGetLastError() != WSA_IO_PENDING) {
                qDebug()<<"ClientServiceWorker:: WSARecv() failed with error " << WSAGetLastError();
@@ -53,18 +55,10 @@ void ClientServiceWorker::ListenForRequests() {
 }
 
 void ClientServiceWorker::ProcessRequest(QString request) {
-    /*
-    switch(request[0]) {
-    case 'a':
-        // download
-        break;
-    case 'b':
-        // song request
-        break;
-    case 'c':
-        // voice
-        break;
+    if (request.left(4) == "song") {
+        qDebug() << "I GOT A SONG";
+        // get file and send to client
     }
-    */
+
     emit ProcessedRequest();
 }

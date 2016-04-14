@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     socket/clientudp.cpp \
     socket/udprecvthread.cpp \
     socket/clienttcp.cpp \
-    socket/threadhandler.cpp
+    socket/threadhandler.cpp \
+    filetransfer.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     socket/clientudp.h \
     socket/udprecvthread.h \
     socket/clienttcp.h \
-    socket/threadhandler.h
+    socket/threadhandler.h \
+    filetransfer.h
 
 FORMS    += mainwindow.ui
 

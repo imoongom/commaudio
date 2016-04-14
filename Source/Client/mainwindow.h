@@ -10,6 +10,7 @@
 #include <QMediaPlaylist>
 #include <QDebug>
 
+#include "filetransfer.h"
 #include "playback.h"
 #include "recording.h"
 #include "playlist.h"
@@ -34,11 +35,12 @@ public:
     void udpRecvSetup();
     void temp_add_music();
 
-
+signals:
+    void readDataM(char* bbb);
 public slots:
     void toggleIcon();
-    void appendMusicPk();
-    void testVoiceRecv();
+
+
 private slots:
 
     void on_actionPlaylist_triggered();
@@ -60,6 +62,8 @@ private slots:
     void on_pushButton_pressed();
 
     void on_pushButton_released();
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     int icon;
@@ -78,10 +82,15 @@ private:
     QThread *playThread;
     QThread *musicThread;
     QThread *voiceThread;
+    QThread *fileTransferThread;
+
     Playback *addPk;
     Playback *addVoice;
+
     UDPRecvThread *udpThread;
     UDPRecvThread *multiThread;
+
+    Filetransfer *ft;
 };
 
 #endif // MAINWINDOW_H
