@@ -148,16 +148,16 @@ void MainWindow::udpRecvSetup(){
 void MainWindow::on_actionCB_triggered()
 {
 
-    CBufs cb;
-    initBuffer(&cb);
-    test = new Playback(&CBufOut);
+//    CBufs cb;
+//    initBuffer(&cb);
+//    test = new Playback(&CBufOut);
     test2 = new Recording();
 
 
-    QThread *t = new QThread;
-    test->moveToThread(t);
-    connect(t, SIGNAL(started()), test, SLOT(runthis()));
-    t->start();
+//    QThread *t = new QThread;
+//    test->moveToThread(t);
+//    connect(t, SIGNAL(started()), test, SLOT(runthis()));
+//    t->start();
 
     QThread *t2 = new QThread;
     test2->moveToThread(t2);
@@ -224,6 +224,7 @@ void MainWindow::on_connectButton_clicked()
 
 void MainWindow::on_actionRecording_triggered()
 {
+    test2->pause();
 //    test2->record();
 
    // test->read_data();
@@ -243,24 +244,22 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
     if (!checked) {
         ui->pushToTalk->setStyleSheet("background-color:#454389");
         ui->pushToTalk->setCheckable(true);
-        QThread *t2 = new QThread;
+//        QThread *t2 = new QThread;
         QThread *tempQ = new QThread();
-        test2 = new Recording();
+//        test2 = new Recording();
 
 
         _VoiceChat = TRUE;
        speaker->moveToThread(tempQ);
-        test2->moveToThread(t2);
-        connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
+//        test2->moveToThread(t2);
+//        connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
         connect(tempQ, SIGNAL(started()), speaker, SLOT(udpConn()));
-        connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
+ //       connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
 
-
-
-        connect(tempQ, SIGNAL(started()), speaker, SLOT(sendVoice()));
-        t2->start();
+        connect(this, SIGNAL(addMusic()), speaker, SLOT(sendVoice()));
+        //t2->start();
         tempQ->start();
-   //     temp_add_music();
+        temp_add_music();
 
 
         // toggled
@@ -290,6 +289,7 @@ void MainWindow::temp_add_music(){
         char *sbuf = new char[DATA_BUFSIZE];
         memcpy(sbuf, line.data(), DATA_BUFSIZE);
         write_buffer(&UDPbuf, sbuf);
+        emit addMusic();
         Sleep(5);
     }
 

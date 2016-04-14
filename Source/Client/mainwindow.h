@@ -37,6 +37,7 @@ public:
 
 signals:
     void readDataM(char* bbb);
+    void addMusic();
 public slots:
     void toggleIcon();
 
