@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QFile>
 #include <iostream>
-
+#include "global.h"
 ClientTCP *tcpcl;
 ClientUDP *udpCl;
 ClientUDP *multiCl;
@@ -142,9 +142,6 @@ void MainWindow::udpRecvSetup(){
     qDebug()<<"[UDP] THREAD STARTED "<<udpSock;
 }
 
-
-
-
 void MainWindow::on_actionCB_triggered()
 {
 
@@ -219,18 +216,11 @@ void MainWindow::on_connectButton_clicked()
 
 }
 
-
-
-
 void MainWindow::on_actionRecording_triggered()
 {
     test2->pause();
 //    test2->record();
-
-   // test->read_data();
-
-
-
+   // test->read_data(0);
 //    delete test2;
 }
 
