@@ -27,6 +27,7 @@ class Playback : public QObject
 public:
     Playback(struct CBuffer * buffer);
     ~Playback();
+FILE *fstream;
 
 public slots:
     void runthis();
@@ -36,7 +37,6 @@ public slots:
 
 signals:
     void CanSendNextData(qint64 pos, QByteArray qba);
-    //void CanReadNextData(qint64 filePos);
 
 private:
     QAudioFormat m_format;

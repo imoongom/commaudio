@@ -2,8 +2,8 @@
 #define GLOBAL_H
 #include <winsock2.h>
 #include <iostream>
+#include "recording.h"
 #include "socket/circularbuffer.h"
-
 
 #define BUFMAX  128
 #define BUFSIZE 8192
@@ -48,6 +48,7 @@ typedef struct TCP_MESSSAGE{
 
 }TCP_MESG;
 
+//extern Recording *gRecording;
 
 extern boolean _TCPconnectOn;
 extern boolean _UDPconnectOn;
@@ -65,4 +66,5 @@ extern struct CBuffer CBufOut;
 extern struct CBuffer UDPbuf;
 
 extern SOCKADDR_IN stLclAddr,  InternetAddr;
+
 #endif // GLOBAL_H

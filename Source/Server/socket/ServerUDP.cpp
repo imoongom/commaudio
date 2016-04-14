@@ -5,10 +5,43 @@
 #include "circularbuffer.h"
 using namespace std;
 
+/*---------------------------------------------------------------------------------------
+--  SOURCE FILE:    ClientServiceWorker.cpp
+--  PROGRAM:        COMP 4985 : Comm Audio
+--  FUNCTIONS:
+--          boolean InitSocket(int port)
+--          boolean MulticastSettings(const char * name)
+--          void SendFileToClient(QString songName, SOCKET cSocket) 
+--			boolean SendOne(LPSOCKET_INFORMATION SockInfo, char * message) 
+--			boolean SendAll(char *message, LPDWORD lpNumberOfBytesSent)
+--		    boolean InitData()
+--			void CloseSocket()
+--  DATE:           April 9, 2016
+--  REVISIONS:      N/A
+--  DESIGNERS:      Krystle Bulalakaw
+--  PROGRAMMER:     Krystle Bulalakaw
+--  NOTES:
+--  The worker class for a thread that handles socket calls to create and bind a
+--	UDP socket, set the local and destination address for the multicast channel used
+--  to stream data, and close the socket.
+---------------------------------------------------------------------------------------*/
+
 SOCKET hSock;
 SOCKADDR_IN stLclAddr, stDstAddr;
 struct ip_mreq stMreq; // Multicast interface structure
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    InitSocket
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:   InitSocket(int port)
+-- NOTES:
+-- Initializes the socket, configures port settings, configures the local address, and binds the
+-- address to the socket.
+-------------------------------------------------------------------------------------------------------*/
 /* Initialize Windows socket */
 boolean ServerUDP::InitSocket(int port) {
     if (!udpConnected) {
@@ -57,6 +90,18 @@ boolean ServerUDP::InitSocket(int port) {
    return true;
 }
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    MulticastSettings
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:	MulticastSettings(const char * name)
+--					const char *name - name of the socket
+-- NOTES:
+-- Sets the local and destination address for the multicast channel used to stream data.
+-------------------------------------------------------------------------------------------------------*/
 boolean ServerUDP::MulticastSettings(const char * name)
 {
     qDebug() << "In ServerUDP::MulticastSettings()";
@@ -96,70 +141,31 @@ boolean ServerUDP::MulticastSettings(const char * name)
     return true;
 }
 
+// Unused inherited function
 boolean ServerUDP::SendOne(LPSOCKET_INFORMATION SockInfo, char * message) {
 
 }
 
 // Multicast UDP send, not used (see UDPSendWorker)
 boolean ServerUDP::SendAll(char * message, LPDWORD lpNumberOfBytesSent) {
-    /*
 
-   socketInformation.DataBuf.buf = message;
-   socketInformation.DataBuf.len = *lpNumberOfBytesSent;
-
-   ZeroMemory(&socketInformation.Overlapped, sizeof(WSAOVERLAPPED));
-   socketInformation.Overlapped.hEvent =  WSACreateEvent();
-
-   if (WSASendTo(socketInformation.Socket,&(socketInformation.DataBuf), 1, NULL, flags, (SOCKADDR *)&InternetAddr,
-           sizeof(InternetAddr), &(socketInformation.Overlapped), NULL) < 0) {
-       if (WSAGetLastError() != WSA_IO_PENDING)
-       {
-           qDebug() << "ServerUDP::WSASendto() failed with error " << WSAGetLastError();
-           return FALSE;
-       }
-       if (WSAWaitForMultipleEvents(1, &socketInformation.Overlapped.hEvent, FALSE, INFINITE, FALSE) == WAIT_TIMEOUT)
-       {
-           qDebug() << "ServerUDP::WSASendto() Timeout";
-           return FALSE;
-       }
-   }
-
-   //Get the actual bytes sent.
-   if(!WSAGetOverlappedResult(socketInformation.Socket, &(socketInformation.Overlapped), &socketInformation.BytesSEND, FALSE, &flags))
-   {
-       qDebug() << "SeverUDP::WSAGetOverlappedResult failed with errno" << WSAGetLastError();
-       return FALSE;
-   }
-   qDebug() << "ServerUDP::Broadcast>>Bytes Sent:[" << socketInformation.BytesSEND << "]";
-   */
-   return true;
 }
 
-boolean ServerUDP::InitData() {
-    // TODO: get next song in playlist
-    QFile file("../Demo/Aero_Chord_ft_Anna_Yvette_-_Break_Them_(Monstep_Remix).wav");
-    if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "ServerUDP::InitData file open fail " << file.errorString();
-        return false;
-    }
-    qDebug() << "ServerUDP::InitData() success";
-    return true;
-}
-
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    CloseSocket
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:	CloseSocket()
+-- NOTES:		Closes the TCP socket.
+-------------------------------------------------------------------------------------------------------*/
 void ServerUDP::CloseSocket() {
     if (udpConnected) {
         qDebug() << "Closing UDP socket...";
         multicastAddr.imr_multiaddr.s_addr = inet_addr(hostAddr);
         multicastAddr.imr_interface.s_addr = INADDR_ANY;
-
-        /*
-        if (setsockopt(hSock, IPPROTO_IP, IP_DROP_MEMBERSHIP, (char *)&multicastAddr,
-                       sizeof(multicastAddr)) == SOCKET_ERROR) {
-            qDebug(
-                "setsockopt() IP_DROP_MEMBERSHIP address %s failed, Err: %d\n",
-                hostAddr, WSAGetLastError());
-        }
-        */
 
         /* Close the socket */
         closesocket(hSock);

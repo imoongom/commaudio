@@ -216,7 +216,7 @@ void MainWindow::udpRecvSetup(){
         return;
 
     voiceThread = new QThread();
-    addVoice= new Playback(&UDPbuf);
+   // addVoice= new Playback(&CBuf);
     qDebug() << "UDP JOIN";
 
     udpCl = new ClientUDP();
@@ -228,19 +228,35 @@ void MainWindow::udpRecvSetup(){
     qDebug()<<"[UDP] : socket opened "<<udpSock;
     _UDPconnectOn = true;
 
-    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, &UDPbuf ,this);
-    addVoice->moveToThread(voiceThread);
+    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, &CBuf ,this);
+  //  addVoice->moveToThread(voiceThread);
 
-    connect(voiceThread, SIGNAL(started()), addVoice, SLOT(runthis()));
+   // connect(voiceThread, SIGNAL(started()), addVoice, SLOT(runthis()));
     connect(udpThread, SIGNAL(recvData()), addPk, SLOT(read_data()));
+ //   connect(udpThread, SIGNAL(SignalPlaybackVoiceData(char*,DWORD)), udpCl, SLOT(PlaybackVoiceData(char*,DWORD)));
 
     udpThread->start();
-    voiceThread->start();
+  //  voiceThread->start();
 
 
     qDebug()<<"[UDP] THREAD STARTED "<<udpSock;
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_actionCB_triggered
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Gabriel Lee
+--
+-- PROGRAMMER: Gabriel Lee
+--
+-- RETURNS: void
+--
+-- NOTES: DEPRECATED: Old testing function for circular buffer.
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_actionCB_triggered()
 {
 
@@ -254,12 +270,12 @@ void MainWindow::on_actionCB_triggered()
 //    test->moveToThread(t);
 //    connect(t, SIGNAL(started()), test, SLOT(runthis()));
 //    t->start();
-
+/*
     QThread *t2 = new QThread;
     test2->moveToThread(t2);
     connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
     t2->start();
-
+*/
 //    test->write_data();
 //    test->read_data();
 }
@@ -351,6 +367,7 @@ void MainWindow::on_connectButton_clicked()
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: call_TCP
 --
+<<<<<<< HEAD
 -- DATE: April 10, 2016
 --
 -- REVISIONS: (Date and Description)
@@ -380,13 +397,13 @@ void MainWindow::call_TCP(){
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:
+-- DESIGNER: Gabriel Lee
 --
--- PROGRAMMER:
+-- PROGRAMMER: Gabriel Lee
 --
 -- RETURNS: void
 --
--- NOTES:
+-- NOTES: DEPRECATED: Old testing function for testing recording and pause.
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_actionRecording_triggered()
 {
@@ -427,7 +444,6 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
         QThread *tempQ = new QThread();
         test2 = new Recording();
 
-
         _VoiceChat = TRUE;
        speaker->moveToThread(tempQ);
         test2->moveToThread(t2);
@@ -437,6 +453,7 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
 
 
 //        connect(this, SIGNAL(addMusic()), speaker, SLOT(sendVoice()));
+
         tempQ->start();
         t2->start();
 
@@ -468,7 +485,9 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
 -- RETURNS:     void
 --
 -- NOTES:       This function is to check sound transfer
-----------------------------------------------------------------------------------------------------------------------*/void MainWindow::temp_add_music(){
+----------------------------------------------------------------------------------------------------------------------*/
+void MainWindow::temp_add_music(){
+
     QString filename = "../ChrisBrown-WithYou.wav";
 
     QFile file(filename);
@@ -491,6 +510,22 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: on_pushButton_pressed
+--
+-- DATE: April 14, 2016
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER:
+--
+-- PROGRAMMER:
+--
+-- RETURNS: void
+--
+-- NOTES:
+--
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_pressed()
 {
     ui->pushButton->setStyleSheet("background-color:#454389");
@@ -530,24 +565,23 @@ void MainWindow::on_pushButton_released()
     tempM = tempMessage.toUtf8().data();
 
     tcpcl->TCPSend(tempM);
-
 }
 
 /*------------------------------------------------------------------------------------------------------------------
--- FUNCTION: on_pushButton2_released
+-- FUNCTION: on_pushButton_2_clicked
 --
--- DATE:    April 14, 2016
+-- DATE: April 14, 2016
 --
 -- REVISIONS: (Date and Description)
 --
--- DESIGNER:       Eunwon Moon
+-- DESIGNER:
 --
--- PROGRAMMER:      Eunwon Mon
+-- PROGRAMMER:
 --
--- RETURNS: void on_pushButton2_released
+-- RETURNS: void
 --
--- NOTES:   This is just to open udp server
---
+-- NOTES:
+--     connect UDP Server
 ----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::on_pushButton_2_clicked()
 {

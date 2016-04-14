@@ -6,6 +6,7 @@
 #include <iostream>
 #include "udprecvthread.h"
 #include "circularbuffer.h"
+#include "recording.h"
 
 
 #define WORD unsigned short
@@ -20,7 +21,7 @@ public:
     boolean Start(SOCKET * sock, int port);
     boolean multiSetup(SOCKET * sock);
     boolean initData();
-
+void sendVoice(char *ip);
 
     int UDPClose();
 
@@ -39,11 +40,13 @@ public:
     int _type;
 signals:
     void voiceGo(char*);
+    void VoiceDataSent(Recording *recording);
+    void connected();
 public slots:
-    void voiceStart();
+
     void sendVoice();
     void udpConn();
-//    void sendVoice(char *ip);
+
 };
 
 

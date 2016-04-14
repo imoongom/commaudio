@@ -2,9 +2,10 @@
 #include "../global.h"
 #include "circularbuffer.h"
 #include <QDebug>
-
+#include "recording.h"
 
 int sockPort;
+Recording *gRecording;
 
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION:	UDPRecvThread
@@ -101,9 +102,7 @@ UDPRecvThread::UDPRecvThread(SOCKET sock, int port, struct CBuffer* buf, QObject
         //qDebug()<<"RECEV SUCCESS "<<hSock;
         emit recvData();
 
+        emit SignalPlaybackVoiceData(SI.Buffer, RecvBytes);
     }
-
-
-
-
 }
+

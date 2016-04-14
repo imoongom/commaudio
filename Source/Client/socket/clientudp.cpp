@@ -1,7 +1,9 @@
 #include "clientudp.h"
 #include "../global.h"
+#include "recording.h"
 
 #include <QDebug>
+
 
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION:	Start
@@ -24,6 +26,7 @@
 --	This function is to open udp client or multicast client.
 --  open socket, setting socket option, and bind
 ----------------------------------------------------------------------------------------------------------------------*/
+
 boolean ClientUDP::Start(SOCKET* sock, int port) {
     int nRet;
     BOOL  fFlag;
@@ -73,7 +76,7 @@ boolean ClientUDP::Start(SOCKET* sock, int port) {
             WSAGetLastError());
         return false;
     }
-
+    qDebug("[UDPBIND]hSocket : %d\thSock: %d\n",hSocket, *sock);
     return true;
 }
 /*------------------------------------------------------------------------------------------------------------------
@@ -138,7 +141,9 @@ void ClientUDP::udpConn(){
 
     DWORD nRet;
     WSADATA stWSAData;
-    char ip[15] = UDP_DEFAULT_PORT;
+
+    char ip[15] = "192.168.0.15";
+
        /* Init WinSock */
     nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
     if (nRet != 0) {
@@ -167,7 +172,7 @@ void ClientUDP::udpConn(){
 
     memset(&InetAddr, 0, sizeof(InetAddr));
     InetAddr.sin_family = AF_INET;
-    InetAddr.sin_port = htons(UDP_DEFAULT_PORT);
+    InetAddr.sin_port = htons(1234);
 
    // memcpy((char *)&InetAddr.sin_addr.s_addr, voiceHost->h_addr, voiceHost->h_length);
     if((InetAddr.sin_addr.s_addr = inet_addr(ip))==INADDR_NONE)
@@ -176,6 +181,7 @@ void ClientUDP::udpConn(){
     }
 
     qDebug()<<"[VoiceSend] SETUP FINISHED " << _VoiceChat << " " << voiceTo;
+    emit connected();
 }
 
 
@@ -201,13 +207,16 @@ void ClientUDP::sendVoice(){//char *ip){
     char temp[DATA_BUFSIZE];
     DWORD  SendBytes;
 
-    if (_VoiceChat) {
-          qDebug() << "Voice Chat startL " <<UDPbuf._count;
-       SIVoice->DataBuf.buf = temp;
-        if(UDPbuf._count == 0)
-            return;
+       while (_VoiceChat) {
+           if(UDPbuf._count == 0)
+               continue;//continue;
 
-        read_buffer(&UDPbuf, temp);
+            qDebug() << "Voice Chat start" <<UDPbuf._count;
+           SIVoice->DataBuf.buf = temp;
+
+            qDebug()<<"VoiceChat SEND " << voiceTo;
+            read_buffer(&UDPbuf, temp);
+
 
 
         memset(&SIVoice->Overlapped, '\0', sizeof(SIVoice->Overlapped));
@@ -231,7 +240,6 @@ void ClientUDP::sendVoice(){//char *ip){
             return;
         }
     }
-
 }
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION:	UDPClose

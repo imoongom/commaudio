@@ -55,7 +55,7 @@ void write_buffer(CBufs * Buf, const void * data){
         return;
     }
     if(Buf->_writePtr == Buf->_endPtr){
-        Buf->_writePtr = buffer;
+        Buf->_writePtr = &Buf->buffer;
     }
 
     std::memcpy(Buf->_writePtr, (char*)data, CIRBUFSIZE);

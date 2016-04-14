@@ -4,6 +4,34 @@
 #include "FileBufferWorker.h"
 #include "circularbuffer.h"
 
+/*-----------------------------------------------------------------------------------------------------
+--  SOURCE FILE:    FileBufferWorker.cpp
+--  PROGRAM:        COMP 4985 : Comm Audio
+--  FUNCTIONS:
+--          void FileBufferWorker()
+--          void ReadFileAndBuffer()
+--          void SendFileToClient(QString songName, SOCKET cSocket) 
+--  DATE:           April 9, 2016
+--  REVISIONS:      N/A
+--  DESIGNERS:      Krystle Bulalakaw
+--  PROGRAMMER:     Krystle Bulalakaw
+--  NOTES:
+--  The worker class for a thread that opens and reads a chunk of a .wav file, writes it
+--  to the circular buffer, and emits a signal to nofiy that there is data in the 
+--  circular buffer (ready for sending).
+-----------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    FileBufferWorker
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     N/A
+-- INTERFACE:   N/A
+-- NOTES:
+-- Constructor for a file buffer worker. Opens a file to be read for playback.
+-------------------------------------------------------------------------------------------------------*/
 FileBufferWorker::FileBufferWorker()
 {
     QString filename = "../Demo/Party_In_The_USA-Miley_Cyrus.wav";
@@ -14,6 +42,17 @@ FileBufferWorker::FileBufferWorker()
     qDebug() << "Now playing " << filename;
 }
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    ReadFileAndBuffer
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:   ReadFileAndBuffer()
+-- NOTES:
+-- Reads from file and fills the circular buffer until end of file.
+-------------------------------------------------------------------------------------------------------*/
 void FileBufferWorker::ReadFileAndBuffer(){
     qDebug() << "Running UDPSendWorker";
     QByteArray qByteArray;
