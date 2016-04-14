@@ -12,7 +12,7 @@ UDPSendWorker::UDPSendWorker(ServerUDP *serverUdp) :
 
 }
 
-void UDPSendWorker::Run(){
+void UDPSendWorker::Run(QString songName){
 qDebug() << "Running UDPSendWorker";
    SOCKET_INFORMATION      SI;
    DWORD SendBytes;
@@ -20,11 +20,12 @@ qDebug() << "Running UDPSendWorker";
    char buffer[DATA_BUFSIZE];
 
 
-   QString filename = "../Demo/Party_In_The_USA-Miley_Cyrus.wav";
+   QString filename = "../Demo/" + songName;
 
    QFile file(filename);
    if (!file.open(QIODevice::ReadOnly)) {
        qDebug() << "ServerUDP::InitData file open fail " << filename << ": " << file.errorString();
+       return;
    }
    qDebug() << "ServerUDP::InitData() success";
 

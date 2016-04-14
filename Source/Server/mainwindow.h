@@ -35,13 +35,17 @@ private slots:
     void on_buttonTcpConnect_clicked(bool checked);
     void on_actionJoin_Multicast_triggered(bool checked);
     void on_actionAdd_Songs_triggered();
+    void on_playList_itemDoubleClicked(QListWidgetItem *item);
     void HandleNewClient(QString ipAddr, int socket);
     //void PlayMusic(qint64 pos);
     void PlayMusic();
 
+
+
 signals:
     void StartReadingFile(qint64 qint);
     void CanSendBufferedData(qint64, QByteArray qByteArray);
+    void GotSongName(QString songName);
 
 private:
     Ui::MainWindow *ui;

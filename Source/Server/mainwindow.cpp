@@ -37,21 +37,22 @@ MainWindow::~MainWindow()
 void MainWindow::on_playPauseButton_clicked(bool checked)
 {
     qDebug() << "play button pressed";
-    if (!checked && udpConnected) {
+    QString songName = ui->label_6->text();
+    if (!checked && udpConnected && songName != "No file selected") {
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
-
 
         // QThread for sending
         udpSendWorkerThread = new QThread;
         udpSendWorker = new UDPSendWorker(serverUdp);
         udpSendWorker->moveToThread(udpSendWorkerThread);
 
-        connect(udpSendWorkerThread, SIGNAL(started()), udpSendWorker, SLOT(Run()));
+        connect(this, SIGNAL(GotSongName(QString)), udpSendWorker, SLOT(Run(QString)));
         connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
         connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
 
         udpSendWorkerThread->start();
+        this->GotSongName(songName);
         /*
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
@@ -180,3 +181,7 @@ void MainWindow::on_actionAdd_Songs_triggered() {
     qDebug() << "add playlist items";
 }
 
+void MainWindow::on_playList_itemDoubleClicked(QListWidgetItem *item)
+{
+    ui->label_6->setText(item->text());
+}
