@@ -59,11 +59,18 @@ void TCPControlWorker::InitSocket(int port) {
 
         // Send client map to all clients
         QString qMessage = CreateClientMapMessage();
-        char* sendMessage = qMessage.toUtf8().data();
+        qDebug() << "qMessage: " << qMessage;
+        //char* sendMessage = qMessage.toUtf8().data();
+        char *temp = new char[ qMessage.length() + 1 ]; // + 1 for zero in the end of string
+        memcpy(temp, qMessage.toUtf8().constData(), qMessage.length() + 1);
+
+        qDebug() << "sendmessage: " << sendMessage;
         for (QMap<int, QString>::iterator it = connectedClients.begin(); it != connectedClients.end(); ++it) {
             qDebug() << "Sending " << sendMessage << " to socket" << it.key();
             send(it.key(), sendMessage, BUFSIZE, 0);
         }
+
+        delete []temp;
 
         emit AcceptedClient(acceptedClientIp, acceptedClientSocket);
     }
@@ -130,7 +137,7 @@ QString TCPControlWorker::CreateClientMapMessage() {
     int i = 1;
 
     for (QMap<int, QString>::iterator it = connectedClients.begin(); it != connectedClients.end(); ++it, ++i) {
-        result += "<" + it.value();
+        result += "@" + it.value();
         qDebug() << "result: " << result;
     }
 
