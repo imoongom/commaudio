@@ -30,6 +30,7 @@ public:
 
 public slots:
     void runthis();
+    void read_data();
     void read_data(qint64 pos);
     void updateVolume(float vol);
 
