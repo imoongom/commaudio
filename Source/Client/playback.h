@@ -27,6 +27,7 @@ class Playback : public QObject
 public:
     Playback(struct CBuffer * buffer);
     ~Playback();
+FILE *fstream;
 
 public slots:
     void runthis();

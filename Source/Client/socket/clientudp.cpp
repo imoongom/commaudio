@@ -1,7 +1,10 @@
 #include "clientudp.h"
 #include "../global.h"
+#include "recording.h"
 
 #include <QDebug>
+
+extern Recording *gRecording;
 
 boolean ClientUDP::Start(SOCKET* sock, int port) {
     int nRet;
@@ -53,7 +56,7 @@ boolean ClientUDP::Start(SOCKET* sock, int port) {
             WSAGetLastError());
         return false;
     }
-    
+
     qDebug("[UDPBIND]hSocket : %d\thSock: %d\n",hSocket, *sock);
     return true;
 }
@@ -150,17 +153,20 @@ void ClientUDP::udpConn(){
     }
 
     qDebug()<<"[VoiceSend] SETUP FINISHED " << _VoiceChat << " " << voiceTo;
+    emit connected();
 }
 
 void ClientUDP::sendVoice(){//char *ip){
     char temp[DATA_BUFSIZE];
     DWORD  SendBytes;
 
-       if (_VoiceChat) {
-    //        qDebug() << "Voice Chat startL " <<UDPbuf._count;
+       while (_VoiceChat) {
+           if(UDPbuf._count == 0)
+               continue;//continue;
+
+            qDebug() << "Voice Chat start" <<UDPbuf._count;
            SIVoice->DataBuf.buf = temp;
-            if(UDPbuf._count == 0)
-                return;//continue;
+
             qDebug()<<"VoiceChat SEND " << voiceTo;
             read_buffer(&UDPbuf, temp);
 
@@ -189,9 +195,34 @@ void ClientUDP::sendVoice(){//char *ip){
 
 
         }
+}
 
+void ClientUDP::SendCapturedMicData(Recording *recording) {
+    return;
+    QByteArray qba;
+    qint64 length = 0;
+    char temp[DATA_BUFSIZE];
 
+    gRecording = recording;
 
+    while (_VoiceChat) {
+        qba = recording->m_audioInputDevice->readAll();
+        int nRet;
+        if (qba.length() > 0) {
+            nRet = sendto(voiceTo, qba, qba.length(), 0, (SOCKADDR *)&(InetAddr), sizeof(InetAddr));
+           // qDebug() << "Sending captured mic data: " << qba;
+        }
+        if (nRet < 0) {
+            qDebug() << "sendto failed: " << WSAGetLastError();
+        }
+    }
+}
+
+void ClientUDP::PlaybackVoiceData(char* data, DWORD len)
+{
+    qDebug() << "abc";
+    //QByteArray* qba = new QByteArray(data, len);
+    gRecording->m_audioOutputDevice->write(data, len);
 }
 
 int ClientUDP::UDPClose() {

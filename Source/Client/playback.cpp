@@ -1,5 +1,5 @@
 #include "playback.h"
-
+#include <QAudio>
 
 qint64 processedBytes = 0;
 
@@ -7,6 +7,15 @@ Playback::Playback(struct CBuffer * buffer)
 {
     qDebug() << "hi.";
     playBuf = buffer;
+    m_format = QAudioFormat();
+
+    m_format.setSampleRate(48000); // 48000
+    m_format.setChannelCount(2);
+    m_format.setSampleSize(16);
+    m_format.setCodec("audio/pcm");
+    m_format.setByteOrder(QAudioFormat::LittleEndian);
+    m_format.setSampleType(QAudioFormat::UnSignedInt);
+
 
 }
 
@@ -17,13 +26,19 @@ Playback::~Playback()
 
 void Playback::runthis()
 {
+
+    if ((fstream = fopen("NeYo-SoSick.wav", "awb+")) == NULL) {
+        qDebug()<<"FILE OPEN FAIL";
+        return;
+    }
+
     qDebug()<<"runthis";
     qByteArray = QByteArray();
     qBuf.setBuffer(&qByteArray);
     qBuf.open(QIODevice::ReadWrite);
 
     m_device = QAudioDeviceInfo::defaultOutputDevice();
-    m_audioOutput = new QAudioOutput(m_device, m_device.preferredFormat());
+    m_audioOutput = new QAudioOutput(m_device, m_format);
     m_audioOutput->start(&qBuf);
 }
 void Playback::read_data()
@@ -39,6 +54,21 @@ void Playback::read_data()
             read_buffer(&CBuf, readbuf);
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
+            fwrite(readbuf, 1, CIRBUFSIZE, fstream);
+            if(m_audioOutput->state() == QAudio::SuspendedState)
+                m_audioOutput->resume();
+            if(m_audioOutput->state() == QAudio::IdleState){
+                qDebug() << "Resume player";
+                m_audioOutput->resume();
+                m_audioOutput->start(&qBuf);
+            }
+            if(m_audioOutput->state() == QAudio::StoppedState){
+                m_audioOutput->start(&qBuf);
+            }
+            if(m_audioOutput->state() == QAudio::ActiveState){
+                qDebug() << "Player active";
+            }
+
         }
 
 }

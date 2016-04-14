@@ -117,7 +117,7 @@ void MainWindow::udpRecvSetup(){
         return;
 
     voiceThread = new QThread();
-    addVoice= new Playback(&UDPbuf);
+   // addVoice= new Playback(&CBuf);
     qDebug() << "UDP JOIN";
 
     udpCl = new ClientUDP();
@@ -129,14 +129,15 @@ void MainWindow::udpRecvSetup(){
     qDebug()<<"[UDP] : socket opened "<<udpSock;
     _UDPconnectOn = true;
 
-    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, &UDPbuf ,this);
-    addVoice->moveToThread(voiceThread);
+    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, &CBuf ,this);
+  //  addVoice->moveToThread(voiceThread);
 
-    connect(voiceThread, SIGNAL(started()), addVoice, SLOT(runthis()));
+   // connect(voiceThread, SIGNAL(started()), addVoice, SLOT(runthis()));
     connect(udpThread, SIGNAL(recvData()), addPk, SLOT(read_data()));
+ //   connect(udpThread, SIGNAL(SignalPlaybackVoiceData(char*,DWORD)), udpCl, SLOT(PlaybackVoiceData(char*,DWORD)));
 
     udpThread->start();
-    voiceThread->start();
+  //  voiceThread->start();
 
 
     qDebug()<<"[UDP] THREAD STARTED "<<udpSock;
@@ -155,12 +156,12 @@ void MainWindow::on_actionCB_triggered()
 //    test->moveToThread(t);
 //    connect(t, SIGNAL(started()), test, SLOT(runthis()));
 //    t->start();
-
+/*
     QThread *t2 = new QThread;
     test2->moveToThread(t2);
     connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
     t2->start();
-
+*/
 //    test->write_data();
 //    test->read_data();
 }
@@ -234,22 +235,24 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
     if (!checked) {
         ui->pushToTalk->setStyleSheet("background-color:#454389");
         ui->pushToTalk->setCheckable(true);
-//        QThread *t2 = new QThread;
+        QThread *t2 = new QThread;
         QThread *tempQ = new QThread();
-//        test2 = new Recording();
-
+        test2 = new Recording();
+        test2->moveToThread(t2);
+        speaker->moveToThread(tempQ);
 
         _VoiceChat = TRUE;
-       speaker->moveToThread(tempQ);
-//        test2->moveToThread(t2);
-//        connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
+        connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
         connect(tempQ, SIGNAL(started()), speaker, SLOT(udpConn()));
- //       connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
+        connect(speaker, SIGNAL(connected()), speaker, SLOT(sendVoice()));
+        //connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
+        connect(test2, SIGNAL(MicDataCapturing(Recording*)),speaker, SLOT(SendCapturedMicData(Recording*)));
 
-        connect(this, SIGNAL(addMusic()), speaker, SLOT(sendVoice()));
-        //t2->start();
+        //connect(this, SIGNAL(addMusic()), speaker, SLOT(sendVoice()));
+        t2->start();
         tempQ->start();
-        temp_add_music();
+        //test2->runthis();
+        //temp_add_music();
 
 
         // toggled

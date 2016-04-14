@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     socket/udprecvthread.cpp \
     socket/clienttcp.cpp \
     socket/threadhandler.cpp \
-    filetransfer.cpp
+    filetransfer.cpp \
+    micbuffer.cpp
 
 HEADERS  += mainwindow.h \
     playback.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     socket/udprecvthread.h \
     socket/clienttcp.h \
     socket/threadhandler.h \
-    filetransfer.h
+    filetransfer.h \
+    micbuffer.h
 
 FORMS    += mainwindow.ui
 

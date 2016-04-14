@@ -8,7 +8,7 @@
 #include <QByteArray>
 #include <QBuffer>
 #include <QDebug>
-
+#include "micbuffer.h"
 #include <QAudioOutput>
 
 #include<QThread>
@@ -24,22 +24,25 @@ public:
     ~Recording();
     void record();
     void pause();
+    QIODevice *m_audioInputDevice;
+    QIODevice *m_audioOutputDevice;
+    QAudioFormat m_format;
+    QAudioDeviceInfo m_device;
+    QAudioInput *m_audioInput;
+    micBuffer * mic;
+    QByteArray qByteArray;
+    QBuffer qBuf;
+
+    QAudioOutput *m_audioOutput;
 
 signals:
     void writeVoice();
+    void MicDataCapturing(Recording *recording);
 
 public slots:
     void runthis();
 
 private:
-    QAudioFormat m_format;
-    QAudioDeviceInfo m_device;
-    QAudioInput *m_audioInput;
-
-    QByteArray qByteArray;
-    QBuffer qBuf;
-
-    QAudioOutput *m_audioOutput;
 };
 
 #endif // RECORDING_H
