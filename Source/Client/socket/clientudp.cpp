@@ -95,75 +95,79 @@ boolean ClientUDP::initData(){
 }
 */
 
+void ClientUDP::udpConn(){
 
-void ClientUDP::sendVoice(char *ip){
-        char temp[DATA_BUFSIZE];
-
-        LPSOCKET_INFORMATION SIVoice;
-        DWORD  SendBytes;
-        SOCKET voiceTo;
-        SOCKADDR_IN InetAddr;
-        struct hostent *voiceHost;
-
-        DWORD nRet;
-        WSADATA stWSAData;
-
-           /* Init WinSock */
-        nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
-        if (nRet != 0) {
-            qDebug("WSAStartup failed: %d\r\n", nRet);
-            return ;
-        }
+    DWORD  SendBytes;
 
 
-        qDebug()<<"[VoiceSend] START";
-        if ((SIVoice = (LPSOCKET_INFORMATION)GlobalAlloc(GPTR, sizeof(SOCKET_INFORMATION)))
-            == NULL)
-        {
-            qDebug("[VoiceSend]GlobalAlloc() failed with error %d\n", WSAGetLastError());
-            return;
-        }
 
 
-        if ((voiceTo = WSASocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP, 0, 0, WSA_FLAG_OVERLAPPED)) == INVALID_SOCKET)
-        {
-           qDebug("[VoiceSend]socket() failed with error %d\n", WSAGetLastError());
-            return;
-        }
-        /*
-        if ((voiceHost = gethostbyname("127.0.0.1")) == NULL)
-        {
-            qDebug("[VoiceSend]Unable to resolve host name");
-            return;
-        }
+    DWORD nRet;
+    WSADATA stWSAData;
+    char ip[15] = "127.0.0.1";
+       /* Init WinSock */
+    nRet = WSAStartup(MAKEWORD(2, 2), &stWSAData);
+    if (nRet != 0) {
+        qDebug("WSAStartup failed: %d\r\n", nRet);
+        return ;
+    }
+
+
+    qDebug()<<"[VoiceSend] START" << ip;
+    if ((SIVoice = (LPSOCKET_INFORMATION)GlobalAlloc(GPTR, sizeof(SOCKET_INFORMATION)))
+        == NULL)
+    {
+        qDebug("[VoiceSend]GlobalAlloc() failed with error %d\n", WSAGetLastError());
+        return;
+    }
+
+
+    if ((voiceTo = WSASocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP, 0, 0, WSA_FLAG_OVERLAPPED)) == INVALID_SOCKET)
+    {
+       qDebug("[VoiceSend]socket() failed with error %d\n", WSAGetLastError());
+        return;
+    }
+    /*
+    if ((voiceHost = gethostbyname("127.0.0.1")) == NULL)
+    {
+        qDebug("[VoiceSend]Unable to resolve host name");
+        return;
+    }
 */
-        SIVoice->Socket = voiceTo;
-        SIVoice->DataBuf.buf = temp;
-        SIVoice->DataBuf.len = DATA_BUFSIZE;
+    SIVoice->Socket = voiceTo;
 
-        memset(&InetAddr, 0, sizeof(InetAddr));
+    SIVoice->DataBuf.len = DATA_BUFSIZE;
 
-        InetAddr.sin_family = AF_INET;
-        InetAddr.sin_port = htons(UDP_DEFAULT_PORT);
+    memset(&InetAddr, 0, sizeof(InetAddr));
 
-       // memcpy((char *)&InetAddr.sin_addr.s_addr, voiceHost->h_addr, voiceHost->h_length);
-        if((InetAddr.sin_addr.s_addr = inet_addr(ip))==INADDR_NONE)
-        {
-            qDebug() << "INVALID IP ";
-        }
+    InetAddr.sin_family = AF_INET;
+    InetAddr.sin_port = htons(UDP_DEFAULT_PORT);
 
-        qDebug()<<"[VoiceSend] SETUP FINISHED " << _VoiceChat;
-        while (_VoiceChat) {
-    //        qDebug() << "Voice Chat startL " <<CBufOut._count;
-            if(CBufOut._count == 0)
-                continue;
+   // memcpy((char *)&InetAddr.sin_addr.s_addr, voiceHost->h_addr, voiceHost->h_length);
+    if((InetAddr.sin_addr.s_addr = inet_addr(ip))==INADDR_NONE)
+    {
+        qDebug() << "INVALID IP ";
+    }
+
+    qDebug()<<"[VoiceSend] SETUP FINISHED " << _VoiceChat << " " << voiceTo;
+}
+
+void ClientUDP::sendVoice(){//char *ip){
+    char temp[DATA_BUFSIZE];
+    DWORD  SendBytes;
+
+       if (_VoiceChat) {
+    //        qDebug() << "Voice Chat startL " <<UDPbuf._count;
+           SIVoice->DataBuf.buf = temp;
+            if(UDPbuf._count == 0)
+                return;//continue;
             qDebug()<<"VoiceChat SEND " << voiceTo;
-            read_buffer(&CBufOut, temp);
+            read_buffer(&UDPbuf, temp);
 
-            memcpy(SIVoice->DataBuf.buf, temp, DATA_BUFSIZE);
 
             memset(&SIVoice->Overlapped, '\0', sizeof(SIVoice->Overlapped));
             SIVoice->Overlapped.hEvent = WSACreateEvent();
+
 
             if (WSASendTo(SIVoice->Socket, &(SIVoice->DataBuf), 1, &SendBytes, 0,
                 (SOCKADDR *)&InetAddr, sizeof(InetAddr), &(SIVoice->Overlapped), NULL) == SOCKET_ERROR)
@@ -182,11 +186,11 @@ void ClientUDP::sendVoice(char *ip){
                 return;
             }
 
-            SIVoice->BytesSEND += SendBytes;
+
 
         }
 
-        free(SIVoice);
+
 
 }
 
@@ -216,16 +220,16 @@ int ClientUDP::UDPClose() {
     }
 
 
-    clean_buffer(_type==UDP_CLIENT?&CBufOut:&CBuf);
+   // clean_buffer(_type == UDP_CLIENT? &UDPbuf : &CBuf);
     /* Close the socket */
-    closesocket(hSocket);
+    //closesocket(hSocket);
 
 
     /* Tell WinSock we're leaving */
-    if(!_MULTIconnectOn && !_UDPconnectOn && !_TCPconnectOn)
-        WSACleanup();
+   // if(!_MULTIconnectOn && !_UDPconnectOn && !_TCPconnectOn)
+   //     WSACleanup();
 
-    return -1;
+  //  return -1;
 }
 
 

@@ -130,6 +130,13 @@ color: white;</string>
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>temp open udp</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
         <widget class="QWidget" name="settingsTab">
