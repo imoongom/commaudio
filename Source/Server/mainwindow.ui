@@ -170,7 +170,7 @@ font: 57 14pt &quot;Roboto Medium&quot;;
 color: white;</string>
       </property>
       <property name="text">
-       <string>Miley Cyrus</string>
+       <string>Currently playing</string>
       </property>
      </widget>
     </item>
@@ -181,7 +181,7 @@ color: white;</string>
 font: 25 italic 11pt &quot;Roboto Light&quot;;</string>
       </property>
       <property name="text">
-       <string>Party in the U.S.A</string>
+       <string>No file selected</string>
       </property>
      </widget>
     </item>

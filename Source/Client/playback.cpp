@@ -28,15 +28,15 @@ void Playback::runthis()
 }
 void Playback::read_data()
 {
-    qDebug()<<"READ DATA" << CBuf._count;
+    qDebug()<<"READ DATA" << playBuf->_count;
     char *readbuf = (char*)malloc(CIRBUFSIZE);
     QByteArray qba;
 
     // While audio is playing
 
-         while(CBuf._count != 0)
+         while(playBuf->_count != 0)
         {
-            read_buffer(&CBuf, readbuf);
+            read_buffer(playBuf, readbuf);
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
         }

@@ -2,6 +2,7 @@
 #include <QDebug>
 #include "ClientServiceWorker.h"
 #include "Global.h"
+#include "MainWindow.h"
 
 SOCKET tcpSock;
 
@@ -57,8 +58,8 @@ void ClientServiceWorker::ListenForRequests() {
 void ClientServiceWorker::ProcessRequest(QString request, int socket) {
     if (request.left(4) == "song") {
         qDebug() << "I GOT A SONG";
-        //QString songName = request.right(4);
-        QString songName = "../Demo/Party_In_The_USA-Miley_Cyrus.wav";
+        QString songName = request.mid(4);
+        //QString songName = "../Demo/Party_In_The_USA-Miley_Cyrus.wav";
 
         // get file and send to client
         SendFileToClient(songName, socket);
@@ -68,43 +69,29 @@ void ClientServiceWorker::ProcessRequest(QString request, int socket) {
 }
 
 void ClientServiceWorker::SendFileToClient(QString songName, SOCKET cSocket) {
+    qDebug() << "ClientServiceWorker::SendFileToClient";
     char *fileName;
     // song files 46-51 MB
-    char buffer[600000] = { 0 };
+    int maxFileSize = 60000;
+    char buffer[maxFileSize] = { 0 };
     fileName = buffer;
     char * ff;
     int bytesRead;
-    qDebug() << songName;
+    songName = "../Demo/" + songName;
+    qDebug() << "songName : " << songName;
     FILE * file;
 
-    /*
-    int index = 0;
-    //find the corresponding song songName with filepath
-    for(QStringList::iterator it = playlist.begin(); it != playlist.end(); ++it, index++){
-        QString current = *it;
-        if(QString::compare(current,songName,Qt::CaseSensitive) == 0){
-            songName = playlistWithPath.at(index);
-            break;
-        }
-    }
-
     if(!(file = fopen(songName.toStdString().c_str(), "rb+"))){
-        char buffer2[2];
-        strcpy(buffer2, ERROR_BIT);
-        //char * buffer2 = ERROR_BIT;
-        send(cSocket, buffer2, DATA_BUFSIZE, 0);
+        qDebug() << "Unable to open file";
         return;
     }
 
-    char success[] = "M";
-    sendDataTCP(m_socket, success);
-    while((bytesRead = fread(buffer, sizeof(char), FILEMAX, file))){
-            if(bytesRead != FILEMAX){
-            send(m_socket, buffer, bytesRead, 1000);
+    send(cSocket, "HAJHAHA!", 10, 0);
 
-            break;
-        }
-        n.WSAS(m_socket, buffer, 60000, 1000);
+    while((bytesRead = fread(buffer, sizeof(char), maxFileSize, file))){
+        send(cSocket, buffer, bytesRead, 1000);
+        qDebug() << "bytesRead " << bytesRead;
     }
-    */
+
+    qDebug() << "send done";
 }

@@ -313,21 +313,6 @@ void MainWindow::on_connectButton_clicked()
     if(_TCPconnectOn){
        return;
     }
-
-    //get input value
-    QString host_ip_addr = ui->lineEdit_ip->text();
-    int host_port_no = ui->lineEdit_port->text().toInt();
-
-    TCPThread = new QThread();
-
-    ThreadHandler *TCPhandler = new ThreadHandler();
-
-    //initialize tcp and udp
-    if(host_ip_addr.size()==0 && host_port_no == 0)
-        tcpcl = new ClientTCP();
-    else
-        tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
-
     if(!_MULTIconnectOn){
         qDebug()<<"???MULTI cnnect call";
         on_actionJoin_Multicast_triggered();
@@ -338,12 +323,36 @@ void MainWindow::on_connectButton_clicked()
         qDebug()<<"???UDP cnnect call";
         udpRecvSetup();
     }
-    qDebug()<<"###UDP Connect success :" << udpSock;
-    connect(TCPThread, SIGNAL(started()), TCPhandler, SLOT(TCPThread()));
+    //get input value
+    QString host_ip_addr = ui->lineEdit_ip->text();
+    int host_port_no = ui->lineEdit_port->text().toInt();
 
-    TCPhandler->moveToThread(TCPThread);
+    TCPThread = new QThread();
+
+    //ThreadHandler *TCPhandler = new ThreadHandler();
+
+    //initialize tcp and udp
+    if(host_ip_addr.size()==0 && host_port_no == 0)
+        tcpcl = new ClientTCP();
+    else
+        tcpcl = new ClientTCP(host_ip_addr.toStdString(), host_port_no,this);
+
+
+    qDebug()<<"###UDP Connect success :" << udpSock;
+    connect(TCPThread, SIGNAL(started()),this, SLOT(call_TCP()));
+    //TCPhandler->moveToThread(TCPThread);
+    tcpcl->moveToThread(TCPThread);
     TCPThread->start();
 
+}
+void MainWindow::call_TCP(){
+    if(!tcpcl->TCPConnect()){
+        qDebug()<<"TCP Connection fail";
+        _TCPconnectOn = false;
+        return ;
+    }
+    _TCPconnectOn = true;
+    tcpcl->TCPcreateThread();
 }
 
 /*------------------------------------------------------------------------------------------------------------------
@@ -474,7 +483,7 @@ void MainWindow::on_pushButton_released()
     // get name of file, request to server, server sends back file
     fileTransferThread = new QThread();
     ft = new Filetransfer();
-    tcpcl = new ClientTCP();
+  // tcpcl = new ClientTCP();
 
     ft->moveToThread(fileTransferThread);
     connect(fileTransferThread, SIGNAL(started()), ft, SLOT(sendSongName()));

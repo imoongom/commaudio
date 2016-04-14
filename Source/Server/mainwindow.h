@@ -14,7 +14,7 @@
 #include "socket/TCPControlWorker.h"
 #include "socket/ClientServiceWorker.h"
 #include "playback.h"
-#include "../Client/playlist.h"
+#include "playlist.h"
 #include "socket/FileBufferWorker.h"
 
 namespace Ui {
@@ -28,18 +28,24 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    Playlist *playlist;
 
 private slots:
     void on_playPauseButton_clicked(bool checked);
     void on_buttonTcpConnect_clicked(bool checked);
     void on_actionJoin_Multicast_triggered(bool checked);
+    void on_actionAdd_Songs_triggered();
+    void on_playList_itemDoubleClicked(QListWidgetItem *item);
     void HandleNewClient(QString ipAddr, int socket);
     //void PlayMusic(qint64 pos);
     void PlayMusic();
 
+
+
 signals:
     void StartReadingFile(qint64 qint);
     void CanSendBufferedData(qint64, QByteArray qByteArray);
+    void GotSongName(QString songName);
 
 private:
     Ui::MainWindow *ui;
@@ -63,7 +69,7 @@ private:
     ClientServiceWorker *clientServiceWorker;
     Playback *playbackWorker;
     FileBufferWorker *fileBufferWorker;
-    Playlist *playlist;
+
 };
 
 #endif // MAINWINDOW_H
