@@ -13,7 +13,6 @@ public:
     boolean MulticastSettings(const char * name);
     boolean SendOne(LPSOCKET_INFORMATION SockInfo, char * message);
     boolean SendAll(char *message, LPDWORD lpNumberOfBytesSent);
-    boolean InitData();
     void CloseSocket();
 
 

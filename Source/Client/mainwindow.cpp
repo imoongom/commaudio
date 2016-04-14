@@ -497,7 +497,6 @@ void MainWindow::on_pushButton_released()
     tempM = tempMessage.toUtf8().data();
 
     tcpcl->TCPSend(tempM);
-
 }
 
 void MainWindow::on_pushButton_2_clicked()

@@ -1,9 +1,6 @@
 #include "CircularBuffer.h"
 #include<QDebug>
-/*
-CircularBuffer::CircularBuffer(){
-}
-*/
+
 
 void initBuffer(CBufs * Buf){
     Buf->_count = 0;
@@ -33,19 +30,10 @@ void write_buffer(CBufs * Buf, const void * data){
         Buf->_writePtr = &Buf->buffer;
     }
     Buf->_count++;
-    /*
-    int i,cnt = 0;
-    for( i = 0; &Buf->buffer[i] != Buf->_writePtr;i++){
-        if(Buf->buffer[i] != '\0')
-            cnt++;
-    }
-*/
-//    qDebug() << "start Point" << &Buf->buffer<<"curPoint "<<Buf->_writePtr<< ", End Point " << Buf->_endPtr;
-//    qDebug() << "COUNT: " << cnt << ", i is "<<i;
 }
 
 void read_buffer(CBufs * Buf, void * data){
-//    qDebug()<<"READ buf " << Buf->_count;
+    //qDebug()<<"READ buf " << Buf->_count;
     if(Buf->_count == 0)
         return ;
     std::memcpy(data, Buf->_readPtr, CIRBUFSIZE);
@@ -54,8 +42,7 @@ void read_buffer(CBufs * Buf, void * data){
     if(Buf->_readPtr == Buf->_endPtr)
         Buf->_readPtr = &Buf->buffer;
     Buf->_count--;
- //  qDebug()<<"read buf : " << (char*)data << " left "<< Buf->_count;
-
+    //qDebug()<<"read buf : " << (char*)data << " left "<< Buf->_count;
 }
 
 void clean_buffer(CBufs * Buf){

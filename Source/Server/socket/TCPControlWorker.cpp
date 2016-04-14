@@ -3,7 +3,36 @@
 #include <QDebug>
 #include "TCPControlWorker.h"
 
-/* Initialize Windows socket */
+/*---------------------------------------------------------------------------------------
+--  SOURCE FILE:    TCPControlWorker.cpp
+--  PROGRAM:        COMP 4985 : Comm Audio
+--  FUNCTIONS:
+--          void InitSocket(int port)
+--          void SendOne(LPSOCKET_INFORMATION socketInformation, char * message)
+--          void CloseSocket()
+
+--  DATE:           April 9, 2016
+--  REVISIONS:      N/A
+--  DESIGNERS:      Krystle Bulalakaw
+--  PROGRAMMER:     Krystle Bulalakaw
+--  NOTES:
+--  The worker class for a thread that handles initializing a TCP socket, listening
+--  for new connections, and keeping track of connected clients.
+---------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    InitSocket
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:   InitSocket(int port)
+-- NOTES:
+-- Initializes the socket, sets up the address structure, then binds the address to the socket.
+-- Then listens for up to 5 connections at a time, which will each have a service worker thread 
+-- created for it.
+-------------------------------------------------------------------------------------------------------*/
 void TCPControlWorker::InitSocket(int port) {
     QString acceptedClientIp;
 
@@ -77,7 +106,19 @@ void TCPControlWorker::InitSocket(int port) {
     emit finished();
 }
 
-/* Send to a client using completion routine */
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    InitSocket
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     boolean
+-- INTERFACE:   SendOne(LPSOCKET_INFORMATION socketInformation, char * message)
+--                  LPSOCKET_INFORMATION socketInformation - socket information struct of destination
+--                  char* message - message to send
+-- NOTES:
+-- Sends to a client on a TCP socket by completion routine. 
+-------------------------------------------------------------------------------------------------------*/
 boolean TCPControlWorker::SendOne(LPSOCKET_INFORMATION socketInformation, char * message) {
     ZeroMemory(&socketInformation->Overlapped, sizeof(WSAOVERLAPPED));
     socketInformation->Overlapped.hEvent = WSACreateEvent();
@@ -102,16 +143,19 @@ boolean TCPControlWorker::SendOne(LPSOCKET_INFORMATION socketInformation, char *
     return true;
 }
 
-/* Send without completion routine */
-boolean TCPControlWorker::SendOne2(LPSOCKET_INFORMATION socketInformation, char* message) {
-    if (send(socketInformation->Socket, message, BUFSIZE, 0) == -1) {
-        qDebug()<<"Send failed";
-        return false;
-    }
-    return true;
-}
-
-/* Send to all connected clients */
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    SendAll
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     boolean
+-- INTERFACE:   SendAll(char *message, LPDWORD lpNumberOfBytesSent)
+--                  char* message - message to send
+--                  LPDWORD lpNumberofBytesSent - number of bytes sent
+-- NOTES:
+-- Sends to all connected clients without completion routine.
+-------------------------------------------------------------------------------------------------------*/
 boolean TCPControlWorker::SendAll(char *message, LPDWORD lpNumberOfBytesSent) {
     QMap<int, QString>::iterator i;
     for(i = connectedClients.begin(); i != connectedClients.end(); i++) {
@@ -124,6 +168,17 @@ boolean TCPControlWorker::SendAll(char *message, LPDWORD lpNumberOfBytesSent) {
     return true;
 }
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    CloseSocket
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:   CloseSocket()
+-- NOTES:
+-- Closes the TCP socket.
+-------------------------------------------------------------------------------------------------------*/
 void TCPControlWorker::CloseSocket(){
     qDebug() << "Closing TCP socket...";
     closesocket(listeningSocket);
@@ -132,6 +187,17 @@ void TCPControlWorker::CloseSocket(){
     qDebug() << "Closed TCP socket.";
 }
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    CreateClientMapMessage
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     QString
+-- INTERFACE:   CreateClientMapMessage()
+-- NOTES:
+-- Creates a string of all connected client's IP delimited by a symbol.
+-------------------------------------------------------------------------------------------------------*/
 QString TCPControlWorker::CreateClientMapMessage() {
     QString result = "";
     int i = 1;

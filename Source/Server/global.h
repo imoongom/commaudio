@@ -45,6 +45,7 @@ extern int sockPort;
 extern SOCKADDR_IN stLclAddr, stDstAddr;
 extern bool udpConnected;
 extern bool tcpConnected;
+extern bool songPlaying;
 
 extern struct CBuffer CBuf, CBufSend;
 extern struct CBuffer CBufOut;
