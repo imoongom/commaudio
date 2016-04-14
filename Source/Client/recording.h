@@ -25,6 +25,9 @@ public:
     void record();
     void pause();
 
+signals:
+    void writeVoice();
+
 public slots:
     void runthis();
 

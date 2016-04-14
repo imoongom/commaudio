@@ -13,6 +13,7 @@ SOCKET tcpSock;
 
 struct CBuffer CBuf;
 struct CBuffer CBufOut;
+struct CBuffer UDPbuf;
 
 boolean _UDPconnectOn;
 boolean _TCPconnectOn;
@@ -27,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initBuffer(&CBuf);
     initBuffer(&CBufOut);
-
+    initBuffer(&UDPbuf);
     // QString fname = QString(":/qss_icons/rc/play-circle1.png");
     //QString fname2 = QString(":/qss_icons/rc/pause-circle.png");
     // QString fname3 = QString(":/qss_icons/rc/stopButton.png");
@@ -84,7 +85,6 @@ void MainWindow::on_actionJoin_Multicast_triggered()
 
     if(_MULTIconnectOn)
         return;
-
     musicThread = new QThread();
     addPk = new Playback(&CBuf);
     qDebug() << "MULTI JOIN multicast";
@@ -95,16 +95,14 @@ void MainWindow::on_actionJoin_Multicast_triggered()
     }
     qDebug()<<"[MULTI] : multisetup socket opened "<<multiSock;
     _MULTIconnectOn = true;
-    multiThread = new UDPRecvThread(multiSock, TIMECAST_PORT, this);
+    multiThread = new UDPRecvThread(multiSock, TIMECAST_PORT,&CBuf, this);
     addPk->moveToThread(musicThread);
 
-
     connect(musicThread, SIGNAL(started()), addPk, SLOT(runthis()));
-    connect(multiThread, SIGNAL(recvData()), this, SLOT(appendMusicPk()));
+    connect(multiThread, SIGNAL(recvData()), addPk, SLOT(read_data()));
 
     multiThread->start();
     musicThread->start();
-
 
     qDebug()<<"[MULTI] THREAD STARTED "<<multiSock;
 
@@ -116,20 +114,23 @@ void MainWindow::udpRecvSetup(){
         return;
 
     voiceThread = new QThread();
-    addVoice= new Playback(&CBufOut);
+    addVoice= new Playback(&UDPbuf);
     qDebug() << "UDP JOIN";
+
     udpCl = new ClientUDP();
-    if(!udpCl->Start(&udpSock,UDP_DEFAULT_PORT)){
+
+    if(!udpCl->Start(&udpSock, UDP_DEFAULT_PORT)){
         udpCl->UDPClose();
         return ;
     }
     qDebug()<<"[UDP] : socket opened "<<udpSock;
     _UDPconnectOn = true;
+
+    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, &UDPbuf ,this);
     addVoice->moveToThread(voiceThread);
-    udpThread = new UDPRecvThread(udpSock, UDP_DEFAULT_PORT, this);
 
     connect(voiceThread, SIGNAL(started()), addVoice, SLOT(runthis()));
-    connect(udpThread, SIGNAL(recvData()), this, SLOT(testVoiceRecv()));
+    connect(udpThread, SIGNAL(recvData()), addPk, SLOT(read_data()));
 
     udpThread->start();
     voiceThread->start();
@@ -138,10 +139,6 @@ void MainWindow::udpRecvSetup(){
     qDebug()<<"[UDP] THREAD STARTED "<<udpSock;
 }
 
-void MainWindow::testVoiceRecv(){
-    qDebug("VoiceReceived");
-    addVoice->read_data();
-}
 
 
 void MainWindow::on_actionCB_triggered()
@@ -218,20 +215,7 @@ void MainWindow::on_connectButton_clicked()
 
 }
 
-//dummy to make space circularbuffer
-void MainWindow::appendMusicPk(){
-    addPk->read_data();
- //   char buffer[CIRBUFSIZE];
-//    if(CBuf._count ==0)
-//        return;
-//    read_buffer(&CBuf, &buffer);
-//    qDebug("CBUFFER readed");
-//    addPk->moveToThread(musicThread);
-//    musicThread->start();
 
-
-
-}
 
 void MainWindow::on_actionRecording_triggered()
 {
@@ -250,22 +234,31 @@ void MainWindow::on_pushToTalk_clicked(bool checked)
     if (!checked) {
         ui->pushToTalk->setStyleSheet("background-color:#454389");
         ui->pushToTalk->setCheckable(true);
+        QThread *t2 = new QThread;
+        QThread *tempQ = new QThread();
+        test2 = new Recording();
 
-        QThread *temp = new QThread();
 
-         _VoiceChat = TRUE;
-        speaker->moveToThread(temp);
-        connect(temp, SIGNAL(started()), speaker, SLOT(voiceStart()));
-        connect(temp, SIGNAL(voiceGo(char* addr)), speaker, SLOT(sendVoice(char *ip)));
-        temp->start();
-        temp_add_music();
+        _VoiceChat = TRUE;
+       speaker->moveToThread(tempQ);
+        test2->moveToThread(t2);
+        connect(t2, SIGNAL(started()), test2, SLOT(runthis()));
+        connect(tempQ, SIGNAL(started()), speaker, SLOT(udpConn()));
+        connect(test2, SIGNAL(writeVoice()),speaker, SLOT(sendVoice()));
+
+
+
+        connect(tempQ, SIGNAL(started()), speaker, SLOT(sendVoice()));
+        t2->start();
+        tempQ->start();
+   //     temp_add_music();
 
 
         // toggled
     } else {
         // not toggled
         _VoiceChat = FALSE;
-        speaker->UDPClose();
+        //speaker->UDPClose();
         ui->pushToTalk->setStyleSheet("background-color:#524FA1");
 
     }
@@ -282,12 +275,13 @@ void MainWindow::temp_add_music(){
 
     // Read and send until end of file
     qDebug() << "ADD instead of VOICE " << filename ;
-    while (!file.atEnd() ){//&& _VoiceChat) {
+    while (!file.atEnd() && _VoiceChat) {
         qDebug()<<"Read! file " << filename;
         QByteArray line = file.read(DATA_BUFSIZE);
         char *sbuf = new char[DATA_BUFSIZE];
-        memcpy(sbuf, line.data(), line.size());
-        write_buffer(&CBufOut, sbuf);
+        memcpy(sbuf, line.data(), DATA_BUFSIZE);
+        write_buffer(&UDPbuf, sbuf);
+        Sleep(5);
     }
 
 }
@@ -303,4 +297,9 @@ void MainWindow::on_pushButton_released()
     QString temp = ui->playList->currentItem()->text();
 
     // get name of file, request to server, server sends back file
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    udpRecvSetup();
 }

@@ -24,8 +24,9 @@ public:
 
     int UDPClose();
 
-
-
+    SOCKET voiceTo;
+    LPSOCKET_INFORMATION SIVoice;
+    SOCKADDR_IN InetAddr;
     SOCKET hSocket;
     char hostAddr[MAXADDRSTR] = TIMECAST_ADDR;
     u_long lhostAddr;
@@ -40,7 +41,9 @@ signals:
     void voiceGo(char*);
 public slots:
     void voiceStart();
-    void sendVoice(char *ip);
+    void sendVoice();
+    void udpConn();
+//    void sendVoice(char *ip);
 };
 
 

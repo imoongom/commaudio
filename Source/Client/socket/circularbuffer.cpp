@@ -30,7 +30,7 @@ void write_buffer(CBufs * Buf, const void * data){
     //qDebug()<<"WHAT IS wrteptr?" << (char*)(Buf->_writePtr);
     Buf->_writePtr+=CIRBUFSIZE;
     if(Buf->_writePtr == Buf->_endPtr){
-        qDebug() << "******END POINT";
+  //      qDebug() << "******END POINT";
         Buf->_writePtr = &Buf->buffer;
     }
     Buf->_count++;

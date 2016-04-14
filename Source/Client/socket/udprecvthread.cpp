@@ -6,10 +6,11 @@
 
 int sockPort;
 
-UDPRecvThread::UDPRecvThread(SOCKET sock, int port, QObject *parent) : QThread(parent)
+UDPRecvThread::UDPRecvThread(SOCKET sock, int port, struct CBuffer* buf, QObject *parent) : QThread(parent)
 {
     hSock = sock;
     hPort = port;
+    writeCBuf =buf;
 }
 
 void UDPRecvThread::run(){
@@ -39,7 +40,7 @@ void UDPRecvThread::run(){
     SI.DataBuf.buf = buffer;
     SI.DataBuf.len = DATA_BUFSIZE;
 
-    qDebug()<<"[MULTI THREAD] SOCKET NUM: "<<multiSock;
+    qDebug()<<"[MULTI THREAD] SOCKET NUM: "<<hSock;
     destlen = sizeof(SOCKADDR);
 
     //read message until timeout
@@ -57,13 +58,13 @@ void UDPRecvThread::run(){
                 emit closeSock();
                 return ;
             }
-            if (WSAWaitForMultipleEvents(1, &SI.Overlapped.hEvent, FALSE, 10000, FALSE) == WAIT_TIMEOUT) {
+            if (WSAWaitForMultipleEvents(1, &SI.Overlapped.hEvent, FALSE, 20000, FALSE) == WAIT_TIMEOUT) {
                 qDebug("NONO WSAWitForMultipleEvents\n  %d", SI.Socket);
                 return ;
             }
 
         }
-        //qDebug("RECV: %s\n", SI.DataBuf.buf);
+     //   qDebug("RECV: %s\n", SI.DataBuf.buf);
 
         //add on Circular buffer
         write_buffer(&CBuf, SI.DataBuf.buf);

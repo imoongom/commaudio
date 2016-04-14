@@ -9,12 +9,13 @@ class UDPRecvThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit UDPRecvThread(SOCKET sock, int port, QObject *parent =0);
+    explicit UDPRecvThread(SOCKET sock, int port, struct CBuffer* buf, QObject *parent =0);
     SOCKET_INFORMATION      SI;
     SOCKADDR_IN InternetAddr;
     SOCKET hSock;
     struct hostent *host;
     int hPort;
+    struct CBuffer *writeCBuf;
 private:
     void run();
 signals:

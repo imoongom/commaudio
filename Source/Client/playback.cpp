@@ -14,6 +14,7 @@ Playback::~Playback()
 
 void Playback::runthis()
 {
+    qDebug()<<"runthis";
     qByteArray = QByteArray();
     qBuf.setBuffer(&qByteArray);
     qBuf.open(QIODevice::ReadWrite);
@@ -25,11 +26,13 @@ void Playback::runthis()
 
 void Playback::read_data()
 {
+    qDebug()<<"READ DATA" << playBuf->_count;
     char *readbuf = (char*)malloc(CIRBUFSIZE);
     QByteArray qba;
         while(playBuf->_count != 0)
         {
             read_buffer(playBuf, readbuf);
+            qDebug()<<"QBUFREADTEST "<<readbuf;
             qba = QByteArray(readbuf, CIRBUFSIZE);
             qByteArray.append(qba);
         }

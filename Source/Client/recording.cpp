@@ -1,5 +1,5 @@
 #include "recording.h"
-
+#include "global.h"
 Recording::Recording()
 {
     qDebug() << "wassup";
@@ -33,10 +33,15 @@ void Recording::runthis()
 
     m_audioInput = new QAudioInput(m_device, m_format);
     m_audioInput->start(&qBuf);
+
+    char *test = (char*)malloc(CIRBUFSIZE);
     while(m_audioInput->state() == QAudio::ActiveState)
     {
         qDebug() << "at leat im here";
-        write_buffer(&CBuf, (qBuf.read(CIRBUFSIZE)).data());
+//        write_buffer(&CBuf, (qBuf.read(CIRBUFSIZE)).data());
+        qBuf.read(test, CIRBUFSIZE);
+        write_buffer(&CBuf, test);
+        emit writeVoice();
     }
 //    m_audioInput->suspend();
 }

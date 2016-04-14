@@ -34,11 +34,12 @@ public:
     void udpRecvSetup();
     void temp_add_music();
 
-
+signals:
+    void readDataM(char* bbb);
 public slots:
     void toggleIcon();
-    void appendMusicPk();
-    void testVoiceRecv();
+
+
 private slots:
 
     void on_actionPlaylist_triggered();
@@ -60,6 +61,8 @@ private slots:
     void on_pushButton_pressed();
 
     void on_pushButton_released();
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     int icon;
