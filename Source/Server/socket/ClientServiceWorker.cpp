@@ -4,7 +4,38 @@
 #include "Global.h"
 #include "MainWindow.h"
 
+/*---------------------------------------------------------------------------------------
+--  SOURCE FILE:    ClientServiceWorker.cpp
+--  PROGRAM:        COMP 4985 : Comm Audio
+--  FUNCTIONS:
+--          void ListenForRequests()
+--          void ProcessRequest(QString request, int socket)
+--          void SendFileToClient(QString songName, SOCKET cSocket) 
+--  DATE:           April 9, 2016
+--  REVISIONS:      N/A
+--  DESIGNERS:      Krystle Bulalakaw
+--  PROGRAMMER:     Krystle Bulalakaw
+--  NOTES:
+--  The worker class for a thread that handles client requests sent over a TCP 
+--  connection. The client may send requests to play a specific song, download a file,
+--  or enable P2P voice communication.
+---------------------------------------------------------------------------------------*/
+
 SOCKET tcpSock;
+
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    Listen for Requests
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE: MulticastSettings(const char * name)
+--          const char *name - name of the socket
+-- INTERFACE: 
+-- Runs in separate thread to initialize a TCP socket and listen on the socket for messages from
+-- the client signifying requests.
+-------------------------------------------------------------------------------------------------------*/
 
 void ClientServiceWorker::ListenForRequests() {
     qDebug() << "ClientServiceWorker::ListenForRequests()";
@@ -55,6 +86,19 @@ void ClientServiceWorker::ListenForRequests() {
     }
 }
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    ProcessRequests
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:   ProcessRequest(QString request, int socket)
+--                QString request - the request message received
+--                int socket - socket of the sender
+-- INTERFACE: 
+-- Parses the message and handles the request.
+-------------------------------------------------------------------------------------------------------*/
 void ClientServiceWorker::ProcessRequest(QString request, int socket) {
     if (request.left(4) == "song") {
         qDebug() << "I GOT A SONG";
@@ -68,6 +112,19 @@ void ClientServiceWorker::ProcessRequest(QString request, int socket) {
     emit ProcessedRequest();
 }
 
+/*-----------------------------------------------------------------------------------------------------
+-- FUNCTION:    SendFileToClient
+-- DATE:        April 14, 2016
+-- REVISIONS:   N/A
+-- DESIGNER:    Krystle Bulalakaw
+-- PROGRAMMER:  Krystle Bulalakaw
+-- RETURNS:     void
+-- INTERFACE:   SendFileToClient(QString songName, SOCKET cSocket) 
+--                QString songName - requested song name
+--                SOCKET cSocket - socket of the sender
+-- INTERFACE: 
+-- Opens a file and sends its contents to the client.
+-------------------------------------------------------------------------------------------------------*/
 void ClientServiceWorker::SendFileToClient(QString songName, SOCKET cSocket) {
     qDebug() << "ClientServiceWorker::SendFileToClient";
     char *fileName;
