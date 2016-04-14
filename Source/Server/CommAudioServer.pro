@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     MainWindow.cpp \
     socket/FileBufferWorker.cpp \
     circularbuffer.cpp \
-    playback.cpp
+    playback.cpp \
+    playlist.cpp \
+    socket/ServerTCP.cpp
 
 HEADERS  += \
     socket/Server.h \
@@ -34,7 +36,9 @@ HEADERS  += \
     Global.h \
     socket/FileBufferWorker.h \
     circularbuffer.h \
-    playback.h
+    playback.h \
+    playlist.h \
+    socket/ServerTCP.h
 
 FORMS    += mainwindow.ui
 

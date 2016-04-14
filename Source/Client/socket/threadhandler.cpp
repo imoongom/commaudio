@@ -53,6 +53,7 @@ void ThreadHandler::createThread() {
 void ThreadHandler::TCPThread() {
  //   ClientTCP tcpcl;
     if(!tcpcl->TCPConnect()){
+        qDebug()<<"TCP Connection fail";
         _TCPconnectOn = false;
         return ;
     }

@@ -2,7 +2,6 @@
 #define GLOBAL_H
 #include <winsock2.h>
 #include <iostream>
-
 #define BUFMAX  128
 #define BUFSIZE 8192
 #define DATA_BUFSIZE 8192

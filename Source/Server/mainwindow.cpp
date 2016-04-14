@@ -1,9 +1,11 @@
 #include "MainWindow.h"
 #include "ui_mainwindow.h"
 #include "circularbuffer.h"
+#include "playlist.h"
 
 bool udpConnected = false;
 bool tcpConnected = false;
+Playlist *playlist;
 
 struct CBuffer CBuf, CBufSend;
 struct CBuffer CBufOut;
@@ -37,18 +39,19 @@ void MainWindow::on_playPauseButton_clicked(bool checked)
     qDebug() << "play button pressed";
     if (!checked && udpConnected) {
         ui->playPauseButton->setIcon(QIcon(fname2));
-          ui->playPauseButton->setCheckable(true);
+        ui->playPauseButton->setCheckable(true);
 
-          // QThread for sending
-          udpSendWorkerThread = new QThread;
-          udpSendWorker = new UDPSendWorker(serverUdp);
-          udpSendWorker->moveToThread(udpSendWorkerThread);
 
-          connect(udpSendWorkerThread, SIGNAL(started()), udpSendWorker, SLOT(Run()));
-          connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
-          connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
+        // QThread for sending
+        udpSendWorkerThread = new QThread;
+        udpSendWorker = new UDPSendWorker(serverUdp);
+        udpSendWorker->moveToThread(udpSendWorkerThread);
 
-          udpSendWorkerThread->start();
+        connect(udpSendWorkerThread, SIGNAL(started()), udpSendWorker, SLOT(Run()));
+        connect(udpSendWorker, SIGNAL(SentData()), udpSendWorker, SLOT(deleteLater()));
+        connect(udpSendWorkerThread, SIGNAL(finished()), udpSendWorkerThread, SLOT(deleteLater()));
+
+        udpSendWorkerThread->start();
         /*
         ui->playPauseButton->setIcon(QIcon(fname2));
         ui->playPauseButton->setCheckable(true);
@@ -167,15 +170,13 @@ void MainWindow::PlayMusic() {
     playbackWorker->read_data();
 }
 
-/*
-void MainWindow::on_actionPlaylist_triggered()
-{
-    list = new Playlist("../Demo");
-    list->update_list();
-    qDebug() << "updated";
-    ui->playList->clear();
-    ui->playList->addItems(list->get_playlist());
-    qDebug() << "got list";
 
+void MainWindow::on_actionAdd_Songs_triggered() {
+    playlist = new Playlist("../Demo");
+    playlist->update_list();
+    qDebug() << "updated playlist";
+    ui->playList->clear();
+    ui->playList->addItems(playlist->get_playlist());
+    qDebug() << "add playlist items";
 }
-*/
+

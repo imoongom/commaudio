@@ -76,12 +76,13 @@ void ClientTCP::TCPcreateThread() {
         qDebug("CreateThread failed with error %d\n", GetLastError());
         return;
     }
-    WaitForSingleObject(ThreadHandle, 2000);
-    qDebug("### TCP CLIENT thread CREATED!!!!!!!!\n");
+    WaitForSingleObject(ThreadHandle, 5000);
+   // qDebug("### TCP CLIENT thread CREATED!!!!!!!!\n");
 }
 
 // TCP Receive routine(Thread function)
 void ClientTCP::TCPRecv() {
+    qDebug() << "TCPRecv() waiting for data";
     LPSOCKET_INFORMATION SI;
     char temp[BUFSIZE] = "";
     char temp2[BUFSIZE] = "";
@@ -106,9 +107,10 @@ void ClientTCP::TCPRecv() {
         if (WSARecv(SI->Socket, &(SI->DataBuf), 1, &RecvBytes, &Flags,
             &(SI->Overlapped), NULL) == SOCKET_ERROR)
         {
+            qDebug() << "bytesrecv " << RecvBytes;
             if (WSAGetLastError() != WSAEWOULDBLOCK && WSAGetLastError() != WSA_IO_PENDING)
             {
-                qDebug()<<"WSASend() failed with error " << WSAGetLastError()<<"\n";
+                qDebug()<<"WSARecv() failed with error " << WSAGetLastError()<<"\n";
 
                 return;
             }
@@ -124,7 +126,7 @@ void ClientTCP::TCPRecv() {
         i++;
            // wsprintf(temp2, "[sendback]%s\nHELLO THIS IS TCP  CLIENT[%d] SEND!!\n", (SI->DataBuf.buf).c_str(), i);
         qDebug()<<"TCPSEND PASS";
-        TCPSend(temp);
+        //TCPSend(temp);
         qDebug()<<"EMPTY BUFFER";
         memset(&temp, '\0', BUFSIZE);
     }
@@ -132,6 +134,7 @@ void ClientTCP::TCPRecv() {
 
 //TCP SEND FUNCTION using completion routine
 void ClientTCP::TCPSend(char * message) {
+    qDebug()<<"TCP SEMD CALLED";
     LPSOCKET_INFORMATION SI;
     DWORD  SendBytes;
     int i = 0;
@@ -142,13 +145,13 @@ void ClientTCP::TCPSend(char * message) {
         return;
     }
     SI->Socket = tcpSock;
-    SI->Overlapped.hEvent = WSACreateEvent();
+
     SI->DataBuf.buf = message;
     SI->DataBuf.len = BUFSIZE;
 
 
     memset(&SI->Overlapped, '\0', sizeof(SI->Overlapped));
-
+    SI->Overlapped.hEvent = WSACreateEvent();
 
     if (WSASend(SI->Socket, &(SI->DataBuf), 1, &SendBytes, 0,
         &(SI->Overlapped), NULL) == SOCKET_ERROR)
@@ -164,6 +167,7 @@ void ClientTCP::TCPSend(char * message) {
         qDebug("READ DOME");
         return;
     }
+    qDebug()<<"SEND SUCCESS TO " << tcpSock << " " << SI->DataBuf.buf;
   //  memset(&SI->DataBuf.buf, '\0', BUFSIZE);
         SI->BytesSEND += SendBytes;
 
