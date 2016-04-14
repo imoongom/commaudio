@@ -144,6 +144,7 @@ void MainWindow::udpRecvSetup(){
 
 
 
+
 void MainWindow::on_actionCB_triggered()
 {
 
@@ -220,10 +221,15 @@ void MainWindow::on_connectButton_clicked()
 
 
 
+
 void MainWindow::on_actionRecording_triggered()
 {
 //    test2->record();
+
    // test->read_data();
+
+
+
 //    delete test2;
 }
 
@@ -298,7 +304,7 @@ void MainWindow::on_pushButton_released()
 {
     ui->pushButton->setStyleSheet("background-color:#524FA1;color:white;");
     QString temp = ui->playList->currentItem()->text();
-
+    char* tempM;
     // get name of file, request to server, server sends back file
     fileTransferThread = new QThread();
     ft = new Filetransfer();
@@ -308,7 +314,10 @@ void MainWindow::on_pushButton_released()
     connect(fileTransferThread, SIGNAL(started()), ft, SLOT(sendSongName()));
     fileTransferThread->start();
 
-    tcpcl->TCPSend("song");
+    QString tempMessage = "song" + temp;
+    tempM = tempMessage.toUtf8().data();
+
+    tcpcl->TCPSend(tempM);
 
 }
 

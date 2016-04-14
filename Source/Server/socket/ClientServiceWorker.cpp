@@ -55,18 +55,10 @@ void ClientServiceWorker::ListenForRequests() {
 }
 
 void ClientServiceWorker::ProcessRequest(QString request) {
-    /*
-    switch(request[0]) {
-    case 'a':
-        // download
-        break;
-    case 'b':
-        // song request
-        break;
-    case 'c':
-        // voice
-        break;
+    if (request.left(4) == "song") {
+        qDebug() << "I GOT A SONG";
+        // get file and send to client
     }
-    */
+
     emit ProcessedRequest();
 }
