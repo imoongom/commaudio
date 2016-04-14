@@ -5,8 +5,6 @@
 #include <stdlib.h> // malloc, free
 #include "../global.h"
 
-#include <cstring>
-#include <stdlib.h> // malloc, free
 
 
 #define CIRBUFSIZE 8192

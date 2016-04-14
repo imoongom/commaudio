@@ -9,7 +9,7 @@ Playback::Playback(struct CBuffer * buffer)
     playBuf = buffer;
     m_format = QAudioFormat();
 
-    m_format.setSampleRate(48000); // 48000
+    m_format.setSampleRate(44100); // 48000
     m_format.setChannelCount(2);
     m_format.setSampleSize(16);
     m_format.setCodec("audio/pcm");
