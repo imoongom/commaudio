@@ -8,15 +8,18 @@ Audio data transfer using TCP/IP
 - Eunwon Moon
 
 ###Modules and Components
-- /Source/Client
+- /Source/Client/
   - Contains the Qt project for the client application
   - Includes C++ header and source files, Qt widgets and objects
-- /Source/Server
+- /Source/Server/
   - Contains the Qt project for the server application
   - Includes C++ header and source files, Qt widgets and objects
-- Demo
+- /Demo/
   - Contains .wav files for demo purposes
-- Documentation
+- /Documentation/
   - Design work (state diagrams and pseudocode)
   - Test Report
   - User Guide
+- /Executables/
+  - Required .dlls and platform to run executables
+  - Contains CommAudioServer.exe and CommAudioClient.exe
