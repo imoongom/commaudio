@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Need a fancy program name and icon</string>
+   <string>Streaming Audio</string>
   </property>
   <property name="toolTipDuration">
    <number>8</number>
@@ -307,7 +307,7 @@ color: white;</string>
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">

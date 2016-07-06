@@ -367,7 +367,7 @@ void MainWindow::on_connectButton_clicked()
 /*------------------------------------------------------------------------------------------------------------------
 -- FUNCTION: call_TCP
 --
-<<<<<<< HEAD
+
 -- DATE: April 10, 2016
 --
 -- REVISIONS: (Date and Description)
